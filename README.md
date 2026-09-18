@@ -88,3 +88,4 @@ O edital exige registrar todo uso de IA na engenharia de software. Cada tarefa f
 Projeto Integrador IV (Aplicações de Inteligência Artificial), curso de Ciência da Computação do Centro Universitário FAESA, 2026/2. Professor: Prof. M.Sc. Howard Cruz Roatti.
 
 O NutriSim é uma ferramenta educacional. Ele não se destina a atender pacientes reais nem a apoiar decisões clínicas, e todos os casos são sintéticos.
+# nutrisim
