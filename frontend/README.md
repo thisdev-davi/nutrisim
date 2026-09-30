@@ -2,7 +2,7 @@
 
 Aplicação web em Next.js (React) com Tailwind CSS, pensada primeiro para o celular e adaptada ao computador.
 
-**Responsável:** Arthur Pomarolli.
+**Responsável:** Pedro Augusto.
 
 > Ainda não há código. O projeto será criado no card NS-009.
 >

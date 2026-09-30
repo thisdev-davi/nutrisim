@@ -2,7 +2,7 @@
 
 Material didático que o NutriSim usa para avaliar as consultas: **rubricas** de avaliação e **roteiros** de anamnese. Tudo em Markdown, para que professores do curso de Nutrição revisem e editem sem conhecimento técnico.
 
-**Responsáveis:** Pedro Augusto (organização), com revisão do professor de Nutrição.
+**Responsáveis:** Arthur Pomarolli (organização), com revisão do professor de Nutrição.
 
 ## Estrutura prevista
 

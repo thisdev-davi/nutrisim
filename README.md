@@ -58,6 +58,7 @@ As justificativas estão em [`docs/decisoes.md`](docs/decisoes.md).
 | [Decisões](docs/decisoes.md) | registro das decisões de arquitetura (ADRs) |
 | [Sprints](docs/sprints.md) | calendário, metas e critérios de saída de cada sprint |
 | [Quadro de tarefas](docs/kanban.md) | todos os cards, prontos para o GitHub Projects |
+| [Caminho crítico](docs/caminho-critico.md) | prioridade de cada card e o que ele bloqueia |
 | [Entregas do edital](docs/entregas-projeto-integrador-iv.md) | prazos, rubricas de avaliação e requisitos obrigatórios |
 | [Registro de uso de IA](docs/prompts/README.md) | prompts usados no desenvolvimento (integridade acadêmica) |
 | [Como contribuir](CONTRIBUTING.md) | branches, commits, pull requests e definição de pronto |
@@ -66,10 +67,12 @@ As justificativas estão em [`docs/decisoes.md`](docs/decisoes.md).
 
 | Integrante | Responsabilidade principal |
 |---|---|
-| Arthur Pomarolli | Frontend responsivo e experiência de uso |
+| Arthur Pomarolli | Harness de avaliação, métricas e governança de IA responsável |
 | Davi de Souza | Backend e integração com LLMs |
 | Mauro Barros | Motor de cálculo determinístico e testes automatizados |
-| Pedro Augusto | Harness de avaliação, métricas e governança de IA responsável |
+| Pedro Augusto | Frontend responsivo e experiência de uso |
+
+Depois da C1, Arthur e Pedro trocaram de papel. A divisão dos cards está no [quadro de tarefas](docs/kanban.md#divisão-por-integrante), e a prioridade de cada um, no [caminho crítico](docs/caminho-critico.md).
 
 ## Entregas
 

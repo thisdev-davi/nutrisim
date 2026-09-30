@@ -2,7 +2,7 @@
 
 Harness de avaliação (*eval*) do componente de IA: uma bateria fixa de casos executada contra o sistema e convertida em métricas.
 
-**Responsável:** Pedro Augusto.
+**Responsável:** Arthur Pomarolli.
 
 ## Estrutura prevista
 
