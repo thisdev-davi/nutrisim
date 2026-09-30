@@ -1,6 +1,6 @@
 # Sprints
 
-As sprints seguem o cronograma do relatório (Quadro 5) e os checkpoints do edital. Cada sprint é um **milestone** no GitHub, com vencimento no último dia. Os cards de cada uma estão em [`kanban.md`](kanban.md).
+As sprints seguem o cronograma do relatório (Quadro 5) e os checkpoints do edital. Cada sprint é um **milestone** no GitHub, com vencimento no último dia. Os cards de cada uma estão em [`kanban.md`](kanban.md), e a prioridade deles, em [`caminho-critico.md`](caminho-critico.md).
 
 ## Calendário
 
