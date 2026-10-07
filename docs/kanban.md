@@ -90,21 +90,23 @@ Carga estimada com P = 0,5, M = 1,5 e G = 3 dias. O backlog (NS-069) fica fora d
 | Integrante | Papel | Cards | Carga | P0 |
 |---|---|---|---|---|
 | Arthur Pomarolli | Eval, métricas, governança de IA e contato com a Nutrição | 19 | ~28,5 dias | 10 |
-| Davi de Souza | Backend e integração com LLMs | 16 | ~27,5 dias | 10 |
+| Davi de Souza | Backend, integração com LLMs e testes | 16 | ~26,5 dias | 8 |
 | Pedro Augusto | Frontend responsivo e experiência de uso | 14 | ~24,5 dias | 3 |
-| Mauro Barros | Motor de cálculo, testes e entregas no AVA | 19 | ~24 dias | 4 |
+| Mauro Barros | Motor de cálculo, backend, testes e entregas no AVA | 19 | ~25 dias | 6 |
 
 | Sprint | Arthur | Davi | Pedro | Mauro |
 |---|---|---|---|---|
 | 0 — C1 | NS-004 | NS-001, NS-002 | NS-005 | NS-003, NS-006 |
 | 1 — Fundação | NS-015, NS-016, NS-017 | NS-007, NS-008, NS-014 | NS-009, NS-010 | NS-011, NS-012, NS-013 |
-| 2 — Paciente e motor | NS-026, NS-027, NS-028 | NS-018, NS-019, NS-020 | NS-021, NS-022 | NS-023, NS-024, NS-025 |
-| 3 — Protótipo (C2) | NS-031, NS-032, NS-033, NS-034 | NS-035, NS-038 | NS-036, NS-037, NS-039 | NS-029, NS-030, NS-040 |
-| 4 — Plano e cenários | NS-047, NS-049 | NS-041, NS-046 | NS-042, NS-048 | NS-043, NS-044, NS-045 |
-| 5 — Retorno e rubrica | NS-056, NS-057 | NS-050, NS-051 | NS-052, NS-054 | NS-053, NS-055 |
-| 6 — Deploy e sessões | NS-062, NS-063 | NS-058, NS-059 | NS-061 | NS-060 |
+| 2 — Paciente e motor | NS-026, NS-027, NS-028 | NS-019, NS-020, NS-024 | NS-021, NS-022 | NS-018, NS-023, NS-025 |
+| 3 — Protótipo (C2) | NS-031, NS-032, NS-033, NS-034 | NS-030, NS-035 | NS-036, NS-037, NS-039 | NS-029, NS-038, NS-040 |
+| 4 — Plano e cenários | NS-047, NS-049 | NS-044, NS-046 | NS-042, NS-048 | NS-041, NS-043, NS-045 |
+| 5 — Retorno e rubrica | NS-056, NS-057 | NS-051, NS-055 | NS-052, NS-054 | NS-050, NS-053 |
+| 6 — Deploy e sessões | NS-062, NS-063 | NS-058, NS-060 | NS-061 | NS-059 |
 | 7 — MVP (C3) | NS-064, NS-065 | – | NS-067 | NS-066, NS-068 |
 | Backlog | – | – | NS-069 | – |
+
+Da Sprint 2 em diante, Davi e Mauro dividem o backend e os testes: cada um implementa funções do backend e do motor e escreve testes, sem separar "quem codifica" de "quem testa".
 
 Autoavaliação, avaliação 360° e inscrição no AVA continuam sendo feitas por cada integrante; o dono do card só garante que todos fizeram.
 
@@ -273,7 +275,7 @@ Sem contrato, front e back travam um ao outro. Esse é um risco listado no Quadr
 ## Sprint 2 — Paciente e motor (05/10 a 18/10)
 
 ### NS-018 — Implementar o cliente do LLM com saída estruturada e registro de tokens
-`area:llm` `area:backend` `tipo:feature` · **Milestone:** Sprint 2 — Paciente e motor · **Responsável:** Davi · **Prioridade:** P0 · **Tamanho:** M · **Depende de:** NS-008 · **Bloqueia:** NS-019, NS-046
+`area:llm` `area:backend` `tipo:feature` · **Milestone:** Sprint 2 — Paciente e motor · **Responsável:** Mauro · **Prioridade:** P0 · **Tamanho:** M · **Depende de:** NS-008 · **Bloqueia:** NS-019, NS-046
 
 Base comum para as cinco tarefas de IA do produto.
 
@@ -329,7 +331,7 @@ O paciente responde só com o que conheceria: hábitos, sintomas, rotina e prefe
 - [ ] Testes com valores conferidos à mão
 
 ### NS-024 — Motor: calcular a necessidade energética (GET)
-`area:motor` `tipo:feature` · **Milestone:** Sprint 2 — Paciente e motor · **Responsável:** Mauro · **Prioridade:** P1 · **Tamanho:** P · **RF:** RF05 · **Depende de:** – · **Bloqueia:** NS-029, NS-045
+`area:motor` `tipo:feature` · **Milestone:** Sprint 2 — Paciente e motor · **Responsável:** Davi · **Prioridade:** P1 · **Tamanho:** P · **RF:** RF05 · **Depende de:** – · **Bloqueia:** NS-029, NS-045
 
 - [ ] Taxa metabólica basal por Mifflin-St Jeor (MIFFLIN et al., 1990), para os dois sexos
 - [ ] GET = TMB × fator de atividade, com os fatores e a fonte documentados
@@ -384,7 +386,7 @@ O paciente responde só com o que conheceria: hábitos, sintomas, rotina e prefe
 - [ ] Rodando na CI
 
 ### NS-030 — Escrever os testes de integração da API
-`area:backend` `tipo:teste` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Mauro · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-019, NS-020 · **Bloqueia:** –
+`area:backend` `tipo:teste` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Davi · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-019, NS-020 · **Bloqueia:** –
 
 - [ ] Endpoints de caso, anamnese e busca na TACO testados
 - [ ] LLM substituído por respostas fixas, com resultados reproduzíveis
@@ -447,7 +449,7 @@ O paciente responde só com o que conheceria: hábitos, sintomas, rotina e prefe
 - [ ] Sessão em andamento retomada na etapa certa
 
 ### NS-038 — Publicar um preview no Render
-`area:infra` `tipo:tarefa` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Davi · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** NS-011 · **Bloqueia:** NS-039, NS-058
+`area:infra` `tipo:tarefa` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Mauro · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** NS-011 · **Bloqueia:** NS-039, NS-058
 
 Deploy antecipado para descobrir problemas de infraestrutura antes da Sprint 6.
 
@@ -476,7 +478,7 @@ Deploy antecipado para descobrir problemas de infraestrutura antes da Sprint 6.
 ## Sprint 4 — Plano e cenários (02/11 a 15/11)
 
 ### NS-041 — Criar os endpoints do plano alimentar
-`area:backend` `tipo:feature` · **Milestone:** Sprint 4 — Plano e cenários · **Responsável:** Davi · **Prioridade:** P1 · **Tamanho:** M · **RF:** RF05 · **Depende de:** NS-023 · **Bloqueia:** NS-042
+`area:backend` `tipo:feature` · **Milestone:** Sprint 4 — Plano e cenários · **Responsável:** Mauro · **Prioridade:** P1 · **Tamanho:** M · **RF:** RF05 · **Depende de:** NS-023 · **Bloqueia:** NS-042
 
 - [ ] Salvar e editar o plano por refeição, com alimentos da TACO e porções em gramas
 - [ ] Resposta com a composição calculada pelo motor (total e por refeição) e o GET do paciente
@@ -502,7 +504,7 @@ A TACO não tem preços, mas a restrição de orçamento do caso depende deles.
 - [ ] Tabela versionada em `backend/data/`
 
 ### NS-044 — Motor: verificar as restrições do caso
-`area:motor` `tipo:feature` · **Milestone:** Sprint 4 — Plano e cenários · **Responsável:** Mauro · **Prioridade:** P1 · **Tamanho:** M · **RF:** RF06 · **Depende de:** NS-043 · **Bloqueia:** NS-042, NS-055
+`area:motor` `tipo:feature` · **Milestone:** Sprint 4 — Plano e cenários · **Responsável:** Davi · **Prioridade:** P1 · **Tamanho:** M · **RF:** RF06 · **Depende de:** NS-043 · **Bloqueia:** NS-042, NS-055
 
 - [ ] Limite de sódio, alimentos evitados e orçamento conferidos contra a ficha do caso
 - [ ] Limites (por exemplo, de sódio) definidos com o professor de Nutrição e documentados com a fonte
@@ -559,7 +561,7 @@ Sai antes da Sprint 5 para dar tempo ao professor de revisar.
 ## Sprint 5 — Retorno e rubrica (16/11 a 22/11)
 
 ### NS-050 — Implementar a consulta de retorno
-`area:llm` `area:backend` `tipo:feature` · **Milestone:** Sprint 5 — Retorno e rubrica · **Responsável:** Davi · **Prioridade:** P0 · **Tamanho:** M · **RF:** RF09 · **Depende de:** NS-046 · **Bloqueia:** NS-052
+`area:llm` `area:backend` `tipo:feature` · **Milestone:** Sprint 5 — Retorno e rubrica · **Responsável:** Mauro · **Prioridade:** P0 · **Tamanho:** M · **RF:** RF09 · **Depende de:** NS-046 · **Bloqueia:** NS-052
 
 - [ ] Prompt versionado em que o paciente relata dificuldades coerentes com o cenário realista
 - [ ] Mesmo streaming, histórico e proteções do paciente da anamnese
@@ -598,7 +600,7 @@ Sai antes da Sprint 5 para dar tempo ao professor de revisar.
 - [ ] Estado vazio para quem ainda não concluiu nenhuma sessão
 
 ### NS-055 — Testar as regras de restrição, adequação e projeção
-`area:motor` `tipo:teste` · **Milestone:** Sprint 5 — Retorno e rubrica · **Responsável:** Mauro · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-044, NS-045 · **Bloqueia:** –
+`area:motor` `tipo:teste` · **Milestone:** Sprint 5 — Retorno e rubrica · **Responsável:** Davi · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-044, NS-045 · **Bloqueia:** –
 
 - [ ] Cada tipo de restrição com casos que violam e casos que não violam
 - [ ] Projeção de peso comparada a valores de referência calculados à mão
@@ -635,7 +637,7 @@ Sai antes da Sprint 5 para dar tempo ao professor de revisar.
 - [ ] Passo a passo de deploy e de reversão no README
 
 ### NS-059 — Reforçar segurança e custo
-`area:backend` `area:llm` `tipo:tarefa` · **Milestone:** Sprint 6 — Deploy e sessões · **Responsável:** Davi · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-057 · **Bloqueia:** –
+`area:backend` `area:llm` `tipo:tarefa` · **Milestone:** Sprint 6 — Deploy e sessões · **Responsável:** Mauro · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-057 · **Bloqueia:** –
 
 - [ ] Limite de requisições por usuário nas rotas que chamam o LLM
 - [ ] Revisão de segredos: nenhuma chave no repositório, no frontend ou nos logs
@@ -644,7 +646,7 @@ Sai antes da Sprint 5 para dar tempo ao professor de revisar.
 - [ ] Modelo menor avaliado nas tarefas simples
 
 ### NS-060 — Escrever os testes de ponta a ponta com Playwright
-`area:frontend` `tipo:teste` · **Milestone:** Sprint 6 — Deploy e sessões · **Responsável:** Mauro · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-052 · **Bloqueia:** –
+`area:frontend` `tipo:teste` · **Milestone:** Sprint 6 — Deploy e sessões · **Responsável:** Davi · **Prioridade:** P2 · **Tamanho:** M · **Depende de:** NS-052 · **Bloqueia:** –
 
 - [ ] Fluxo principal percorrido: login → caso → anamnese → plano → cenários → retorno → feedback
 - [ ] Backend rodando com um LLM falso, ativado por variável de ambiente, para resultados reproduzíveis
