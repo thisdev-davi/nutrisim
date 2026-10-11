@@ -8,8 +8,6 @@ Vitória, 2026
 
 **Autores:** Arthur Pomarolli, Davi de Souza, Mauro Barros, Pedro Augusto
 
-> Trechos marcados com `==destaque==` ainda precisam ser preenchidos.
-
 ## Resumo
 
 Este relatório apresenta o escopo, a justificativa, a metodologia e o plano de trabalho do NutriSim, aplicação web responsiva, acessível por computador e dispositivos móveis, que utiliza inteligência artificial para simular pacientes em consultas nutricionais. O estudante de Nutrição escolhe o perfil e o nível de dificuldade do caso, conduz a anamnese em uma conversa em tempo real com um paciente simulado por modelo de linguagem, elabora um plano alimentar e observa como esse plano se comportaria em um cenário de adesão ideal e em um cenário de adesão realista. A solução separa deliberadamente as responsabilidades: o modelo de linguagem representa o comportamento do paciente, enquanto um motor de cálculo determinístico, baseado na Tabela Brasileira de Composição de Alimentos e em equações publicadas, calcula a composição nutricional, a necessidade energética e a projeção de peso. Essa separação reduz o risco de alucinações e torna o sistema testável. O projeto prevê testes automatizados, um harness de avaliação do componente de IA com metas de consistência, robustez e concordância com especialistas, práticas de IA responsável e indicadores de impacto junto a estudantes do curso de Nutrição do Centro Universitário FAESA.
@@ -300,7 +298,7 @@ Cada integrante terá uma área principal de responsabilidade, conforme o Quadro
 
 ### 6.3 Repositório e gestão do projeto
 
-O código e a documentação serão mantidos no repositório ==https://github.com/usuario/nutrisim==, com o professor da disciplina adicionado como colaborador. A estrutura inicial do repositório é a seguinte:
+O código e a documentação serão mantidos no repositório https://github.com/thisdev-davi/nutrisim, com o professor da disciplina adicionado como colaborador. A estrutura inicial do repositório é a seguinte:
 
 ```text
 nutrisim/
