@@ -81,7 +81,7 @@ nutrisim/
 │   │   ├── motor/               cálculo determinístico, sem IA                  NS-023+
 │   │   └── services/            orquestração das 5 etapas
 │   ├── data/taco/               TACO original + importação                      NS-013
-│   └── tests/{unit,integration}/                                                NS-029/030
+│   └── tests/{unit,integration}/                                                NS-019+
 ├── frontend/                    README: ../frontend/README.md
 │   ├── src/{app,components,lib}/                                                NS-009+
 │   └── e2e/                     Playwright (360 px e desktop)                   NS-060
