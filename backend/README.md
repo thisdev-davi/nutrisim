@@ -4,7 +4,28 @@ API REST em FastAPI (Python). Reúne a integração com LLMs, o motor de cálcul
 
 **Responsáveis:** Davi de Souza (API e LLM) e Mauro Barros (motor de cálculo e testes).
 
-> Ainda não há código. As instruções de instalação e execução entram com o card NS-008.
+## Como rodar
+
+Requer [uv](https://docs.astral.sh/uv/) e Python 3.11+. Os comandos rodam dentro de `backend/`.
+
+```sh
+uv sync                           # instala as dependências
+cp .env.example .env              # preencha os valores
+uv run --env-file .env fastapi dev   # sobe em http://localhost:8000
+```
+
+A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs`.
+
+| Variável | Uso | Padrão |
+|---|---|---|
+| `FRONTEND_URL` | origem do frontend liberada no CORS | `http://localhost:3000` |
+
+## Como testar
+
+```sh
+uv run pytest        # testes
+uv run ruff check .  # lint (o mesmo da CI)
+```
 
 ## Estrutura prevista
 

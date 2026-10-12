@@ -5,13 +5,13 @@ description = "Configuracao de dependencias para o backend"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi>=0.143.0",
+    "fastapi[standard]>=0.143.0",
     "loguru>=0.7.3",
 ]
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
+    "httpx2>=2.13.1",
     "pytest>=8.0.0",
     "ruff>=0.3.0",
 ]
@@ -42,6 +42,7 @@ select = [
 ignore = [
     "D100", # Ignora exigencia de docstring no arquivo .py raiz
     "D104", # Ignora exigencia de docstring em pacotes __init__.py
+    "D403", # Permite docstring em minusculo (padrao do time)
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -53,3 +54,9 @@ max-statements = 150
 [tool.ruff.lint.per-file-ignores]
 # Ignora a regra S101 (proibicao de assert) apenas nos arquivos de teste
 "tests/**/*.py" = ["S101"]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+
+[tool.fastapi]
+entrypoint = "app.main:app"
