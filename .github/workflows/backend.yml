@@ -1,0 +1,48 @@
+name: Backend Pipeline
+
+on: # Condicao para executar
+  push:
+    branches:
+      - main
+      - desenvolvimento
+  pull_request:
+    branches:
+      - main
+      - desenvolvimento
+
+jobs:
+  brackend-lint-test: # Representa o nome da VM criada para rodar o CI do back
+    name: Backend Lint 
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend # Identifica que por padrão deve abrir o diretorio do backend.
+    
+    env:
+      OPENAI_API_KEY: "mock-key-nao-usar"
+      USE_MOCK_LLM: "true"
+      ENVIRONMENT: "test"
+    
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4 # Clona o repositorio
+      
+      - name: Instalar e configurar uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true # Avisa para usar o cache (baixa novamente se o uv.lock tiver modificacao)
+          cache-dependency-glob: "./backend/uv.lock"
+      
+      - name: Setup Python via uv
+        run: uv python install 3.11
+
+      - name: Instalar dependencias
+        run: uv sync --frozen
+      
+      - name: Rodar Lint com Ruff
+        run: uv run ruff check .
+      
+      - name: Rodar testes com Pytest
+        run: uv run pytest
+        
