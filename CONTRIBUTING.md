@@ -1,19 +1,21 @@
 # Como contribuir
 
-Toda mudança chega na `main` por pull request revisado por outro integrante. Este guia vale para código e para documentação.
+Toda mudança passa pela `desenvolvimento`, por pull request revisado por outro integrante, antes de chegar à `main`. Este guia vale para código e para documentação.
 
 ## Fluxo de trabalho
 
 1. **Pegue um card** no quadro (GitHub Projects), atribua a si e mova-o para *Em andamento*.
-2. **Crie uma branch** a partir da `main` atualizada:
+2. **Crie uma branch** a partir da `desenvolvimento` atualizada:
    ```text
    <tipo>/NS-<id>-<descricao-curta>
    ```
-   Exemplos: `feat/NS-020-paciente-streaming`, `docs/NS-007-contrato-api`, `test/NS-029-motor-unitarios`.
+   O tipo vem da tabela abaixo, o id é o do card e a descrição tem 2 a 4 palavras em minúsculas, separadas por hífen.
+   Exemplos: `feat/NS-011-ci-configuration`, `feat/NS-020-paciente-simulado`, `docs/NS-007-contrato-api`.
 3. **Faça commits** pequenos, cada um com um único contexto lógico.
-4. **Abra o PR** com `Closes #<número da issue>` na descrição e mova o card para *Em revisão*.
-5. **Revisão:** outro integrante aprova e a CI fica verde. Só então o PR entra na `main` (squash merge).
+4. **Abra o PR contra a `desenvolvimento`**, com o título no padrão das mensagens de commit (veja abaixo) e `Closes #<número da issue>` na descrição. O template de PR já traz as seções. Mova o card para *Em revisão*.
+5. **Revisão:** outro integrante aprova e a CI fica verde. Só então o PR entra na `desenvolvimento` (squash merge). O título do PR vira a mensagem do commit.
 6. Ao fechar a issue, o card vai sozinho para *Concluído*.
+7. **Promoção para a `main`:** no fim de cada sprint e antes de cada entrega, um PR `desenvolvimento → main` leva o que foi validado. Esse PR usa *merge commit*, e não squash, para as duas branches continuarem com o mesmo histórico.
 
 ## Tipos de branch e de commit
 
@@ -28,7 +30,7 @@ Toda mudança chega na `main` por pull request revisado por outro integrante. Es
 
 ## Mensagens de commit
 
-Seguimos [Conventional Commits](https://www.conventionalcommits.org/pt-br/), em português, no imperativo e citando o card:
+Vale para os commits e para o título dos PRs. Seguimos [Conventional Commits](https://www.conventionalcommits.org/pt-br/), em português, no imperativo e citando o card:
 
 ```text
 <tipo>(<escopo>): <o que muda> (NS-<id>)

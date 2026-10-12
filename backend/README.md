@@ -4,7 +4,44 @@ API REST em FastAPI (Python). Reúne a integração com LLMs, o motor de cálcul
 
 **Responsáveis:** Davi de Souza (API e LLM) e Mauro Barros (motor de cálculo e testes).
 
-> Ainda não há código. As instruções de instalação e execução entram com o card NS-008.
+## Como rodar
+
+Requer [uv](https://docs.astral.sh/uv/) e Python 3.11+. Os comandos rodam dentro de `backend/`.
+
+```sh
+uv sync                           # instala as dependências
+cp .env.example .env              # preencha os valores
+uv run --env-file .env fastapi dev   # sobe em http://localhost:8000
+```
+
+A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs`.
+
+| Variável | Uso | Padrão |
+|---|---|---|
+| `FRONTEND_URL` | origem do frontend liberada no CORS | `http://localhost:3000` |
+
+## Contrato da API
+
+O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api` e, por enquanto, devolvem dados fixos (mock) até a NS-019 e a NS-020 ligarem o LLM. O mock só conhece a sessão `mock`.
+
+| Rota | Etapa | O que faz |
+|---|---|---|
+| `GET /api/perfis` | 1 | perfis e níveis de dificuldade |
+| `POST /api/sessoes` | 1 | cria o caso e a sessão |
+| `GET /api/sessoes/{id}` | 2 | estado e histórico, para retomar |
+| `POST /api/sessoes/{id}/mensagens` | 2 | fala do paciente em SSE |
+| `POST /api/sessoes/{id}/anamnese/encerrar` | 2 | encerra a anamnese e vai para o plano |
+
+- **Streaming (SSE):** vários eventos `trecho` (`{"texto"}`), depois `fim` (`{"mensagem_id"}`) ou `erro` (`{"codigo", "mensagem"}`).
+- **Erros:** toda resposta de erro tem o formato `{"erro": {"codigo", "mensagem"}}`. O frontend decide o que exibir pelo `codigo`.
+- **Autenticação:** `Authorization: Bearer <token>` já está declarado, mas só passa a ser exigido na NS-035.
+
+## Como testar
+
+```sh
+uv run pytest        # testes
+uv run ruff check .  # lint (o mesmo da CI)
+```
 
 ## Estrutura prevista
 

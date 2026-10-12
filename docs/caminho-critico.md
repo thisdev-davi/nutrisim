@@ -1,5 +1,7 @@
 # Caminho crítico
 
+> **Retrato da C1.** Desde 12/10/2026, a fonte da verdade dos cards é o [board do GitHub Projects](https://github.com/users/thisdev-davi/projects/1). Este arquivo não é mais atualizado.
+
 O caminho crítico é a sequência de cards em que **um dia de atraso vira um dia de atraso na entrega**. Ele sai do campo "Depende de" dos cards do [`kanban.md`](kanban.md) e define a prioridade de cada um. As cargas usam P = 0,5, M = 1,5 e G = 3 dias.
 
 ## Prioridades
@@ -130,4 +132,4 @@ flowchart LR
 | NS-068 | P0 | S7 | Mauro | – | 0 | C3 |
 | NS-069 | P3 | – | Pedro | – | 0 | – |
 
-Quando um card mudar de dependência no `kanban.md`, atualizem o "Bloqueia" dos cards envolvidos e esta tabela na mesma PR.
+As dependências atuais ficam nos campos "Depende de" e "Bloqueia" de cada issue.

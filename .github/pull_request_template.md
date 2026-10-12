@@ -1,3 +1,5 @@
+<!-- Branch de destino: desenvolvimento. Título: <tipo>(<escopo>): <o que muda> (NS-<id>) -->
+
 ## O que muda
 
 <!-- Resumo em 1 a 3 linhas. -->

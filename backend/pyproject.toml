@@ -5,7 +5,7 @@ description = "Configuracao de dependencias para o backend"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi>=0.143.0",
+    "fastapi[standard]>=0.143.0",
     "loguru>=0.7.3",
 ]
 
@@ -42,6 +42,7 @@ select = [
 ignore = [
     "D100", # Ignora exigencia de docstring no arquivo .py raiz
     "D104", # Ignora exigencia de docstring em pacotes __init__.py
+    "D403", # Permite docstring em minusculo (padrao do time)
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -56,3 +57,6 @@ max-statements = 150
 
 [tool.pytest.ini_options]
 pythonpath = "."
+
+[tool.fastapi]
+entrypoint = "app.main:app"

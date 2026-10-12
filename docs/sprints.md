@@ -17,6 +17,11 @@ As sprints seguem o cronograma do relatório (Quadro 5) e os checkpoints do edit
 
 Há um desvio intencional em relação ao relatório: um **deploy de preview na Sprint 3** (NS-038). Assim, problemas de infraestrutura aparecem cedo, e não na Sprint 6. O Quadro 5 continua valendo, porque o deploy de produção segue na Sprint 6.
 
+**Replanejamento de 12/10.** A Sprint 1 terminou com quase todos os cards abertos. Os cards dela passaram para a Sprint 2, e o escopo da C2 foi enxugado para caber até o vídeo (28/10):
+- autenticação, navegação entre etapas e adequação às DRIs foram para a Sprint 4;
+- o eval da C2 usa volumes menores (5 fichas, 15 ataques, 30 vereditos e 1 execução), e os volumes completos ficam para a rodada final;
+- o streaming do paciente virou um card próprio (NS-070), e a NS-014 e a NS-026 deixaram de esperar a NS-015 e a NS-020.
+
 ## Rituais
 
 | Ritual | Quando | Duração | O que acontece |
@@ -40,7 +45,7 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] o relatório está com os destaques preenchidos e foi enviado no AVA;
 - [ ] a autoavaliação e a avaliação 360° foram feitas.
 
-**Cards:** NS-001 a NS-006.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** o prazo é hoje. Priorizem NS-001, NS-003 e NS-006. Se o tempo apertar, importem primeiro os cards das Sprints 0 e 1.
 
@@ -55,22 +60,22 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] o contrato da API (`docs/api.md`) e o schema da ficha oculta foram aprovados pela equipe;
 - [ ] os perfis do MVP estão definidos, e a reunião com o curso de Nutrição aconteceu.
 
-**Cards:** NS-007 a NS-017.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** o contrato da API e o schema da ficha destravam as sprints seguintes, então fechem os dois na primeira semana. Confirmem com o professor se as sessões com estudantes dispensam apreciação do CEP.
 
 ## Sprint 2 — Paciente e motor · 05/10 a 18/10
 
-**Meta:** conversar com um paciente gerado a partir de uma ficha oculta, com o motor já calculando.
+**Meta:** fechar a fundação que ficou da Sprint 1 e destravar o caminho até a C2.
 
 **Pronto quando:**
-- [ ] o estudante escolhe perfil e dificuldade e conversa em streaming com o paciente;
-- [ ] a ficha oculta é validada e nunca chega ao frontend;
-- [ ] o motor calcula composição, GET e adequação de uma lista de alimentos;
-- [ ] o harness executa ao menos uma ficha de ponta a ponta e salva o resultado;
-- [ ] os tokens são registrados em cada chamada ao LLM.
+- [ ] backend e frontend rodam localmente seguindo os READMEs, com CI verde e a `main` protegida;
+- [ ] o contrato das etapas 1 e 2 e o schema da ficha oculta foram aprovados pela equipe;
+- [ ] o cliente do LLM valida saídas estruturadas e registra os tokens de cada chamada;
+- [ ] o motor calcula o GET;
+- [ ] os perfis do MVP estão definidos, e a bateria de ataques está pronta.
 
-**Cards:** NS-018 a NS-028.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** o feriado de 12/10 cai nesta sprint. Durante o desenvolvimento, usem respostas gravadas nos testes para não gastar o limite gratuito do Gemini.
 
@@ -79,13 +84,14 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 **Meta:** entregar a C2. Na nota, a C2 pesa assim: funcionamento da IA 40%, viabilidade técnica 30%, testes/eval e vídeo 30%.
 
 **Pronto quando:**
-- [ ] os testes unitários do motor e os de integração rodam na CI;
-- [ ] o juiz foi validado, com o acerto medido em 50 vereditos;
+- [ ] o estudante gera um caso e conversa com o paciente, e a ficha oculta nunca chega ao frontend;
+- [ ] o motor calcula a composição e o GET, e os testes do motor e da API rodam na CI;
+- [ ] o juiz foi validado, com o acerto medido em 30 vereditos;
 - [ ] a 1ª rodada de eval de consistência e robustez está publicada em `evals/resultados/`;
 - [ ] o preview está publicado no Render;
 - [ ] o vídeo está no YouTube, a entrega foi feita no AVA e a autoavaliação e a 360° estão preenchidas.
 
-**Cards:** NS-029 a NS-040.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** gravem o vídeo até 28/10 para ter folga. Se o juiz ficar abaixo de 85% de acerto, ajustem o prompt dele antes da rodada de eval.
 
@@ -100,7 +106,7 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] as regras de coerência medem o cenário realista;
 - [ ] a rubrica e os roteiros foram enviados ao professor de Nutrição.
 
-**Cards:** NS-041 a NS-049.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:**
 - O feriado de 02/11 cai nesta sprint.
@@ -119,7 +125,7 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] a governança de IA está documentada em `docs/governanca.md`;
 - [ ] a validação com o professor começou (20 consultas e 20 cenários).
 
-**Cards:** NS-050 a NS-057.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** é uma sprint de 4 dias úteis. A validação do professor pode terminar na Sprint 6 sem bloquear as sessões com estudantes.
 
@@ -134,7 +140,7 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] as sessões com estudantes aconteceram, com consentimento e dados anonimizados;
 - [ ] as **funcionalidades estão congeladas**: daqui em diante, só correções.
 
-**Cards:** NS-058 a NS-063.
+**Cards:** os do milestone da sprint no board.
 
 **Atenção:** as sessões dependem da agenda do curso, que precisa estar combinada desde a Sprint 1. Cada sessão dura no máximo 30 minutos.
 
@@ -149,7 +155,7 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - [ ] o vídeo do MVP está no YouTube;
 - [ ] a entrega foi feita no AVA **até 03/12**, com um dia de folga, e a autoavaliação e a 360° estão preenchidas.
 
-**Cards:** NS-064 a NS-068.
+**Cards:** os do milestone da sprint no board.
 
 ---
 
@@ -160,7 +166,7 @@ Preenchido na revisão de cada sprint.
 | Sprint | Concluído | Ficou para a próxima | Retro: manter / mudar / tentar |
 |---|---|---|---|
 | 0 | – | – | – |
-| 1 | – | – | – |
+| 1 | NS-016 | todos os outros cards, migrados para a Sprint 2 em 12/10 | – |
 | 2 | – | – | – |
 | 3 | – | – | – |
 | 4 | – | – | – |
