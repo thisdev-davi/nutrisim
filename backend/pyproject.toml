@@ -1,0 +1,50 @@
+[project]
+name = "nutrisim-backend-project"
+version = "1.0.0"
+description = "Configuracao de dependencias para o backend"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.143.0",
+    "loguru>=0.7.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
+]
+
+# Configuracoes do ruff
+[tool.ruff]
+line-length = 88 # Forca linhas possuirem no maximo 88 caracteres
+target-version = "py311" # Informa que o python usado é o 3.11
+preview = true
+
+[tool.ruff.lint]
+select = [
+    "E",  # Erros basicos de pycodestyle
+    "F", # Pyflakes (pega variaveis nao usadas, imports nao usados...)
+    "I", # Organizacao automatica de imports
+    "D", # Pydocstyle (docstring)
+    "N", # pep8-naming (padronizacao de nomes de variaveis e classes)
+    "PT", # flake8-pytest-style (boas praticas do pytest)
+    "PL", # Pylint (funcoes nao utilizadas, complexidade e limites de linhas) 
+    "UP", # pyupgrade (sintaxe moderna do python)
+    "B", # flake8-bugbear (bugs logicos e armadilhas comuns da linguagem)
+    "SIM", # flake8-simplify (codigo mais limpo e direto)
+    "S", # flake8-bandit (pega chaves hardcoded e falhas comuns de seguranca)
+    "DOC", # Valida a estrutura da funcao e permite ter certeza de que nao esqueceu de documentar nada
+    "T20", # flake8-print (proibe o uso de print() solto no codigo)
+]
+
+ignore = [
+    "D100", # Ignora exigencia de docstring no arquivo .py raiz
+    "D104", # Ignora exigencia de docstring em pacotes __init__.py
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-statements = 150
