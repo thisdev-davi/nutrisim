@@ -1,0 +1,37 @@
+name: Frontend Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+      - desenvolvimento
+
+jobs:
+    frontend-lint-test: # Representa o nome da vm criada para executar o CI do front
+      name: Frontend Lint & Test
+      runs-on: ubuntu-latest # Representa qual SO vai executar
+      defaults:
+        run:
+          working-directory: ./frontend # Identifica que por padrão deve abrir o diretorio do frontend.    
+      
+      steps: # Steps representa a lista de comandos executadas em ordem
+        - name: Checkout do código # Nome do comando
+          uses: actions/checkout@v4 # Comando pronto do github. Faz um clone do repositorio para dentro da VM
+        
+        - name: Setup Node.js
+          uses: actions/setup-node@v4 # Instala o Node.js na máquina
+          with:
+            node-version: '20' # Fixa versão para evitar que atualizacão do Node quebre o projeto
+            cache: npm 
+            cache-dependency-path: ./frontend/package-lock.json # Representa o cache das dependencias, para evitar baixar novamente
+        
+        - name: Instalar dependencias
+          run: npm ci
+        
+        - name: Rodar Lint
+          run: npm run lint
+        
+        - name: Rodar Testes
+          run: npm run test
+          
+
