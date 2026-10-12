@@ -31,14 +31,14 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           version: "latest"
-          enable-chache: true # Avisa para usar os  (baixa novamente se o uv.lock tiver modificacao)
-          chache-dependency-glob: "./backend/uv.lock"
+          enable-cache: true # Avisa para usar o cache (baixa novamente se o uv.lock tiver modificacao)
+          cache-dependency-glob: "./backend/uv.lock"
       
       - name: Setup Python via uv
         run: uv python install 3.11
 
       - name: Instalar dependencias
-        run: uv sync --fronzen
+        run: uv sync --frozen
       
       - name: Rodar Lint com Ruff
         run: uv run ruff check .
