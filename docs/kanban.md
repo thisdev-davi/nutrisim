@@ -1,6 +1,8 @@
 # Quadro de tarefas (kanban)
 
-Este arquivo é a fonte dos cards do **GitHub Projects**. Cada card vira uma issue. As metas, os critérios de saída e os riscos de cada sprint estão em [`sprints.md`](sprints.md).
+> **Retrato da C1.** Desde 12/10/2026, a fonte da verdade dos cards é o [board do GitHub Projects](https://github.com/users/thisdev-davi/projects/1). Este arquivo não é mais atualizado.
+
+Este arquivo foi a fonte dos cards do **GitHub Projects**. Cada card vira uma issue. As metas, os critérios de saída e os riscos de cada sprint estão em [`sprints.md`](sprints.md).
 
 ## Como montar o quadro no GitHub
 
