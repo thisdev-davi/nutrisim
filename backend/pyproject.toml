@@ -49,3 +49,7 @@ convention = "google"
 
 [tool.ruff.lint.pylint]
 max-statements = 150
+
+[tool.ruff.lint.per-file-ignores]
+# Ignora a regra S101 (proibicao de assert) apenas nos arquivos de teste
+"tests/**/*.py" = ["S101"]
