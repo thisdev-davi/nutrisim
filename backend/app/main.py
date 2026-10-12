@@ -1,7 +1,11 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer
+
+from app.api import anamnese, caso
+from app.api.erros import registrar_erros
 
 app = FastAPI(title="NutriSim")
 
@@ -12,6 +16,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+registrar_erros(app)
+
+# token bearer so declarado; a NS-035 passa a exigir
+bearer = Depends(HTTPBearer(auto_error=False))
+for rotas in (caso.router, anamnese.router):
+    app.include_router(rotas, prefix="/api", dependencies=[bearer])
 
 
 @app.get("/health")
