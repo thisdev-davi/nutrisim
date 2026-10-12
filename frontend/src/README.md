@@ -4,10 +4,6 @@ Aplicação web em Next.js (React) com Tailwind CSS, pensada primeiro para o cel
 
 **Responsável:** Pedro Augusto.
 
-> Ainda não há código. O projeto será criado no card NS-009.
->
-> **Atenção:** o `create-next-app` exige uma pasta vazia. Antes de rodá-lo, tire este README da pasta e depois incorpore o conteúdo ao README gerado.
-
 ## Estrutura prevista
 
 ```text
@@ -38,3 +34,11 @@ As rotas são uma proposta e podem mudar com os wireframes (NS-010) e o contrato
 - **Desempenho percebido:** a resposta do paciente aparece em streaming, e toda espera mostra um estado de carregamento.
 - **Sem IA no navegador:** o frontend só conversa com o backend e nunca chama o provedor de LLM.
 - **Projeções com aviso:** gráficos de peso e adequação sempre exibem a limitação do modelo.
+
+## Como rodar?
+
+- Para inciar o servidor:
+>> npm run dev
+
+- Para a análise sintática e semântica estática no código:
+>> npm run lint
