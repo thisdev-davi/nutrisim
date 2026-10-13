@@ -10,12 +10,13 @@ const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
   const {theme, setTheme} = useTheme();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  setMounted(true);
+}, []);
 
   if(!mounted) {
-    return;
+    return null;
   }
 
   return (

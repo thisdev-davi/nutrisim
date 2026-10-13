@@ -12,7 +12,7 @@ jobs:
       runs-on: ubuntu-latest # Representa qual SO vai executar
       defaults:
         run:
-          working-directory: ./frontend # Identifica que por padrão deve abrir o diretorio do frontend.    
+          working-directory: ./frontend/src # Identifica que por padrão deve abrir o diretorio do frontend.    
       
       steps: # Steps representa a lista de comandos executadas em ordem
         - name: Checkout do código # Nome do comando
@@ -23,7 +23,7 @@ jobs:
           with:
             node-version: '20' # Fixa versão para evitar que atualizacão do Node quebre o projeto
             cache: npm 
-            cache-dependency-path: ./frontend/package-lock.json # Representa o cache das dependencias, para evitar baixar novamente
+            cache-dependency-path: ./frontend/src/package-lock.json # Representa o cache das dependencias, para evitar baixar novamente
         
         - name: Instalar dependencias
           run: npm ci
