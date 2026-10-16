@@ -5,8 +5,11 @@ description = "Configuracao de dependencias para o backend"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "alembic>=1.20.0",
     "fastapi[standard]>=0.143.0",
     "loguru>=0.7.3",
+    "psycopg[binary]>=3.3.6",
+    "sqlalchemy>=2.0",
 ]
 
 [dependency-groups]
@@ -21,6 +24,7 @@ dev = [
 line-length = 88 # Forca linhas possuirem no maximo 88 caracteres
 target-version = "py311" # Informa que o python usado é o 3.11
 preview = true
+extend-exclude = ["app/db/migrations/versions"] # gerado pelo alembic
 
 [tool.ruff.lint]
 select = [
