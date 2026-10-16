@@ -40,3 +40,56 @@ class ChamadaLLM(Base):
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class Alimentos(Base):
+    """Tabela referente aos dados dos alimentos."""
+
+    __tablename__ = "alimentos"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categorias.id"))
+    nome: Mapped[str]
+
+
+class Nutrientes(Base):
+    """Tabela referente aos dados nutricionais dos alimentos."""
+
+    __tablename__ = "nutrientes"
+
+    id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), primary_key=True)
+    umidade: Mapped[float | None]
+    kcal: Mapped[float | None]
+    kj: Mapped[float | None]
+    proteina: Mapped[float | None]
+    lipidios: Mapped[float | None]
+    colesterol: Mapped[float | None]
+    carboidratos: Mapped[float | None]
+    fibra_alimentar: Mapped[float | None]
+    cinzas: Mapped[float | None]
+    calcio: Mapped[float | None]
+    magnesio: Mapped[float | None]
+    manganes: Mapped[float | None]
+    fosforo: Mapped[float | None] 
+    ferro: Mapped[float | None]
+    sodio: Mapped[float | None] 
+    potassio: Mapped[float | None]
+    cobre: Mapped[float | None]
+    zinco: Mapped[float | None]
+    retinol: Mapped[float | None]
+    re: Mapped[float | None]
+    rae: Mapped[float | None]
+    tiamina: Mapped[float | None]
+    riboflavina: Mapped[float | None]
+    piridoxina: Mapped[float | None]
+    niacina: Mapped[float | None]
+    vitamina_c: Mapped[float | None]
+
+
+class Categorias(Base):
+    """Tabela que representa as categorias dos alimentos."""
+
+    __tablename__ = "categorias"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str]
