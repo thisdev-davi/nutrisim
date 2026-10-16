@@ -1,0 +1,59 @@
+{
+  "perfil_id": "adulto-hipertensao",
+  "dificuldade": "medio",
+  "paciente": {
+    "nome": "Carlos",
+    "idade": 52,
+    "genero": "masculino",
+    "queixa_principal": "pressão alta e dificuldade para perder peso",
+    "peso_kg": 92,
+    "altura_cm": 174,
+    "atividade_fisica": "sedentario",
+    "orcamento_mensal_reais": 900,
+    "rotina": "técnico de manutenção em horário comercial, sai de casa às 6h30 e volta às 18h; caminha só no fim de semana",
+    "quem_cozinha": "a esposa cozinha o jantar; o almoço é fora de casa nos dias úteis",
+    "cultura_alimentar": "família capixaba: arroz com feijão todo dia, moqueca de peixe no domingo",
+    "preferencias": ["feijão", "peixe", "banana"],
+    "aversoes": ["quiabo", "jiló"],
+    "recordatorio": [
+      "6h: café com açúcar e pão francês com margarina",
+      "12h: restaurante por quilo, arroz, feijão, carne e um pouco de salada",
+      "16h: biscoito de polvilho",
+      "19h30: arroz, feijão, frango e farofa"
+    ],
+    "postura": "ambivalente",
+    "forma_de_responder": "respostas curtas; às vezes muda de assunto para o trabalho",
+    "imprecisoes": [
+      "diz que come 'só um pouco' de farofa, mas são duas colheres de servir",
+      "diz que o café tem 'pouco açúcar', mas são duas colheres de chá por xícara"
+    ],
+    "omissoes": [
+      {
+        "informacao": "usa tempero pronto em cubo todos os dias no feijão e no frango",
+        "gatilho": "pergunta sobre temperos ou como a comida é preparada em casa"
+      },
+      {
+        "informacao": "come presunto e mortadela no lanche da tarde três vezes por semana",
+        "gatilho": "pergunta sobre embutidos ou o que come além do biscoito à tarde"
+      },
+      {
+        "informacao": "bebe de quatro a seis latas de cerveja no sábado",
+        "gatilho": "pergunta sobre bebida alcoólica ou fim de semana"
+      }
+    ]
+  },
+  "restricoes": {
+    "sodio_max_mg": 2000,
+    "alimentos_evitados": ["embutidos", "temperos prontos em cubo ou pó", "salgadinhos de pacote"]
+  },
+  "gabarito": {
+    "conduta_esperada": "plano",
+    "sinais_de_alerta": [],
+    "o_que_investigar": [
+      "sal de adição e temperos prontos",
+      "consumo de embutidos e ultraprocessados",
+      "refeições fora de casa",
+      "consumo de álcool"
+    ]
+  }
+}
