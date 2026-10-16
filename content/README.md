@@ -8,6 +8,7 @@ Material didático que o NutriSim usa para avaliar as consultas: **rubricas** de
 
 ```text
 content/
+├── perfis.md     perfis do MVP e níveis de dificuldade               NS-015
 ├── rubricas/     critérios de correção da consulta, por perfil     NS-049
 └── roteiros/     o que uma boa anamnese deve investigar, por perfil NS-049
 ```
@@ -18,7 +19,7 @@ Cada arquivo começa com um cabeçalho de metadados (front matter). O sistema us
 
 ```markdown
 ---
-tipo: rubrica            # rubrica | roteiro
+tipo: rubrica            # rubrica | roteiro | perfis
 perfis: [adulto-hipertensao, adulto-diabetes]
 versao: 1
 revisado_por: Nome do(a) professor(a)
