@@ -110,7 +110,7 @@ Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versa
 ```json
 {
   "data": "2026-10-30",
-  "modelo_paciente": "<valor de LLM_MODELO_PACIENTE>",
+  "modelo_paciente": "<valor de LLM_MODELO>",
   "modelo_juiz": "<valor de LLM_MODELO_JUIZ>",
   "versao_prompt": "paciente-v1",
   "execucoes_por_caso": 3,
