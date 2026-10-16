@@ -173,15 +173,22 @@ O edital exige que todo uso de IA na engenharia de software seja registrado com 
 ## Sprint 1 — Fundação (21/09 a 04/10)
 
 ### NS-007 — Definir o contrato da API REST
-`area:backend` `area:frontend` `tipo:tarefa` · **Milestone:** Sprint 1 — Fundação · **Responsável:** Davi (apoio: Pedro) · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** – · **Bloqueia:** NS-021, NS-022
+`area:backend` `area:frontend` `tipo:tarefa` · **Milestone:** Sprint 2 — Paciente e motor · **Responsável:** Davi (apoio: Pedro) · **Prioridade:** P1 · **Tamanho:** P · **Depende de:** NS-008 · **Bloqueia:** NS-021, NS-022
 
 Sem contrato, front e back travam um ao outro. Esse é um risco listado no Quadro 7 do relatório.
 
-- [ ] `docs/api.md` com os endpoints das 5 etapas: método, rota, corpo, resposta e erros
-- [ ] Formato do streaming do paciente definido (por exemplo, Server-Sent Events)
-- [ ] Autenticação e formato de erro padronizados
-- [ ] Nenhum endpoint devolve a ficha oculta ao frontend
-- [ ] Contrato aprovado pelos quatro integrantes no PR
+O contrato sai do código: os schemas Pydantic e as rotas geram o OpenAPI (`/docs`), que é o contrato vivo. As rotas devolvem dados fixos e servem de mock para o frontend até a NS-019 e a NS-020 trocarem pelos dados reais.
+
+**Davi (backend)**
+- [x] Schemas Pydantic e rotas das etapas 1 (caso) e 2 (anamnese), devolvendo dados fixos. As etapas 3 a 5 entram no contrato quando forem construídas
+- [x] Formato do evento de streaming do paciente (Server-Sent Events) definido
+- [x] Formato de erro padronizado e esquema de autenticação previsto (a implementação fica na NS-035)
+- [x] Nenhum endpoint devolve a ficha oculta ao frontend
+
+**Pedro (apoio, frontend)**
+- [x] Contrato conferido contra as telas da NS-021 e da NS-022
+- [x] `docs/api.md` com o que o OpenAPI não mostra: como o frontend consome o stream e como exibe cada erro
+- [ ] PR aprovado pelo Pedro
 
 ### NS-008 — Configurar o backend
 `area:backend` `area:infra` `tipo:tarefa` · **Milestone:** Sprint 1 — Fundação · **Responsável:** Davi · **Prioridade:** P0 · **Tamanho:** M · **Depende de:** – · **Bloqueia:** NS-011, NS-012, NS-018

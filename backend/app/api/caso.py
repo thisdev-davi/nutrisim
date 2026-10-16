@@ -16,13 +16,33 @@ from app.schemas.api import (
 
 router = APIRouter(tags=["etapa 1: caso"], responses={422: {"model": RespostaErro}})
 
-# perfil provisorio ate a NS-015 fechar a lista
+# perfis do content/perfis.md (NS-015); a descricao nao revela a conduta esperada
 PERFIS = [
     Perfil(
         id="adulto-hipertensao",
-        nome="Adulto com hipertensao",
-        descricao="adulto de 40 a 60 anos com pressao alta e excesso de peso",
-    )
+        nome="Adulto com hipertensão",
+        descricao="Adulto de 40 a 60 anos com pressão alta.",
+    ),
+    Perfil(
+        id="adulto-diabetes-tipo2",
+        nome="Adulto com diabetes tipo 2",
+        descricao="Adulto de 40 a 65 anos com diabetes tipo 2.",
+    ),
+    Perfil(
+        id="adulto-dislipidemia",
+        nome="Adulto com colesterol alto",
+        descricao="Adulto de 30 a 60 anos com colesterol LDL elevado.",
+    ),
+    Perfil(
+        id="idoso-baixa-ingestao",
+        nome="Pessoa idosa com perda de apetite",
+        descricao="Pessoa de 65 a 80 anos que está comendo pouco.",
+    ),
+    Perfil(
+        id="adulto-jovem-emagrecimento",
+        nome="Adulto jovem que quer emagrecer",
+        descricao="Adulto de 18 a 30 anos que pede uma dieta para emagrecer.",
+    ),
 ]
 
 SESSAO_MOCK = Sessao(
