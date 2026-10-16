@@ -2,7 +2,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -19,6 +19,24 @@ class Sessao(Base):
     dificuldade: Mapped[str]
     etapa: Mapped[str]
     ficha: Mapped[dict] = mapped_column(JSONB)
+    criada_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class ChamadaLLM(Base):
+    """uma chamada ao llm, com os tokens gastos; cada nova tentativa conta."""
+
+    __tablename__ = "chamadas_llm"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # vazio fora de uma sessao (eval, por exemplo)
+    sessao_id: Mapped[UUID | None] = mapped_column(ForeignKey("sessoes.id"))
+    tarefa: Mapped[str]
+    modelo: Mapped[str]
+    tentativa: Mapped[int]
+    tokens_entrada: Mapped[int]
+    tokens_saida: Mapped[int]
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
