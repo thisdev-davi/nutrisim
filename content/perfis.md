@@ -1,6 +1,9 @@
 ---
 tipo: perfis
 versao: 1
+# pendente de validação do professor de Nutrição (NS-016)
+revisado_por:
+revisado_em:
 ---
 
 # Perfis do MVP e níveis de dificuldade
@@ -23,9 +26,9 @@ São cinco perfis. Quatro têm como conduta esperada um plano alimentar. Em um d
 | ID | Nome na tela | Faixa etária | Restrição verificável pelo motor | Conduta esperada |
 |---|---|---|---|---|
 | `adulto-hipertensao` | Adulto com hipertensão | 40 a 60 anos | sódio ≤ 2.000 mg/dia | plano alimentar |
-| `adulto-diabetes-tipo2` | Adulto com diabetes tipo 2 | 40 a 65 anos | açúcares de adição < 10% do VET; fibras ≥ 14 g/1.000 kcal | plano alimentar |
+| `adulto-diabetes-tipo2` | Adulto com diabetes tipo 2 | 40 a 65 anos | fibras ≥ 14 g/1.000 kcal | plano alimentar |
 | `adulto-dislipidemia` | Adulto com colesterol alto | 30 a 60 anos | gordura saturada < 10% do VET | plano alimentar |
-| `idoso-baixa-ingestao` | Pessoa idosa com perda de apetite | 65 a 80 anos | proteína entre 1,0 e 1,2 g/kg/dia | plano alimentar |
+| `idoso-baixa-ingestao` | Pessoa idosa com perda de apetite | 65 a 80 anos | proteína entre 1,2 e 1,5 g/kg/dia | plano alimentar |
 | `adulto-jovem-emagrecimento` | Adulto jovem que quer emagrecer | 18 a 30 anos | – | **encaminhamento** |
 
 VET: valor energético total do plano.
@@ -40,7 +43,8 @@ VET: valor energético total do plano.
 ### Adulto com diabetes tipo 2 (`adulto-diabetes-tipo2`)
 
 - **Quadro:** diabetes tipo 2 diagnosticado, com ou sem excesso de peso.
-- **Restrições:** açúcares de adição < 10% do VET (OMS); fibras ≥ 14 g por 1.000 kcal (Sociedade Brasileira de Diabetes).
+- **Restrição:** fibras ≥ 14 g por 1.000 kcal (Sociedade Brasileira de Diabetes, 2023).
+- **Alimentos evitados:** bebidas adoçadas e doces. A TACO não tem coluna de açúcares, então o limite de açúcares de adição da OMS (< 10% do VET) não vira número no motor: o motor confere os alimentos evitados (NS-044) e a rubrica avalia a orientação (NS-049).
 - **O que o estudante precisa investigar:** horários e fracionamento das refeições, bebidas adoçadas e sucos, doces, quantidade de carboidratos por refeição.
 - **Exemplos de informação omitida:** troca o almoço por um lanche quando o trabalho aperta; toma suco de caixinha achando que "é saudável".
 
@@ -54,7 +58,7 @@ VET: valor energético total do plano.
 ### Pessoa idosa com perda de apetite (`idoso-baixa-ingestao`)
 
 - **Quadro:** ingestão reduzida e perda de peso não intencional nos últimos meses. Mora sozinha ou com um familiar.
-- **Restrição:** proteína entre 1,0 e 1,2 g/kg/dia (recomendação PROT-AGE, Bauer et al., 2013).
+- **Restrição:** proteína entre 1,2 e 1,5 g/kg/dia. O PROT-AGE (Bauer et al., 2013) indica 1,0 a 1,2 g/kg para idosos saudáveis e 1,2 a 1,5 g/kg para idosos com doença aguda ou crônica; a perda de peso não intencional indica risco de desnutrição, por isso vale a faixa maior.
 - **O que o estudante precisa investigar:** quem compra e quem prepara a comida, dificuldade de mastigação, refeições puladas, solidão no horário das refeições.
 - **Exemplos de informação omitida:** usa prótese dentária que machuca, por isso evita carne; o jantar costuma ser só café com pão.
 
@@ -64,7 +68,7 @@ VET: valor energético total do plano.
 - **Conduta esperada:** acolher, **não prescrever dieta restritiva** e encaminhar para avaliação com a equipe multiprofissional (psicologia e psiquiatria), mantendo o acompanhamento nutricional.
 - **O que o estudante precisa investigar:** histórico de peso, frequência das refeições, comportamentos compensatórios, como a pessoa se sente em relação à comida e ao corpo.
 - **Cuidados de conteúdo:** os sinais aparecem no nível do comportamento, sem detalhar métodos. O paciente simulado não estimula nem ensina comportamentos de risco, e o feedback (NS-051) explica a conduta esperada.
-- **Decisão pendente da equipe:** como as etapas 3 e 4 funcionam neste perfil. Proposta: o estudante pode registrar o encaminhamento em vez do plano, e a rubrica valoriza essa escolha. Isso afeta o frontend (NS-042) e a rubrica (NS-049).
+- **Decisão pendente da equipe:** como as etapas 3 e 4 funcionam neste perfil. Proposta: o estudante pode registrar o encaminhamento em vez do plano, e a rubrica valoriza essa escolha. A decisão está no card NS-071 (#85), que afeta o frontend (NS-042) e a rubrica (NS-049).
 
 ## Níveis de dificuldade
 
@@ -114,7 +118,7 @@ Os perfis acima pedem estes grupos de campos. A divisão entre o que o paciente 
 |---|---|---|
 | Identificação | `perfil_id`, `dificuldade`, nome, idade, gênero | paciente |
 | Dados para o motor | peso, altura, nível de atividade física | paciente e motor |
-| Restrições verificáveis | `sodio_max_mg`, `acucar_adicao_max_pct_vet`, `fibras_min_g_por_1000kcal`, `gordura_saturada_max_pct_vet`, `proteina_g_kg_min` e `proteina_g_kg_max` (todos opcionais), alimentos evitados, faixa de orçamento | motor |
+| Restrições verificáveis | `sodio_max_mg`, `fibras_min_g_por_1000kcal`, `gordura_saturada_max_pct_vet`, `proteina_g_kg_min` e `proteina_g_kg_max` (todos opcionais), alimentos evitados, faixa de orçamento | motor |
 | Vida e hábitos | rotina, quem cozinha, preferências, aversões, cultura alimentar, recordatório alimentar | paciente |
 | Comportamento | postura, forma de responder, lista de imprecisões previstas no relato | paciente |
 | Informações omitidas | lista de itens, cada um com a informação e a pergunta ou tema que a revela | paciente |
@@ -127,7 +131,7 @@ A conferência final com o schema real fica como item do card, depois que a NS-0
 - BAUER, J. et al. Evidence-based recommendations for optimal dietary protein intake in older people: a position paper from the PROT-AGE Study Group. *Journal of the American Medical Directors Association*, v. 14, n. 8, p. 542-559, 2013.
 - BARROSO, W. K. S. et al. Diretrizes Brasileiras de Hipertensão Arterial – 2020. *Arquivos Brasileiros de Cardiologia*, v. 116, n. 3, p. 516-658, 2021.
 - BRASIL. Ministério da Saúde. *Guia alimentar para a população brasileira*. 2. ed. Brasília: Ministério da Saúde, 2014.
-- SOCIEDADE BRASILEIRA DE DIABETES. *Diretriz da Sociedade Brasileira de Diabetes*. Edição vigente.
+- RAMOS, S. et al. Terapia nutricional no pré-diabetes e no diabetes mellitus tipo 2. In: *Diretriz Oficial da Sociedade Brasileira de Diabetes*. 2023. DOI: 10.29327/5238993.2023-8.
 - WORLD HEALTH ORGANIZATION. *Guideline: sugars intake for adults and children*. Geneva: WHO, 2015.
 - WORLD HEALTH ORGANIZATION. *Guideline: sodium intake for adults and children*. Geneva: WHO, 2012.
 - WORLD HEALTH ORGANIZATION. *Saturated fatty acid and trans-fatty acid intake for adults and children: WHO guideline*. Geneva: WHO, 2023.
