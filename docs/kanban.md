@@ -244,23 +244,23 @@ O contrato sai do código: os schemas Pydantic e as rotas geram o OpenAPI (`/doc
 ### NS-014 — Definir o schema da ficha oculta
 `area:backend` `area:llm` `tipo:tarefa` · **Milestone:** Sprint 1 — Fundação · **Responsável:** Davi · **Prioridade:** P0 · **Tamanho:** M · **RF:** RF03 · **Depende de:** NS-015 · **Bloqueia:** NS-019, NS-027
 
-- [ ] Modelo Pydantic e JSON Schema cobrindo:
+- [x] Modelo Pydantic e JSON Schema cobrindo:
   - dados antropométricos;
   - rotina, preferências e aversões;
   - orçamento;
   - restrições (por exemplo, limite de sódio);
   - informações que o paciente omite, cada uma com o gatilho que a revela
-- [ ] Separação explícita entre o que o paciente sabe e o gabarito da avaliação
-- [ ] Um exemplo completo validado pelo schema
+- [x] Separação explícita entre o que o paciente sabe e o gabarito da avaliação
+- [x] Um exemplo completo validado pelo schema
 - [ ] Revisado por Arthur (eval) e por Mauro (motor)
 
 ### NS-015 — Definir os perfis do MVP e os níveis de dificuldade
 `area:nutricao` `tipo:tarefa` · **Milestone:** Sprint 1 — Fundação · **Responsável:** Arthur · **Prioridade:** P0 · **Tamanho:** M · **Depende de:** – · **Bloqueia:** NS-014
 
-- [ ] Lista de perfis do MVP (por exemplo, adulto com hipertensão), sem perfis pediátricos, de gestantes ou de atletas
-- [ ] Níveis de dificuldade descritos (por exemplo, quantidade de omissões e resistência do paciente)
-- [ ] Diversidade de renda, rotina e hábitos alimentares, revisada para evitar estereótipos
-- [ ] Um caso em que a conduta esperada é o encaminhamento (por exemplo, sinais de transtorno alimentar)
+- [x] Lista de perfis do MVP (por exemplo, adulto com hipertensão), sem perfis pediátricos, de gestantes ou de atletas
+- [x] Níveis de dificuldade descritos (por exemplo, quantidade de omissões e resistência do paciente)
+- [x] Diversidade de renda, rotina e hábitos alimentares, revisada para evitar estereótipos
+- [x] Um caso em que a conduta esperada é o encaminhamento (por exemplo, sinais de transtorno alimentar)
 - [ ] Perfis enviados para validação do professor de Nutrição (NS-016)
 
 ### NS-016 — Fazer o contato com o curso de Nutrição
