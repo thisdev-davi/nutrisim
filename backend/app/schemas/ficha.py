@@ -4,6 +4,7 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, Field, model_validator
 
+from app.motor.energia import Atividade, Sexo
 from app.schemas.api import Dificuldade
 
 
@@ -19,12 +20,11 @@ class FichaPaciente(BaseModel):
 
     nome: str
     idade: int = Field(ge=18, le=100)
-    genero: Literal["feminino", "masculino"]
+    genero: Sexo
     queixa_principal: str
     peso_kg: float = Field(gt=0)
     altura_cm: float = Field(gt=0)
-    # nivel usado no calculo do GET (NS-024)
-    atividade_fisica: Literal["sedentario", "leve", "moderado", "intenso"]
+    atividade_fisica: Atividade
     orcamento_mensal_reais: float = Field(gt=0, description="gasto com alimentacao")
     rotina: str
     quem_cozinha: str
