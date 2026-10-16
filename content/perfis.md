@@ -117,14 +117,17 @@ Os perfis acima pedem estes grupos de campos. A divisão entre o que o paciente 
 | Grupo | Campos | Quem vê |
 |---|---|---|
 | Identificação | `perfil_id`, `dificuldade`, nome, idade, gênero | paciente |
-| Dados para o motor | peso, altura, nível de atividade física | paciente e motor |
-| Restrições verificáveis | `sodio_max_mg`, `fibras_min_g_por_1000kcal`, `gordura_saturada_max_pct_vet`, `proteina_g_kg_min` e `proteina_g_kg_max` (todos opcionais), alimentos evitados, faixa de orçamento | motor |
+| Dados para o motor | peso, altura, nível de atividade física, orçamento mensal para alimentação | paciente e motor |
+| Restrições verificáveis | `sodio_max_mg`, `fibras_min_g_por_1000kcal`, `gordura_saturada_max_pct_vet`, `proteina_g_kg_min` e `proteina_g_kg_max` (todos opcionais), alimentos evitados | motor |
 | Vida e hábitos | rotina, quem cozinha, preferências, aversões, cultura alimentar, recordatório alimentar | paciente |
 | Comportamento | postura, forma de responder, lista de imprecisões previstas no relato | paciente |
 | Informações omitidas | lista de itens, cada um com a informação e a pergunta ou tema que a revela | paciente |
 | Gabarito | conduta esperada (`plano` ou `encaminhamento`), sinais de alerta, o que a anamnese deveria descobrir | rubrica e eval, **nunca o paciente** |
 
-A conferência final com o schema real fica como item do card, depois que a NS-014 for publicada.
+Conferido em 16/10/2026 com o schema real, `backend/app/schemas/ficha.py` (NS-014). Os grupos acima correspondem às partes `paciente`, `restricoes` e `gabarito` da ficha. Duas diferenças:
+
+- **Orçamento:** ficou com o paciente, como valor mensal em reais (`orcamento_mensal_reais`), porque é o paciente quem sabe quanto gasta. O motor lê o valor de lá. A faixa de renda (baixa, média ou alta) da tabela de diversidade sai desse valor.
+- **Vegetarianismo e restrições religiosas:** não têm campo próprio e entram em `preferencias` ou `aversoes`, em texto. Se a NS-044 precisar conferir essas restrições no plano, elas passam a ter campo próprio.
 
 ## Referências
 
