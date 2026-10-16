@@ -19,6 +19,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 | Variável | Uso | Padrão |
 |---|---|---|
 | `FRONTEND_URL` | origem do frontend liberada no CORS | `http://localhost:3000` |
+| `DATABASE_URL` | conexão do PostgreSQL (string do Neon, `postgresql://...?sslmode=require`) | – |
 
 ## Contrato da API
 
@@ -35,6 +36,25 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 - **Streaming (SSE):** vários eventos `trecho` (`{"texto"}`), depois `fim` (`{"mensagem_id"}`) ou `erro` (`{"codigo", "mensagem"}`).
 - **Erros:** toda resposta de erro tem o formato `{"erro": {"codigo", "mensagem"}}`. O frontend decide o que exibir pelo `codigo`.
 - **Autenticação:** `Authorization: Bearer <token>` já está declarado, mas só passa a ser exigido na NS-035.
+
+## Banco e migrações
+
+O banco é PostgreSQL no Neon, com uma base para desenvolvimento e outra para produção. Cada pessoa usa a base de desenvolvimento no próprio `.env`, e a string de conexão nunca entra no commit. As migrações ficam em `app/db/migrations/` (Alembic).
+
+```sh
+uv run --env-file .env alembic upgrade head      # aplica as migrações pendentes
+uv run --env-file .env alembic revision --autogenerate -m "descricao"   # depois de mudar app/db/modelos.py
+uv run --env-file .env alembic downgrade -1      # desfaz a última
+```
+
+Revise o arquivo gerado antes do commit: o autogenerate não detecta tudo (por exemplo, renomear coluna vira apagar e criar).
+
+Para testar sem o Neon, suba um Postgres local:
+
+```sh
+docker run -d --rm --name nutrisim-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=nutrisim -p 55432:5432 postgres:17-alpine
+DATABASE_URL=postgresql://postgres:dev@localhost:55432/nutrisim uv run alembic upgrade head
+```
 
 ## Como testar
 
