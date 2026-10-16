@@ -54,53 +54,84 @@
       </root>
     </mxGraphModel>
   </diagram>
+  
+  <!-- ========================================== -->
+  <!-- INÍCIO DA NOVA PÁGINA 2: ESCOLHA DO CASO   -->
+  <!-- ========================================== -->
   <diagram name="2. Escolha do Caso" id="page-2">
     <mxGraphModel dx="1154" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        
+        <!-- MOBILE LAYOUT -->
         <mxCell id="m2_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
           <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
         </mxCell>
-        <mxCell id="m2_header" value="&amp;lt; Voltar  |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Selecione o Paciente" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="m2_bg" vertex="1">
+        <mxCell id="m2_header" value="&amp;lt; Voltar  |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Configurar Paciente" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="m2_bg" vertex="1">
           <mxGeometry y="23" width="360" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="m2_search" value="🔍 Buscar paciente..." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
-          <mxGeometry x="20" y="90" width="320" height="40" as="geometry" />
+        <mxCell id="m2_title" value="Parâmetros da Simulação" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="90" width="320" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="m2_filters" value="Filtros: [ Dificuldade ▾ ]  [ Patologia ▾ ]" style="rounded=0;whiteSpace=wrap;html=1;" parent="m2_bg" vertex="1">
+        <mxCell id="m2_sel1" value="Patologia/Objetivo: [ Diabetes Tipo 2 ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
           <mxGeometry x="20" y="140" width="320" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="m2_card1" value="João, 45 anos - Diabetes Tipo 2&#xa;&#xa;Dificuldade: [ Média ]&#xa;&#xa;[ Selecionar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="m2_bg" vertex="1">
-          <mxGeometry x="20" y="200" width="320" height="110" as="geometry" />
+        <mxCell id="m2_sel2" value="Dificuldade: [ Média ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="190" width="320" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="m2_card2" value="Maria, 28 anos - Hipertrofia&#xa;&#xa;Dificuldade: [ Fácil ]&#xa;&#xa;[ Selecionar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="m2_bg" vertex="1">
-          <mxGeometry x="20" y="330" width="320" height="110" as="geometry" />
+        <mxCell id="m2_sel3" value="Faixa Etária: [ Adulto (30-50) ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="240" width="320" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="m2_sel4" value="Sexo: [ Aleatório ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="290" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_info" value="💡 A IA criará um perfil único (história, rotina, gostos) com base nas suas escolhas. Descubra os detalhes conversando com ele na anamnese!" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#fffbe6;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="350" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_btn" value="✨ Gerar Paciente e Iniciar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="450" width="320" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DESKTOP LAYOUT -->
         <mxCell id="d2_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
           <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
         </mxCell>
         <mxCell id="d2_header" value="NutriSim Logo         |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Início      [ Casos ]      Histórico         | Perfil" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="d2_bg" vertex="1">
           <mxGeometry y="23" width="1024" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="d2_sidebar" value="Filtros&#xa;&#xa;&gt; Dificuldade&#xa;[ ] Fácil&#xa;[x] Média&#xa;[ ] Difícil&#xa;&#xa;&gt; Patologia&#xa;[ ] Diabetes&#xa;[ ] Hipertensão&#xa;[ ] Obesidade" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingTop=15;spacingLeft=15;" parent="d2_bg" vertex="1">
-          <mxGeometry x="40" y="110" width="220" height="500" as="geometry" />
+        <mxCell id="d2_title" value="Configurar Novo Paciente (Gerado por IA)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="110" width="500" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="d2_search" value="🔍 Buscar por nome ou condição..." style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
-          <mxGeometry x="290" y="110" width="690" height="40" as="geometry" />
+        
+        <!-- Formulário Desktop -->
+        <mxCell id="d2_sel1" value="Patologia/Objetivo: [ Diabetes Tipo 2 ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="180" width="350" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="d2_c1" value="João, 45 anos&#xa;Diabetes Tipo 2&#xa;&#xa;Dificuldade: [ Média ]&#xa;&#xa;&#xa;[ Iniciar Atendimento ]" style="rounded=1;whiteSpace=wrap;html=1;" parent="d2_bg" vertex="1">
-          <mxGeometry x="290" y="180" width="210" height="160" as="geometry" />
+        <mxCell id="d2_sel2" value="Dificuldade: [ Média ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="240" width="350" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="d2_c2" value="Maria, 28 anos&#xa;Hipertrofia&#xa;&#xa;Dificuldade: [ Fácil ]&#xa;&#xa;&#xa;[ Iniciar Atendimento ]" style="rounded=1;whiteSpace=wrap;html=1;" parent="d2_bg" vertex="1">
-          <mxGeometry x="530" y="180" width="210" height="160" as="geometry" />
+        <mxCell id="d2_sel3" value="Faixa Etária: [ Adulto (30-50) ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="300" width="350" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="d2_c3" value="Carlos, 60 anos&#xa;Hipertensão&#xa;&#xa;Dificuldade: [ Difícil ]&#xa;&#xa;&#xa;[ Iniciar Atendimento ]" style="rounded=1;whiteSpace=wrap;html=1;" parent="d2_bg" vertex="1">
-          <mxGeometry x="770" y="180" width="210" height="160" as="geometry" />
+        <mxCell id="d2_sel4" value="Sexo: [ Aleatório ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="360" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_btn" value="✨ Gerar Ficha Oculta e Iniciar Consulta" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="440" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Informação explicativa Desktop -->
+        <mxCell id="d2_info" value="Como funciona a geração?&#xa;&#xa;Ao clicar em 'Gerar Ficha Oculta', nossa Inteligência Artificial irá estruturar um paciente exclusivo contendo uma história de vida, rotina de trabalho, limitações financeiras e resistências alimentares.&#xa;&#xa;Você não verá esses dados previamente. O objetivo é testar suas habilidades investigativas: você terá que descobrir os detalhes da vida do paciente conversando com ele em tempo real durante a etapa de Anamnese, como em um consultório de verdade." style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=20;spacingTop=20;fillColor=#f5f5f5;fontSize=14;" parent="d2_bg" vertex="1">
+          <mxGeometry x="490" y="180" width="450" height="260" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
+  <!-- ========================================== -->
+  <!-- FIM DA NOVA PÁGINA 2                       -->
+  <!-- ========================================== -->
+
   <diagram name="3. Anamnese" id="page-3">
     <mxGraphModel dx="1395" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="3200" math="0" shadow="0">
       <root>
