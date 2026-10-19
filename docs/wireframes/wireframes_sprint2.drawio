@@ -1,0 +1,562 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1" pages="7">
+  <diagram name="1. Início" id="page-1">
+    <mxGraphModel dx="1456" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="m_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry">
+            <mxRectangle x="40" y="40" width="120" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m_header" value="NutriSim Logo  |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; [ ☰ ]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="m_hero_txt" value="Aperfeiçoe suas consultas com pacientes simulados por IA" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" parent="m_bg" vertex="1">
+          <mxGeometry x="20" y="90" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="m_cta" value="Iniciar Simulação" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" parent="m_bg" vertex="1">
+          <mxGeometry x="60" y="180" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m_img" value="[ Ilustração do Estudante / Paciente ]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="m_bg" vertex="1">
+          <mxGeometry x="40" y="250" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="m_feat1" value="[Card] Casos Clínicos Variados" style="rounded=1;whiteSpace=wrap;html=1;" parent="m_bg" vertex="1">
+          <mxGeometry x="40" y="430" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="m_feat2" value="[Card] Feedback de Adesão" style="rounded=1;whiteSpace=wrap;html=1;" parent="m_bg" vertex="1">
+          <mxGeometry x="40" y="510" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="d_header" value="NutriSim Logo         |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Início      Casos      Histórico         | Perfil" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d_hero_txt" value="Aperfeiçoe suas consultas com pacientes simulados por IA" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontStyle=1" parent="d_bg" vertex="1">
+          <mxGeometry x="80" y="160" width="400" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="d_sub" value="Pratique a anamnese em tempo real e analise como a dieta prescrita se comporta com a adesão realista do paciente." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="d_bg" vertex="1">
+          <mxGeometry x="80" y="270" width="400" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d_cta" value="Escolher um Caso Clínico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;" parent="d_bg" vertex="1">
+          <mxGeometry x="80" y="360" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="d_img" value="[ Imagem Principal / Mockup da Interface ]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="d_bg" vertex="1">
+          <mxGeometry x="550" y="160" width="400" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="d_feat_area" value="Cards de Funcionalidades em Flex-Row/Grid" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="d_bg" vertex="1">
+          <mxGeometry x="80" y="480" width="870" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Dnl20bK_9j0g5q7qS2fO-1" value="Cards de Feedback de Adesão em Flex-Row/Grid" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;" parent="d_bg" vertex="1">
+          <mxGeometry x="80" y="650" width="870" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  
+  <!-- ========================================== -->
+  <!-- INÍCIO DA NOVA PÁGINA 2: ESCOLHA DO CASO   -->
+  <!-- ========================================== -->
+  <diagram name="2. Escolha do Caso" id="page-2">
+    <mxGraphModel dx="1154" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- MOBILE LAYOUT -->
+        <mxCell id="m2_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_header" value="&amp;lt; Voltar  |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Configurar Paciente" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="m2_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_title" value="Parâmetros da Simulação" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="90" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_sel1" value="Patologia/Objetivo: [ Diabetes Tipo 2 ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="140" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_sel2" value="Dificuldade: [ Média ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="190" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_sel3" value="Faixa Etária: [ Adulto (30-50) ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="240" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_sel4" value="Sexo: [ Aleatório ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="290" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_info" value="💡 A IA criará um perfil único (história, rotina, gostos) com base nas suas escolhas. Descubra os detalhes conversando com ele na anamnese!" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#fffbe6;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="350" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="m2_btn" value="✨ Gerar Paciente e Iniciar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14;" parent="m2_bg" vertex="1">
+          <mxGeometry x="20" y="450" width="320" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- DESKTOP LAYOUT -->
+        <mxCell id="d2_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_header" value="NutriSim Logo         |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Início      [ Casos ]      Histórico         | Perfil" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="d2_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_title" value="Configurar Novo Paciente (Gerado por IA)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="110" width="500" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Formulário Desktop -->
+        <mxCell id="d2_sel1" value="Patologia/Objetivo: [ Diabetes Tipo 2 ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="180" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_sel2" value="Dificuldade: [ Média ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="240" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_sel3" value="Faixa Etária: [ Adulto (30-50) ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="300" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_sel4" value="Sexo: [ Aleatório ▾ ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="360" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="d2_btn" value="✨ Gerar Ficha Oculta e Iniciar Consulta" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;" parent="d2_bg" vertex="1">
+          <mxGeometry x="80" y="440" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Informação explicativa Desktop -->
+        <mxCell id="d2_info" value="Como funciona a geração?&#xa;&#xa;Ao clicar em 'Gerar Ficha Oculta', nossa Inteligência Artificial irá estruturar um paciente exclusivo contendo uma história de vida, rotina de trabalho, limitações financeiras e resistências alimentares.&#xa;&#xa;Você não verá esses dados previamente. O objetivo é testar suas habilidades investigativas: você terá que descobrir os detalhes da vida do paciente conversando com ele em tempo real durante a etapa de Anamnese, como em um consultório de verdade." style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=20;spacingTop=20;fillColor=#f5f5f5;fontSize=14;" parent="d2_bg" vertex="1">
+          <mxGeometry x="490" y="180" width="450" height="260" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <!-- ========================================== -->
+  <!-- FIM DA NOVA PÁGINA 2                       -->
+  <!-- ========================================== -->
+
+  <diagram name="3. Anamnese" id="page-3">
+    <mxGraphModel dx="1395" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="3200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="r1_m_bg" value="LINHA 1: Aba [Chat] Ativa (Mobile)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_m_head" value="Paciente: João (Média)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r1_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_m_tabs" value="[Chat]  |  Anotações  |  Plano  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r1_m_bg" vertex="1">
+          <mxGeometry y="63" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_m_c1" value="Olá, João! Como tem sido sua alimentação?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=right;spacingRight=10;" parent="r1_m_bg" vertex="1">
+          <mxGeometry x="70" y="130" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_m_c2" value="Oi doutor, eu ando beliscando muitos doces à tarde por causa da ansiedade." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;align=left;spacingLeft=10;" parent="r1_m_bg" vertex="1">
+          <mxGeometry x="20" y="200" width="270" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_m_in" value="Digite sua mensagem...&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; [ Enviar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="r1_m_bg" vertex="1">
+          <mxGeometry x="10" y="580" width="340" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_bg" value="LINHA 1: Nenhuma ferramenta ativa (Desktop)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_head" value="Consulta em Andamento: João, 45 anos (Diabetes Tipo 2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r1_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_chat" value="Anamnese em Tempo Real (LLM)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r1_d_bg" vertex="1">
+          <mxGeometry x="40" y="90" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_c1" value="Nutricionista: Olá, João! Como tem sido sua alimentação?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=right;spacingRight=15;" parent="r1_d_chat" vertex="1">
+          <mxGeometry x="140" y="50" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_c2" value="Paciente (IA): Oi doutor, eu ando beliscando muitos doces à tarde&#xa;por causa da ansiedade do trabalho e da glicemia desregulada." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;align=left;spacingLeft=15;" parent="r1_d_chat" vertex="1">
+          <mxGeometry x="20" y="120" width="400" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_cin" value="Digite sua próxima intervenção...&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; [ Enviar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="r1_d_chat" vertex="1">
+          <mxGeometry x="20" y="450" width="520" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_tools" value="Ferramentas Clínicas" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r1_d_bg" vertex="1">
+          <mxGeometry x="640" y="90" width="340" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_tabs" value="Anotações  |  Plano Alimentar  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e6e6e6;fontColor=#666666;" parent="r1_d_tools" vertex="1">
+          <mxGeometry y="23" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_d_empty" value="Selecione uma ferramenta acima para&#xa;iniciar suas anotações ou plano." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#999999;" parent="r1_d_tools" vertex="1">
+          <mxGeometry x="20" y="200" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_m_bg" value="LINHA 2: Aba [Anotações] Ativa (Mobile)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="720" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_m_head" value="Paciente: João (Média)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r2_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_m_tabs" value="Chat  |  [Anotações]  |  Plano  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r2_m_bg" vertex="1">
+          <mxGeometry y="63" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_m_notes" value="Rascunho Clínico&#xa;&#xa;- Paciente ansioso&#xa;- Come doce de tarde&#xa;- Investigar rotina de trabalho&#xa;&#xa;&#xa;&#xa;&#xa;" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingTop=10;spacingLeft=10;fillColor=#fffbe6;" parent="r2_m_bg" vertex="1">
+          <mxGeometry x="20" y="130" width="320" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_bg" value="LINHA 2: Aba [Anotações] Ativa (Desktop)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="720" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_head" value="Consulta em Andamento: João, 45 anos (Diabetes Tipo 2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r2_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_chat" value="Anamnese em Tempo Real (LLM)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r2_d_bg" vertex="1">
+          <mxGeometry x="40" y="90" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_c1" value="Nutricionista: Entendi. E como é seu sono?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=right;spacingRight=15;" parent="r2_d_chat" vertex="1">
+          <mxGeometry x="140" y="50" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_c2" value="Paciente (IA): Durmo umas 5 horas por noite só, acordo cansado." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;align=left;spacingLeft=15;" parent="r2_d_chat" vertex="1">
+          <mxGeometry x="20" y="120" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="KlkgHItbgRK3D4PS5l1a-1" value="Digite sua próxima intervenção...&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;[ Enviar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" vertex="1" parent="r2_d_chat">
+          <mxGeometry x="20" y="450" width="520" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_tools" value="Ferramentas Clínicas" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r2_d_bg" vertex="1">
+          <mxGeometry x="640" y="90" width="340" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_tabs" value="[ Anotações ]  |  Plano Alimentar  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r2_d_tools" vertex="1">
+          <mxGeometry y="23" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_d_notes" value="- Costuma ingerir muitos doces;&#xa;- Possui muita ansiedade;&#xa;- Dorme mal (5h/noite);&#xa;- Despertar cansado.&#xa;&#xa;&#xa;&#xa;&#xa;" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingTop=10;spacingLeft=15;fillColor=#fffbe6;" parent="r2_d_tools" vertex="1">
+          <mxGeometry x="20" y="80" width="300" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_bg" value="LINHA 3: Aba [Plano] Ativa (Mobile)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1400" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_head" value="Paciente: João (Média)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r3_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_tabs" value="Chat  |  Anotações  |  [Plano]  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r3_m_bg" vertex="1">
+          <mxGeometry y="63" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_macros" value="Macros: 1800 kcal | C: 40% | P: 30% | G: 30%" style="rounded=0;whiteSpace=wrap;html=1;fontSize=10;" parent="r3_m_bg" vertex="1">
+          <mxGeometry x="10" y="110" width="340" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_meal" value="Café da Manhã (07:00)&#xa;----------------------------------&#xa;+ Pão Integral        2 fatias&#xa;+ Ovo cozido        2 un" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingTop=10;spacingLeft=10;" parent="r3_m_bg" vertex="1">
+          <mxGeometry x="10" y="150" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_add" value="+ Adicionar Refeição" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="r3_m_bg" vertex="1">
+          <mxGeometry x="10" y="270" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_m_btn" value="Avaliar Adesão da Dieta" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="r3_m_bg" vertex="1">
+          <mxGeometry x="10" y="580" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_bg" value="LINHA 3: Aba [Plano] Ativa (Desktop)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="1400" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_head" value="Consulta em Andamento: João, 45 anos (Diabetes Tipo 2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1" parent="r3_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_chat" value="Anamnese em Tempo Real (LLM)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r3_d_bg" vertex="1">
+          <mxGeometry x="40" y="90" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_tools" value="Ferramentas Clínicas" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r3_d_bg" vertex="1">
+          <mxGeometry x="640" y="90" width="340" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_tabs" value="Anotações  |  [ Plano Alimentar ]  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r3_d_tools" vertex="1">
+          <mxGeometry y="23" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_mac" value="Metas: 1800 kcal  (C: 40% | P: 30% | G: 30%)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="r3_d_tools" vertex="1">
+          <mxGeometry x="20" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_m1" value="Café da Manhã (07:00)&#xa;  - Pão Integral     2 fatias&#xa;  - Ovo mexido       2 un&#xa;  - Aveia            30g" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;spacingTop=10;" parent="r3_d_tools" vertex="1">
+          <mxGeometry x="20" y="120" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_m2" value="Almoço (12:30)&#xa;  - Arroz integral   100g&#xa;  - Feijão           80g&#xa;  - Peito de frango  120g" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;spacingTop=10;" parent="r3_d_tools" vertex="1">
+          <mxGeometry x="20" y="220" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_add" value="+ Nova Refeição" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="r3_d_tools" vertex="1">
+          <mxGeometry x="20" y="330" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_d_fin" value="Concluir Consulta e&#xa;Gerar Simulação de Adesão" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="r3_d_tools" vertex="1">
+          <mxGeometry x="20" y="450" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_bg" value="LINHA 4: Aba [Adesão] Ativa (Mobile)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="2080" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_head" value="Simulação Encerrada" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontStyle=1" parent="r4_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_tabs" value="Chat  |  Anotações  |  Plano  |  [Adesão]" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="r4_m_bg" vertex="1">
+          <mxGeometry y="63" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_g1" value="65%" style="shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=20;" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="130" y="130" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_l1" value="Adesão Prevista" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="130" y="240" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_fb" value="Feedback do Paciente:&#xa;&#xa;&quot;Doutor, achei muita comida no café da manhã, acabei não conseguindo comer a aveia.&quot;" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="20" y="280" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_btn_retorno" value="Iniciar Consulta de Retorno" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="20" y="390" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_btn_resultados" value="Ver Resultados / Feedback Geral" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="20" y="440" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_m_ret" value="Voltar para Menu" style="rounded=1;whiteSpace=wrap;html=1;" parent="r4_m_bg" vertex="1">
+          <mxGeometry x="20" y="580" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_bg" value="LINHA 4: Aba [Adesão] Ativa (Desktop)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="2080" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_head" value="Consulta Concluída: Resultados de Adesão" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontStyle=1" parent="r4_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_chat" value="Histórico do Chat (Somente Leitura)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r4_d_bg" vertex="1">
+          <mxGeometry x="40" y="90" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_c1" value="Nutricionista: Vamos tentar essa dieta, ok?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=right;spacingRight=15;" parent="r4_d_chat" vertex="1">
+          <mxGeometry x="140" y="50" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_tools" value="Ferramentas Clínicas" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="r4_d_bg" vertex="1">
+          <mxGeometry x="640" y="90" width="340" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_tabs" value="Anotações  |  Plano Alimentar  |  [ Adesão ]" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1;fillColor=#f8cecc;" parent="r4_d_tools" vertex="1">
+          <mxGeometry y="23" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_g1" value="65%" style="shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=24;" parent="r4_d_tools" vertex="1">
+          <mxGeometry x="110" y="75" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_l1" value="Adesão Prevista" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="r4_d_tools" vertex="1">
+          <mxGeometry x="110" y="180" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_fb" value="Feedback IA: &quot;O volume do café da manhã foi excessivo.&quot;" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#f5f5f5;" parent="r4_d_tools" vertex="1">
+          <mxGeometry x="20" y="215" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_btn_retorno" value="Iniciar Consulta de Retorno" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" parent="r4_d_tools" vertex="1">
+          <mxGeometry x="20" y="280" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="r4_d_btn_resultados" value="Ver Resultados / Feedback Geral" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="r4_d_tools" vertex="1">
+          <mxGeometry x="20" y="335" width="300" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="4. Retorno" id="page-retorno">
+    <mxGraphModel dx="1395" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ret_m_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_m_head" value="Retorno: João (30 dias após)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;fontStyle=1" parent="ret_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_m_tabs" value="[Chat]  |  Anotações  |  Plano  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="ret_m_bg" vertex="1">
+          <mxGeometry y="63" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_m_c1" value="Olá, João! Como foram as coisas nesse último mês?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;align=right;spacingRight=10;" parent="ret_m_bg" vertex="1">
+          <mxGeometry x="70" y="130" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_m_c2" value="Oi doutor, acabei pulando a aveia de manhã, não tive tempo." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;align=left;spacingLeft=10;" parent="ret_m_bg" vertex="1">
+          <mxGeometry x="20" y="195" width="270" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_m_in" value="Digite sua mensagem... [ Enviar ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" parent="ret_m_bg" vertex="1">
+          <mxGeometry x="10" y="580" width="340" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_head" value="Consulta de Retorno: João, 45 anos" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;fontStyle=1" parent="ret_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_chat" value="Acompanhamento em Tempo Real (LLM)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="ret_d_bg" vertex="1">
+          <mxGeometry x="40" y="90" width="560" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_tools" value="Ferramentas Clínicas (Modo Edição)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="ret_d_bg" vertex="1">
+          <mxGeometry x="640" y="90" width="340" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_tabs" value="Anotações  |  [ Plano Alimentar ]  |  Adesão" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="ret_d_tools" vertex="1">
+          <mxGeometry y="23" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_mac" value="Metas: 1800 kcal (C: 40% | P: 30% | G: 30%)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="ret_d_tools" vertex="1">
+          <mxGeometry x="20" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_m1" value="Café da Manhã (07:00) ✏️ Editar&#xa;  - Pão Integral / Aveia" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#fff2cc;" parent="ret_d_tools" vertex="1">
+          <mxGeometry x="20" y="120" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ret_d_fin" value="Salvar Ajustes e Gerar Nova Adesão" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="ret_d_tools" vertex="1">
+          <mxGeometry x="20" y="450" width="300" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="5. Resultados" id="page-resultados">
+    <mxGraphModel dx="1395" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="res_m_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="res_m_head" value="Avaliação de Desempenho (Feedback)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontStyle=1" parent="res_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="res_m_score" value="Nota Final: 8.5 / 10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontStyle=1;fontSize=16;" parent="res_m_bg" vertex="1">
+          <mxGeometry x="20" y="80" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="res_m_details" value="Pontos Fortes:&#xa;- Boa condução da anamnese&#xa;- Dieta adequada para Diabetes Tipo 2&#xa;&#xa;Pontos de Melhoria:&#xa;- Investigar melhor a rotina matinal" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=10;spacingTop=10;fillColor=#f5f5f5;" parent="res_m_bg" vertex="1">
+          <mxGeometry x="20" y="150" width="320" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="res_m_btn" value="Voltar ao Menu / Histórico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#cccccc;" parent="res_m_bg" vertex="1">
+          <mxGeometry x="20" y="580" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_head" value="Relatório de Desempenho Clínico: Caso João (Diabetes Tipo 2)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;fontStyle=1;fontSize=14;" parent="res_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_score" value="Nota Geral: 8.5 / 10&#xa;Aprovado com Êxito" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;fontStyle=1;fontSize=20;" parent="res_d_bg" vertex="1">
+          <mxGeometry x="60" y="100" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_eval1" value="Anamnese &amp; Investigação: 9.0&#xa;- Excelente empatia e escuta ativa dos problemas de ansiedade." style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="res_d_bg" vertex="1">
+          <mxGeometry x="400" y="100" width="560" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_eval2" value="Prescrição Nutricional: 8.0&#xa;- Boa distribuição de macronutrientes, mas exigiu preparos complexos pela manhã." style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="res_d_bg" vertex="1">
+          <mxGeometry x="400" y="210" width="560" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_eval3" value="Manejo de Retorno: 8.5&#xa;- Conseguiu identificar o gargalo da aveia e ajustou bem o plano no segundo ciclo." style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="res_d_bg" vertex="1">
+          <mxGeometry x="400" y="320" width="560" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="res_d_btn" value="Concluir e Salvar no Histórico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;" parent="res_d_bg" vertex="1">
+          <mxGeometry x="362" y="520" width="300" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="6. Login" id="page-login">
+    <mxGraphModel dx="1969" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="log_m_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_logo" value="NutriSim Logo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1;fontSize=18;strokeColor=none;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="60" y="80" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_title" value="Bem-vindo de volta!" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="160" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_sub" value="Faça login para continuar seus atendimentos" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#666666;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="190" width="320" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_email" value="✉️ E-mail" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#cccccc;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="240" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_pass" value="🔒 Senha" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#cccccc;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="300" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_forgot" value="Esqueci minha senha" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#2D76BA;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="190" y="350" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_btn" value="Entrar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="390" width="320" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_div" value="----------------- ou -----------------" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#999999;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="450" width="320" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_clerk" value="G | Continuar com Google" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;fontStyle=1" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="490" width="320" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="log_m_register" value="Não tem uma conta? Crie aqui" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#2D76BA;" parent="log_m_bg" vertex="1">
+          <mxGeometry x="20" y="560" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_left" value="[ Ilustração / Imagem de Fundo NutriSim ]&#xa;&#xa;&quot;Aperfeiçoe sua prática clínica hoje.&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=none;fontStyle=1;fontSize=18;fontColor=#4d72a0;" parent="log_d_bg" vertex="1">
+          <mxGeometry y="23" width="512" height="617" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_logo" value="NutriSim Logo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontStyle=1;fontSize=22;strokeColor=none;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="648" y="80" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_title" value="Bem-vindo de volta!" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" parent="log_d_bg" vertex="1">
+          <mxGeometry x="596" y="160" width="344" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_sub" value="Faça login para continuar seus atendimentos" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="596" y="200" width="344" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_email" value="✉️ E-mail" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#ffffff;strokeColor=#cccccc;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="250" width="360" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_pass" value="🔒 Senha" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#ffffff;strokeColor=#cccccc;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="320" width="360" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_forgot" value="Esqueci minha senha" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#2D76BA;cursor=pointer;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="798" y="375" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_btn" value="Entrar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;cursor=pointer;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="420" width="360" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_div" value="-------------------------- ou --------------------------" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#999999;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="490" width="360" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_clerk" value="G | Continuar com Google" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;fontStyle=1;fontSize=14;cursor=pointer;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="530" width="360" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="log_d_register" value="Não tem uma conta? Crie aqui" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#2D76BA;cursor=pointer;" parent="log_d_bg" vertex="1">
+          <mxGeometry x="588" y="600" width="360" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="7. Histórico" id="page-historico">
+    <mxGraphModel dx="1154" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="hist_m_bg" value="Mobile (360px)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="360" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_head" value="NutriSim Logo  |                       [ ☰ ]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="hist_m_bg" vertex="1">
+          <mxGeometry y="23" width="360" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_title" value="Seu Histórico de Consultas" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="hist_m_bg" vertex="1">
+          <mxGeometry x="20" y="90" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_filter" value="Filtros: [ Patologia ▾ ]  [ Data ▾ ]" style="rounded=0;whiteSpace=wrap;html=1;" parent="hist_m_bg" vertex="1">
+          <mxGeometry x="20" y="130" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_c1" value="João - Diabetes Tipo 2&#xa;Data: 12/10/2026&#xa;Nota: 8.5/10&#xa;&#xa;[ Ver Relatório ]  [ Refazer ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#f5f5f5;" parent="hist_m_bg" vertex="1">
+          <mxGeometry x="20" y="190" width="320" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_c2" value="Maria - Hipertrofia&#xa;Data: 05/10/2026&#xa;Nota: 6.0/10&#xa;&#xa;[ Ver Relatório ]  [ Refazer ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;fillColor=#f5f5f5;" parent="hist_m_bg" vertex="1">
+          <mxGeometry x="20" y="320" width="320" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_m_ret" value="&lt; Voltar ao Início" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="hist_m_bg" vertex="1">
+          <mxGeometry x="20" y="580" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_bg" value="Desktop (1024px+)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+          <mxGeometry x="460" y="40" width="1024" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_header" value="NutriSim Logo         |                                                                                                                                              Início      Casos      [ Histórico ]         | Perfil" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" parent="hist_d_bg" vertex="1">
+          <mxGeometry y="23" width="1024" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_title" value="Histórico de Atendimentos Simulados" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="110" width="500" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_sub" value="Acompanhe sua evolução e refaça casos para testar novas abordagens clínicas." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="150" width="600" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_filter" value="Filtros: [ Patologia ▾ ]  [ Dificuldade ▾ ]  [ Data ▾ ]" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=15;" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="200" width="940" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_row1" value="João, 45 anos | Diabetes Tipo 2                                Data: 12/10/2026 | Nota Final: 8.5/10              [ Ver Relatório ]   [ Refazer Simulação ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="270" width="940" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_row2" value="Maria, 28 anos | Hipertrofia                                       Data: 05/10/2026 | Nota Final: 6.0/10              [ Ver Relatório ]   [ Refazer Simulação ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="350" width="940" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="hist_d_row3" value="Carlos, 60 anos | Hipertensão                                   Data: 28/09/2026 | Nota Final: 9.0/10              [ Ver Relatório ]   [ Refazer Simulação ]" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#f5f5f5;" parent="hist_d_bg" vertex="1">
+          <mxGeometry x="40" y="430" width="940" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
