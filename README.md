@@ -56,6 +56,7 @@ As justificativas estão em [`docs/decisoes.md`](docs/decisoes.md).
 | [Relatório C1](docs/relatorios/NutriSim_Relatorio_C1.md) | escopo, justificativa, metodologia e plano de trabalho |
 | [Arquitetura](docs/arquitetura.md) | componentes, fronteiras entre IA e motor, árvore de pastas |
 | [Decisões](docs/decisoes.md) | registro das decisões de arquitetura (ADRs) |
+| [Design](DESIGN.md) | identidade visual (cores, fontes, tamanhos) e especificação dos componentes |
 | [Sprints](docs/sprints.md) | calendário, metas e critérios de saída de cada sprint |
 | [Quadro de tarefas](docs/kanban.md) | todos os cards, prontos para o GitHub Projects |
 | [Caminho crítico](docs/caminho-critico.md) | prioridade de cada card e o que ele bloqueia |
