@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db.deps import obter_sessao
-from app.db.modelos import Alimentos
+from app.db.modelos import AcidosGraxos, Alimentos, Nutrientes
 from app.schemas.alimentos import ResultadoAlimento
 
 router = APIRouter(tags=["alimentos"])
@@ -56,17 +56,37 @@ def buscar_alimentos(
     """
     termo = normalizar_busca(nome)
     consulta = (
-        select(Alimentos)
+        select(
+            Alimentos.id,
+            Alimentos.nome,
+            Alimentos.category_id.label("categoria_id"),
+            Nutrientes.kcal,
+            Nutrientes.proteina,
+            Nutrientes.carboidratos,
+            Nutrientes.lipidios,
+            Nutrientes.fibra_alimentar,
+            Nutrientes.sodio,
+            AcidosGraxos.gordura_saturada,
+        )
+        .outerjoin(Nutrientes, Nutrientes.id == Alimentos.id)
+        .outerjoin(AcidosGraxos, AcidosGraxos.id == Alimentos.id)
         .where(expressao_nome_normalizado().contains(termo))
         .order_by(Alimentos.nome)
         .limit(50)
     )
-    alimentos = sessao.scalars(consulta).all()
+    alimentos = sessao.execute(consulta).all()
     return [
         ResultadoAlimento(
             id=alimento.id,
             nome=alimento.nome,
-            categoria_id=alimento.category_id,
+            categoria_id=alimento.categoria_id,
+            kcal=alimento.kcal,
+            proteina=alimento.proteina,
+            carboidratos=alimento.carboidratos,
+            lipidios=alimento.lipidios,
+            fibra_alimentar=alimento.fibra_alimentar,
+            sodio=alimento.sodio,
+            gordura_saturada=alimento.gordura_saturada,
         )
         for alimento in alimentos
     ]

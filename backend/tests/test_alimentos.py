@@ -9,17 +9,28 @@ from app.main import app
 
 
 class ResultadoFalso:
-    """Resultado simulado de uma consulta SQLAlchemy."""
+    """Linhas simuladas de uma consulta SQLAlchemy."""
 
     @staticmethod
     def all():
-        """Retorna um alimento simulado.
+        """Retorna um alimento com seus nutrientes.
 
         Returns:
-            Lista com um alimento simulado.
+            Lista com uma linha simulada.
         """
         return [
-            SimpleNamespace(id=1, nome="Arroz, integral, cozido", category_id=1)
+            SimpleNamespace(
+                id=1,
+                nome="Arroz, integral, cozido",
+                categoria_id=1,
+                kcal=124.0,
+                proteina=2.6,
+                carboidratos=25.8,
+                lipidios=1.0,
+                fibra_alimentar=2.7,
+                sodio=1.0,
+                gordura_saturada=0.3,
+            )
         ]
 
 
@@ -27,7 +38,7 @@ class SessaoFalsa:
     """Sessão simulada para o teste do endpoint."""
 
     @staticmethod
-    def scalars(_consulta):
+    def execute(_consulta):
         """Retorna resultados simulados.
 
         Returns:
@@ -60,5 +71,16 @@ def test_busca_de_alimentos():
 
     assert resposta.status_code == status.HTTP_200_OK
     assert resposta.json() == [
-        {"id": 1, "nome": "Arroz, integral, cozido", "categoria_id": 1}
+        {
+            "id": 1,
+            "nome": "Arroz, integral, cozido",
+            "categoria_id": 1,
+            "kcal": 124.0,
+            "proteina": 2.6,
+            "carboidratos": 25.8,
+            "lipidios": 1.0,
+            "fibra_alimentar": 2.7,
+            "sodio": 1.0,
+            "gordura_saturada": 0.3,
+        }
     ]
