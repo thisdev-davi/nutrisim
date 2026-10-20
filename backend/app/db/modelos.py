@@ -86,6 +86,36 @@ class Nutrientes(Base):
     vitamina_c: Mapped[float | None]
 
 
+class AcidosGraxos(Base):
+    """Tabela referente aos dados de ácidos graxos dos alimentos."""
+
+    __tablename__ = "acidos_graxos"
+
+    id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), primary_key=True)
+    gordura_saturada: Mapped[float | None]
+    gordura_monoinsaturada: Mapped[float | None]
+    gordura_poliinsaturada: Mapped[float | None]
+    acido_laurico: Mapped[float | None]
+    acido_miristico: Mapped[float | None]
+    acido_palmitico: Mapped[float | None]
+    acido_estearico: Mapped[float | None]
+    acido_araquidico: Mapped[float | None]
+    acido_behenico: Mapped[float | None]
+    acido_lignocerico: Mapped[float | None]
+    acido_miristoleico: Mapped[float | None]
+    acido_palmitoleico: Mapped[float | None]
+    acido_oleico: Mapped[float | None]
+    acido_eicosenoico: Mapped[float | None]
+    acido_linoleico: Mapped[float | None]
+    acido_linolenico: Mapped[float | None]
+    acido_araquidonico: Mapped[float | None]
+    acido_epa: Mapped[float | None]
+    acido_dpa: Mapped[float | None]
+    acido_dha: Mapped[float | None]
+    acido_oleico_trans: Mapped[float | None]
+    acido_linoleico_trans: Mapped[float | None]
+
+
 class Categorias(Base):
     """Tabela que representa as categorias dos alimentos."""
 
