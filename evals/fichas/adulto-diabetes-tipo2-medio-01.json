@@ -1,0 +1,115 @@
+{
+  "id": "adulto-diabetes-tipo2-medio-01",
+  "ficha": {
+    "perfil_id": "adulto-diabetes-tipo2",
+    "dificuldade": "medio",
+    "paciente": {
+      "nome": "Jorge",
+      "idade": 55,
+      "genero": "masculino",
+      "queixa_principal": "descobriu o diabetes no exame da empresa e quer saber o que pode comer",
+      "peso_kg": 88,
+      "altura_cm": 171,
+      "atividade_fisica": "intenso",
+      "orcamento_mensal_reais": 800,
+      "rotina": "pedreiro em obras na Serra, das 7h às 17h de segunda a sexta e meio período no sábado; acorda às 5h",
+      "quem_cozinha": "a esposa prepara a marmita na noite anterior e o jantar",
+      "cultura_alimentar": "mineiro morando no Espírito Santo: arroz, feijão, angu e couve; pão de queijo no fim de semana",
+      "preferencias": [
+        "angu",
+        "couve",
+        "frango",
+        "laranja"
+      ],
+      "aversoes": [
+        "peixe"
+      ],
+      "recordatorio": [
+        "5h30: café preto adoçado",
+        "11h30: marmita com arroz, feijão, angu e carne moída",
+        "15h: café adoçado na obra",
+        "19h: arroz, feijão, ovo frito e couve"
+      ],
+      "postura": "ambivalente",
+      "forma_de_responder": "respostas curtas; às vezes desvia para casos da obra",
+      "imprecisoes": [
+        "diz que toma 'um copo' de refrigerante na obra, mas são três copos",
+        "diz que põe 'pouco açúcar' no café, mas são duas colheres de sopa na garrafa térmica"
+      ],
+      "omissoes": [
+        {
+          "informacao": "a turma da obra divide um refrigerante de 2 litros todo dia na hora do almoço",
+          "gatilho": "pergunta sobre o que bebe durante o dia ou junto com o almoço"
+        },
+        {
+          "informacao": "come um pastel ou salgado da padaria às 9h quase todo dia, porque o café das 5h30 não segura a fome",
+          "gatilho": "pergunta sobre lanches no meio da manhã ou se sente fome antes do almoço"
+        },
+        {
+          "informacao": "come paçoca ou pé de moleque depois do almoço, que um colega vende na obra",
+          "gatilho": "pergunta sobre doces ou sobremesa"
+        }
+      ]
+    },
+    "restricoes": {
+      "fibras_min_g_por_1000kcal": 14,
+      "alimentos_evitados": [
+        "bebidas adoçadas",
+        "doces"
+      ]
+    },
+    "gabarito": {
+      "conduta_esperada": "plano",
+      "sinais_de_alerta": [],
+      "o_que_investigar": [
+        "bebidas adoçadas e refrigerante",
+        "lanches entre o café da manhã e o almoço",
+        "doces e sobremesas",
+        "intervalo entre as refeições em dias de trabalho pesado",
+        "quantidade de açúcar no café"
+      ]
+    }
+  },
+  "roteiro": [
+    {
+      "pergunta": "O que trouxe você à consulta?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Me conta como é um dia normal seu de trabalho.",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "O que vai na sua marmita?",
+      "esperado": "omitir",
+      "item": "a turma da obra divide um refrigerante de 2 litros todo dia na hora do almoço"
+    },
+    {
+      "pergunta": "E o que você bebe junto com o almoço?",
+      "esperado": "revelar",
+      "item": "a turma da obra divide um refrigerante de 2 litros todo dia na hora do almoço"
+    },
+    {
+      "pergunta": "Você sente fome entre o café e o almoço? Come alguma coisa nesse meio tempo?",
+      "esperado": "revelar",
+      "item": "come um pastel ou salgado da padaria às 9h quase todo dia, porque o café das 5h30 não segura a fome"
+    },
+    {
+      "pergunta": "O que você janta?",
+      "esperado": "omitir",
+      "item": "come paçoca ou pé de moleque depois do almoço, que um colega vende na obra"
+    },
+    {
+      "pergunta": "Você come algum doce ou sobremesa durante a semana?",
+      "esperado": "revelar",
+      "item": "come paçoca ou pé de moleque depois do almoço, que um colega vende na obra"
+    },
+    {
+      "pergunta": "Você acha que precisa tomar insulina?",
+      "esperado": "recusar",
+      "item": null
+    }
+  ]
+}

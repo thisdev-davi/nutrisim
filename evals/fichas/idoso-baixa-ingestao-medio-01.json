@@ -1,0 +1,110 @@
+{
+  "id": "idoso-baixa-ingestao-medio-01",
+  "ficha": {
+    "perfil_id": "idoso-baixa-ingestao",
+    "dificuldade": "medio",
+    "paciente": {
+      "nome": "Lourdes",
+      "idade": 70,
+      "genero": "feminino",
+      "queixa_principal": "a filha acha que ela está comendo pouco e emagrecendo",
+      "peso_kg": 51,
+      "altura_cm": 155,
+      "atividade_fisica": "sedentario",
+      "orcamento_mensal_reais": 700,
+      "rotina": "aposentada, mora em Cariacica com a filha, que trabalha das 8h às 19h; passa o dia em casa vendo televisão e cuidando das plantas",
+      "quem_cozinha": "a filha deixa o almoço pronto na geladeira antes de sair e faz o jantar quando chega",
+      "cultura_alimentar": "do interior do Espírito Santo: angu, feijão, couve, banana-da-terra e café coado",
+      "preferencias": [
+        "café com leite",
+        "banana-da-terra",
+        "sopa",
+        "biscoito de polvilho"
+      ],
+      "aversoes": [
+        "comida requentada no micro-ondas"
+      ],
+      "recordatorio": [
+        "7h: café com leite e biscoito de polvilho",
+        "12h: um pouco do almoço que a filha deixou",
+        "16h: café",
+        "20h: sopa ou o jantar que a filha fizer"
+      ],
+      "postura": "ambivalente",
+      "forma_de_responder": "respostas curtas; muda de assunto para as plantas ou para os netos",
+      "imprecisoes": [
+        "diz que 'come bem no almoço', mas come só metade do prato que a filha deixa"
+      ],
+      "omissoes": [
+        {
+          "informacao": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café",
+          "gatilho": "pergunta sobre como prepara ou esquenta o almoço quando está sozinha"
+        },
+        {
+          "informacao": "quando a filha chega tarde, vai dormir sem jantar para não dar trabalho",
+          "gatilho": "pergunta sobre o jantar nos dias em que a filha se atrasa"
+        },
+        {
+          "informacao": "as roupas ficaram largas nos últimos meses e precisou apertar a saia",
+          "gatilho": "pergunta sobre mudança de peso ou se as roupas estão servindo"
+        }
+      ]
+    },
+    "restricoes": {
+      "proteina_g_kg_min": 1.2,
+      "proteina_g_kg_max": 1.5,
+      "alimentos_evitados": []
+    },
+    "gabarito": {
+      "conduta_esperada": "plano",
+      "sinais_de_alerta": [
+        "perda de peso não intencional",
+        "refeições puladas quando está sozinha"
+      ],
+      "o_que_investigar": [
+        "quem prepara e como ela esquenta as refeições",
+        "refeições puladas",
+        "perda de peso recente",
+        "consumo de proteína",
+        "isolamento nos horários das refeições"
+      ]
+    }
+  },
+  "roteiro": [
+    {
+      "pergunta": "O que traz a senhora aqui hoje?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Como é o seu dia em casa?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "O que a senhora toma no café da manhã?",
+      "esperado": "omitir",
+      "item": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café"
+    },
+    {
+      "pergunta": "Quando a senhora está sozinha na hora do almoço, como faz para esquentar a comida?",
+      "esperado": "revelar",
+      "item": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café"
+    },
+    {
+      "pergunta": "E nos dias em que a sua filha chega tarde, como fica o jantar?",
+      "esperado": "revelar",
+      "item": "quando a filha chega tarde, vai dormir sem jantar para não dar trabalho"
+    },
+    {
+      "pergunta": "A senhora notou se as suas roupas estão mais largas?",
+      "esperado": "revelar",
+      "item": "as roupas ficaram largas nos últimos meses e precisou apertar a saia"
+    },
+    {
+      "pergunta": "Quantos gramas de proteína a senhora precisa comer por dia?",
+      "esperado": "recusar",
+      "item": null
+    }
+  ]
+}
