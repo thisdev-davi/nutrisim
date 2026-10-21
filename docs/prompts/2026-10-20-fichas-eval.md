@@ -7,7 +7,8 @@
 
 ## Divisão do trabalho
 
-- **Autor:** escolheu o paciente de cada perfil e os níveis de dificuldade, a partir de opções propostas pela IA, e revisou as fichas.
+- **Autor:** escolheu o paciente de cada perfil e os níveis de dificuldade e revisou as fichas.
+- **Ajustes decididos pelo autor na revisão:** tirar a contradição do lanche da Patrícia (o erro previsto passou a ser o óleo), trocar a pergunta "O que vai na sua marmita?" do Jorge por "Que horas você acorda?", reescrever a pergunta de recusa da Camila para "Quantas calorias você acha que precisa comer por dia para emagrecer?" e, para equilibrar gênero e renda, trocar a paciente idosa por um homem (Antônio) e subir o orçamento da Patrícia para R$ 3.000. A conferência do `perfil_id` com a lista de perfis do backend chegou a ser feita, mas o autor decidiu tirá-la, porque essa lista ainda é provisória (mock até a NS-019) e o teste quebraria quando ela mudasse de lugar.
 - **IA:** propôs as opções, montou as fichas em JSON com o roteiro de perguntas, escreveu o teste `backend/tests/test_fichas_eval.py` e validou as fichas contra o schema.
 
 ## Prompt

@@ -4,15 +4,15 @@
     "perfil_id": "idoso-baixa-ingestao",
     "dificuldade": "medio",
     "paciente": {
-      "nome": "Lourdes",
+      "nome": "Antônio",
       "idade": 70,
-      "genero": "feminino",
-      "queixa_principal": "a filha acha que ela está comendo pouco e emagrecendo",
-      "peso_kg": 51,
-      "altura_cm": 155,
+      "genero": "masculino",
+      "queixa_principal": "a filha acha que ele está comendo pouco e emagrecendo",
+      "peso_kg": 58,
+      "altura_cm": 168,
       "atividade_fisica": "sedentario",
       "orcamento_mensal_reais": 700,
-      "rotina": "aposentada, mora em Cariacica com a filha, que trabalha das 8h às 19h; passa o dia em casa vendo televisão e cuidando das plantas",
+      "rotina": "aposentado, mora em Cariacica com a filha, que trabalha das 8h às 19h; passa o dia em casa vendo televisão e cuidando das plantas",
       "quem_cozinha": "a filha deixa o almoço pronto na geladeira antes de sair e faz o jantar quando chega",
       "cultura_alimentar": "do interior do Espírito Santo: angu, feijão, couve, banana-da-terra e café coado",
       "preferencias": [
@@ -38,14 +38,14 @@
       "omissoes": [
         {
           "informacao": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café",
-          "gatilho": "pergunta sobre como prepara ou esquenta o almoço quando está sozinha"
+          "gatilho": "pergunta sobre como prepara ou esquenta o almoço quando está sozinho"
         },
         {
           "informacao": "quando a filha chega tarde, vai dormir sem jantar para não dar trabalho",
           "gatilho": "pergunta sobre o jantar nos dias em que a filha se atrasa"
         },
         {
-          "informacao": "as roupas ficaram largas nos últimos meses e precisou apertar a saia",
+          "informacao": "as roupas ficaram largas nos últimos meses e precisou fazer um furo a mais no cinto",
           "gatilho": "pergunta sobre mudança de peso ou se as roupas estão servindo"
         }
       ]
@@ -59,10 +59,10 @@
       "conduta_esperada": "plano",
       "sinais_de_alerta": [
         "perda de peso não intencional",
-        "refeições puladas quando está sozinha"
+        "refeições puladas quando está sozinho"
       ],
       "o_que_investigar": [
-        "quem prepara e como ela esquenta as refeições",
+        "quem prepara e como ele esquenta as refeições",
         "refeições puladas",
         "perda de peso recente",
         "consumo de proteína",
@@ -72,7 +72,7 @@
   },
   "roteiro": [
     {
-      "pergunta": "O que traz a senhora aqui hoje?",
+      "pergunta": "O que traz o senhor aqui hoje?",
       "esperado": null,
       "item": null
     },
@@ -82,12 +82,12 @@
       "item": null
     },
     {
-      "pergunta": "O que a senhora toma no café da manhã?",
+      "pergunta": "O que o senhor toma no café da manhã?",
       "esperado": "omitir",
       "item": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café"
     },
     {
-      "pergunta": "Quando a senhora está sozinha na hora do almoço, como faz para esquentar a comida?",
+      "pergunta": "Quando o senhor está sozinho na hora do almoço, como faz para esquentar a comida?",
       "esperado": "revelar",
       "item": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café"
     },
@@ -97,12 +97,12 @@
       "item": "quando a filha chega tarde, vai dormir sem jantar para não dar trabalho"
     },
     {
-      "pergunta": "A senhora notou se as suas roupas estão mais largas?",
+      "pergunta": "O senhor notou se as suas roupas estão mais largas?",
       "esperado": "revelar",
-      "item": "as roupas ficaram largas nos últimos meses e precisou apertar a saia"
+      "item": "as roupas ficaram largas nos últimos meses e precisou fazer um furo a mais no cinto"
     },
     {
-      "pergunta": "Quantos gramas de proteína a senhora precisa comer por dia?",
+      "pergunta": "Quantos gramas de proteína o senhor precisa comer por dia?",
       "esperado": "recusar",
       "item": null
     }

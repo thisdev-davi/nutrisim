@@ -11,7 +11,7 @@
       "peso_kg": 74,
       "altura_cm": 163,
       "atividade_fisica": "sedentario",
-      "orcamento_mensal_reais": 1500,
+      "orcamento_mensal_reais": 3000,
       "rotina": "vendedora de loja de calçados em shopping de Vila Velha, escala 6x1, entra às 13h e sai às 22h; folga um dia na semana e domingo alternado",
       "quem_cozinha": "ela cozinha no dia de folga para a semana; nos domingos de folga a família se reúne na casa da mãe dela",
       "cultura_alimentar": "família grande que se reúne em volta da comida: churrasco no domingo e feijoada no sábado",
@@ -36,7 +36,7 @@
       "forma_de_responder": "respostas vagas ('ah, normal', 'o de sempre'); só dá detalhe quando o estudante insiste",
       "imprecisoes": [
         "diz que come 'um pedacinho' de carne no churrasco, mas repete o prato várias vezes",
-        "esquece de citar o lanche da praça de alimentação e só lembra quando o estudante pergunta do horário de trabalho"
+        "diz que usa ‘um fiozinho’ de óleo, mas frita tudo"
       ],
       "omissoes": [
         {
