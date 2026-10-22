@@ -12,9 +12,9 @@
       "altura_cm": 168,
       "atividade_fisica": "sedentario",
       "orcamento_mensal_reais": 700,
-      "rotina": "aposentado, mora em Cariacica com a filha, que trabalha das 8h às 19h; passa o dia em casa vendo televisão e cuidando das plantas",
+      "rotina": "aposentado, mora em Cariacica com a filha, que trabalha das 8h às 19h; passa o dia em casa vendo televisão e cuidando das plantas; usa dentadura e mastiga sem dificuldade",
       "quem_cozinha": "a filha deixa o almoço pronto na geladeira antes de sair e faz o jantar quando chega",
-      "cultura_alimentar": "do interior do Espírito Santo: angu, feijão, couve, banana-da-terra e café coado",
+      "cultura_alimentar": "do interior do Espírito Santo: angu, feijão, couve, banana-da-terra e café coado; parou de beber há muitos anos",
       "preferencias": [
         "café com leite",
         "banana-da-terra",
@@ -22,7 +22,8 @@
         "biscoito de polvilho"
       ],
       "aversoes": [
-        "comida requentada no micro-ondas"
+        "jiló",
+        "fígado"
       ],
       "recordatorio": [
         "7h: café com leite e biscoito de polvilho",
@@ -33,7 +34,7 @@
       "postura": "ambivalente",
       "forma_de_responder": "respostas curtas; muda de assunto para as plantas ou para os netos",
       "imprecisoes": [
-        "diz que 'come bem no almoço', mas come só metade do prato que a filha deixa"
+        "diz que toma 'um cafezinho' à tarde, mas são três xícaras com duas colheres de açúcar cada"
       ],
       "omissoes": [
         {
@@ -82,7 +83,7 @@
       "item": null
     },
     {
-      "pergunta": "O que o senhor toma no café da manhã?",
+      "pergunta": "Que fruta o senhor mais gosta de comer?",
       "esperado": "omitir",
       "item": "muitas vezes não esquenta o almoço porque não gosta do micro-ondas e acaba comendo só bolacha com café"
     },

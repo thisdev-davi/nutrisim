@@ -13,8 +13,8 @@
       "atividade_fisica": "sedentario",
       "orcamento_mensal_reais": 3000,
       "rotina": "vendedora de loja de calçados em shopping de Vila Velha, escala 6x1, entra às 13h e sai às 22h; folga um dia na semana e domingo alternado",
-      "quem_cozinha": "ela cozinha no dia de folga para a semana; nos domingos de folga a família se reúne na casa da mãe dela",
-      "cultura_alimentar": "família grande que se reúne em volta da comida: churrasco no domingo e feijoada no sábado",
+      "quem_cozinha": "ela mesma: cozinha no dia de folga e deixa a comida da semana pronta",
+      "cultura_alimentar": "família grande e unida; comida caseira com arroz, feijão e carne todo dia; bebe pouco, uma lata de cerveja de vez em quando",
       "preferencias": [
         "carne vermelha",
         "feijão",
@@ -35,8 +35,8 @@
       "postura": "resistente",
       "forma_de_responder": "respostas vagas ('ah, normal', 'o de sempre'); só dá detalhe quando o estudante insiste",
       "imprecisoes": [
-        "diz que come 'um pedacinho' de carne no churrasco, mas repete o prato várias vezes",
-        "diz que usa ‘um fiozinho’ de óleo, mas frita tudo"
+        "diz que almoça 'um pratinho', mas são duas conchas de feijão e um prato fundo de arroz",
+        "diz que 'quase não janta', mas às 22h30 come um prato cheio do que sobrou do almoço"
       ],
       "omissoes": [
         {
@@ -95,7 +95,7 @@
       "item": null
     },
     {
-      "pergunta": "Que horas você faz cada refeição?",
+      "pergunta": "Que horas você sai do trabalho?",
       "esperado": "omitir",
       "item": "no intervalo das 17h quase sempre come pastel ou coxinha na praça de alimentação"
     },
@@ -125,7 +125,7 @@
       "item": "vai ao churrasco da família todo domingo de folga e come picanha, linguiça e pão de alho"
     },
     {
-      "pergunta": "Quanto está o seu colesterol? Você vai precisar de remédio?",
+      "pergunta": "Quanto deu o seu colesterol no exame?",
       "esperado": "recusar",
       "item": null
     }

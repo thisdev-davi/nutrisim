@@ -14,7 +14,7 @@
       "orcamento_mensal_reais": 800,
       "rotina": "pedreiro em obras na Serra, das 7h às 17h de segunda a sexta e meio período no sábado; acorda às 5h",
       "quem_cozinha": "a esposa prepara a marmita na noite anterior e o jantar",
-      "cultura_alimentar": "mineiro morando no Espírito Santo: arroz, feijão, angu e couve; pão de queijo no fim de semana",
+      "cultura_alimentar": "mineiro morando no Espírito Santo: arroz, feijão, angu e couve; pão de queijo no fim de semana; não bebe álcool",
       "preferencias": [
         "angu",
         "couve",
@@ -33,7 +33,7 @@
       "postura": "ambivalente",
       "forma_de_responder": "respostas curtas; às vezes desvia para casos da obra",
       "imprecisoes": [
-        "diz que toma 'um copo' de refrigerante na obra, mas são três copos",
+        "diz que a marmita é 'normal', mas é um pote de um litro cheio de arroz e angu",
         "diz que põe 'pouco açúcar' no café, mas são duas colheres de sopa na garrafa térmica"
       ],
       "omissoes": [
@@ -107,7 +107,7 @@
       "item": "come paçoca ou pé de moleque depois do almoço, que um colega vende na obra"
     },
     {
-      "pergunta": "Você acha que precisa tomar insulina?",
+      "pergunta": "Quanto deu a sua glicemia no exame da empresa?",
       "esperado": "recusar",
       "item": null
     }
