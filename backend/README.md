@@ -34,6 +34,7 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 | `GET /api/sessoes/{id}` | 2 | estado e histórico, para retomar |
 | `POST /api/sessoes/{id}/mensagens` | 2 | fala do paciente em SSE |
 | `POST /api/sessoes/{id}/anamnese/encerrar` | 2 | encerra a anamnese e vai para o plano |
+| `GET /api/alimentos?nome={termo}` | NS-013 | busca até 50 alimentos por nome, ignorando maiúsculas e acentos |
 
 - **Streaming (SSE):** vários eventos `trecho` (`{"texto"}`), depois `fim` (`{"mensagem_id"}`) ou `erro` (`{"codigo", "mensagem"}`).
 - **Erros:** toda resposta de erro tem o formato `{"erro": {"codigo", "mensagem"}}`. O frontend decide o que exibir pelo `codigo`.
@@ -56,6 +57,12 @@ Para testar sem o Neon, suba um Postgres local:
 ```sh
 docker run -d --rm --name nutrisim-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=nutrisim -p 55432:5432 postgres:17-alpine
 DATABASE_URL=postgresql://postgres:dev@localhost:55432/nutrisim uv run alembic upgrade head
+```
+
+Para importar ou atualizar a base TACO, execute a partir de `backend/`:
+
+```sh
+uv run --env-file .env python -m scripts.importar_taco
 ```
 
 ## Como testar

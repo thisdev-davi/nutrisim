@@ -4,11 +4,10 @@ import csv
 from pathlib import Path
 
 from loguru import logger
-from sqlalchemy import create_engine
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.db.base import url_do_banco
+from app.db.deps import obter_engine
 from app.db.modelos import AcidosGraxos, Alimentos, Categorias, Nutrientes
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "taco"
@@ -189,8 +188,7 @@ def importar_acidos_graxos(sessao: Session) -> None:
 
 def main() -> None:
     """Importa as tabelas da TACO em uma única transação."""
-    engine = create_engine(url_do_banco())
-    with Session(engine) as sessao:
+    with Session(obter_engine()) as sessao:
         try:
             importar_categorias(sessao)
             importar_alimentos(sessao)
@@ -201,8 +199,6 @@ def main() -> None:
             sessao.rollback()
             logger.exception("Falha ao importar dados da TACO")
             raise
-        finally:
-            engine.dispose()
 
 
 if __name__ == "__main__":

@@ -14,9 +14,6 @@ from app.schemas.alimentos import ResultadoAlimento
 router = APIRouter(tags=["alimentos"])
 SessaoBanco = Annotated[Session, Depends(obter_sessao)]
 
-CARACTERES_COM_ACENTO = "áàâãäéèêëíìîïóòôõöúùûüç"
-CARACTERES_SEM_ACENTO = "aaaaaeeeeiiiiooooouuuuc"
-
 
 def normalizar_busca(texto: str) -> str:
     """Converte texto para comparação sem acentos e sem maiúsculas.
@@ -37,11 +34,7 @@ def expressao_nome_normalizado():
     Returns:
         Expressão SQL com nomes em minúsculas e sem acentos.
     """
-    return func.translate(
-        func.lower(Alimentos.nome),
-        CARACTERES_COM_ACENTO,
-        CARACTERES_SEM_ACENTO,
-    )
+    return func.unaccent(func.lower(Alimentos.nome))
 
 
 @router.get("/alimentos", response_model=list[ResultadoAlimento])
@@ -55,6 +48,9 @@ def buscar_alimentos(
         Até 50 alimentos que correspondem ao termo informado.
     """
     termo = normalizar_busca(nome)
+    if not termo:
+        return []
+
     consulta = (
         select(
             Alimentos.id,
@@ -70,7 +66,7 @@ def buscar_alimentos(
         )
         .outerjoin(Nutrientes, Nutrientes.id == Alimentos.id)
         .outerjoin(AcidosGraxos, AcidosGraxos.id == Alimentos.id)
-        .where(expressao_nome_normalizado().contains(termo))
+        .where(expressao_nome_normalizado().contains(termo, autoescape=True))
         .order_by(Alimentos.nome)
         .limit(50)
     )
