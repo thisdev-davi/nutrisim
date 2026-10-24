@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from app.llm import cliente
 
 TOKENS = 10
+SAIDA, RACIOCINIO = 3, 2
 
 
 class Saida(BaseModel):
@@ -20,12 +21,18 @@ class BancoFalso(list):
     add = list.append
 
 
-def provedor_falso(monkeypatch, textos):
+USO = SimpleNamespace(
+    total_input_tokens=TOKENS,
+    total_output_tokens=SAIDA,
+    total_thought_tokens=RACIOCINIO,
+)
+
+
+def provedor_falso(monkeypatch, textos, uso=USO):
     """troca o gemini por respostas fixas, uma por chamada."""
     respostas = iter(textos)
 
     def create(**_):
-        uso = SimpleNamespace(total_input_tokens=TOKENS, total_output_tokens=3)
         return SimpleNamespace(output_text=next(respostas), usage=uso)
 
     falso = SimpleNamespace(interactions=SimpleNamespace(create=create))
@@ -50,6 +57,15 @@ def test_tenta_de_novo_e_registra_cada_tentativa(monkeypatch):
     assert [c.tentativa for c in db] == [1, 2]
     assert db[0].modelo == "modelo-teste"
     assert db[0].tokens_entrada == TOKENS
+    assert db[0].tokens_saida == SAIDA + RACIOCINIO  # raciocinio e cobrado como saida
+
+
+def test_resposta_sem_usage_registra_zero(monkeypatch):
+    """saida bloqueada vem sem usage; registra zero em vez de quebrar."""
+    provedor_falso(monkeypatch, ['{"nota": 10}'], uso=None)
+    db = BancoFalso()
+    assert gerar(db) == Saida(nota=10)
+    assert (db[0].tokens_entrada, db[0].tokens_saida) == (0, 0)
 
 
 def test_erro_claro_quando_as_tentativas_acabam(monkeypatch):

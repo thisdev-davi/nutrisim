@@ -65,14 +65,19 @@ def gerar(  # noqa: PLR0913
                 "schema": schema.model_json_schema(),
             },
         )
+        uso = resposta.usage  # vem None quando a saida e bloqueada
         db.add(
             ChamadaLLM(
                 sessao_id=sessao_id,
                 tarefa=tarefa,
                 modelo=modelo,
                 tentativa=tentativa,
-                tokens_entrada=resposta.usage.total_input_tokens or 0,
-                tokens_saida=resposta.usage.total_output_tokens or 0,
+                tokens_entrada=getattr(uso, "total_input_tokens", None) or 0,
+                # o gemini cobra o raciocinio como saida
+                tokens_saida=sum(
+                    getattr(uso, campo, None) or 0
+                    for campo in ("total_output_tokens", "total_thought_tokens")
+                ),
             )
         )
         try:

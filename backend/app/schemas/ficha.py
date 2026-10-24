@@ -1,10 +1,10 @@
 # ficha oculta do caso (NS-014), campos de content/perfis.md
 # o prompt do paciente recebe so `paciente`; `gabarito` vai so para rubrica e eval
-from typing import Literal, Self
+from typing import Any, Literal, Self
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.motor.energia import Atividade, Sexo
+from app.motor.energia import FAIXAS, Atividade, Sexo
 from app.schemas.api import Dificuldade
 
 
@@ -15,15 +15,21 @@ class Omissao(BaseModel):
     gatilho: str = Field(description="pergunta ou tema que faz o paciente revelar")
 
 
+def _faixa(nome: str) -> Any:
+    minimo, maximo = FAIXAS[nome]
+    return Field(ge=minimo, le=maximo)
+
+
 class FichaPaciente(BaseModel):
     """tudo que o paciente simulado sabe sobre si."""
 
     nome: str
-    idade: int = Field(ge=18, le=100)
+    # faixas do motor: fora delas o calculo quebra no meio da sessao
+    idade: int = _faixa("idade")
     genero: Sexo
     queixa_principal: str
-    peso_kg: float = Field(gt=0)
-    altura_cm: float = Field(gt=0)
+    peso_kg: float = _faixa("peso_kg")
+    altura_cm: float = _faixa("altura_cm")
     atividade_fisica: Atividade
     orcamento_mensal_reais: float = Field(gt=0, description="gasto com alimentacao")
     rotina: str
