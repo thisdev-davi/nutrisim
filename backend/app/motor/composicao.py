@@ -1,4 +1,3 @@
-# composicao nutricional (NS-023): funcao pura, sem ia e sem banco
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
