@@ -3,7 +3,7 @@
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Dificuldade(StrEnum):
@@ -72,6 +72,8 @@ class Sessao(BaseModel):
 
 class NovaMensagem(BaseModel):
     """pergunta do estudante ao paciente."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)  # "   " vira vazio
 
     texto: str = Field(min_length=1, max_length=2000)
 

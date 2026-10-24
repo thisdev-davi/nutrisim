@@ -8,6 +8,7 @@ from app.api import alimentos, anamnese, caso
 from app.api.erros import registrar_erros
 
 app = FastAPI(title="NutriSim")
+registrar_erros(app)
 
 # libera so o front configurado (vazio cai no padrao)
 app.add_middleware(
@@ -16,7 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-registrar_erros(app)
 
 # token bearer so declarado; a NS-035 passa a exigir
 bearer = Depends(HTTPBearer(auto_error=False))
