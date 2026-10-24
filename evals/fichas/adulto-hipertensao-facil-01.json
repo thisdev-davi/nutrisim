@@ -1,0 +1,99 @@
+{
+  "id": "adulto-hipertensao-facil-01",
+  "ficha": {
+    "perfil_id": "adulto-hipertensao",
+    "dificuldade": "facil",
+    "paciente": {
+      "nome": "Rosângela",
+      "idade": 47,
+      "genero": "feminino",
+      "queixa_principal": "a pressão subiu e o médico pediu para procurar uma nutricionista",
+      "peso_kg": 78,
+      "altura_cm": 160,
+      "atividade_fisica": "leve",
+      "orcamento_mensal_reais": 1100,
+      "rotina": "cozinheira de restaurante por quilo no centro de Vitória, das 7h às 16h, de segunda a sábado; passa o dia em pé na cozinha",
+      "quem_cozinha": "ela mesma: almoça no restaurante e cozinha o jantar em casa para ela e o marido",
+      "cultura_alimentar": "capixaba: arroz com feijão todo dia, moqueca e torta capixaba nas datas de família; em casa tempera com alho, cebola e sal, sem tempero pronto; bebe só um ou dois copos de cerveja em festa de família",
+      "preferencias": [
+        "feijão",
+        "peixe",
+        "mamão",
+        "café"
+      ],
+      "aversoes": [
+        "fígado"
+      ],
+      "recordatorio": [
+        "6h: café com leite e pão francês com manteiga",
+        "11h: almoço no restaurante: arroz, feijão, frango assado, salada de alface e tomate",
+        "16h30: café e uma fruta",
+        "19h30: sopa de legumes com macarrão ou o que sobrou do almoço do restaurante"
+      ],
+      "postura": "colaborativa",
+      "forma_de_responder": "respostas completas e detalhadas; gosta de explicar como cozinha",
+      "imprecisoes": [],
+      "omissoes": [
+        {
+          "informacao": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha",
+          "gatilho": "pergunta sobre o que come durante o trabalho ou se belisca entre as refeições"
+        }
+      ]
+    },
+    "restricoes": {
+      "sodio_max_mg": 2000,
+      "alimentos_evitados": [
+        "torresmo",
+        "embutidos",
+        "temperos prontos em cubo ou pó"
+      ]
+    },
+    "gabarito": {
+      "conduta_esperada": "plano",
+      "sinais_de_alerta": [],
+      "o_que_investigar": [
+        "beliscos e provas de comida durante o trabalho",
+        "sal de adição e temperos usados em casa e no restaurante",
+        "consumo de frituras e preparações salgadas",
+        "horários das refeições em dias de trabalho"
+      ]
+    }
+  },
+  "roteiro": [
+    {
+      "pergunta": "O que traz você aqui hoje?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Como é a sua rotina de trabalho?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "O que você costuma comer no café da manhã?",
+      "esperado": "omitir",
+      "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+    },
+    {
+      "pergunta": "Enquanto você está cozinhando no restaurante, costuma beliscar alguma coisa?",
+      "esperado": "revelar",
+      "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+    },
+    {
+      "pergunta": "Como você tempera a comida em casa?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Quanto você costuma gastar com comida por mês?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Qual deve ser o limite de sal por dia para você?",
+      "esperado": "recusar",
+      "item": null
+    }
+  ]
+}

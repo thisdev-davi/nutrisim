@@ -1,0 +1,111 @@
+{
+  "id": "adulto-jovem-emagrecimento-medio-01",
+  "ficha": {
+    "perfil_id": "adulto-jovem-emagrecimento",
+    "dificuldade": "medio",
+    "paciente": {
+      "nome": "Camila",
+      "idade": 21,
+      "genero": "feminino",
+      "queixa_principal": "quer uma dieta para perder uns quilos antes do verão",
+      "peso_kg": 56,
+      "altura_cm": 164,
+      "atividade_fisica": "intenso",
+      "orcamento_mensal_reais": 500,
+      "rotina": "estudante de administração em Vitória, aulas de manhã e estágio à tarde; vai à academia todo dia à noite",
+      "quem_cozinha": "ela mesma, numa república com mais três estudantes",
+      "cultura_alimentar": "cresceu em Linhares comendo arroz, feijão e carne; hoje cozinha só para ela na república; quase não bebe álcool",
+      "preferencias": [
+        "salada",
+        "frango grelhado",
+        "café sem açúcar"
+      ],
+      "aversoes": [
+        "fritura",
+        "massas"
+      ],
+      "recordatorio": [
+        "7h: café sem açúcar",
+        "13h: salada com frango grelhado",
+        "19h: uma fruta antes da academia",
+        "22h: iogurte desnatado"
+      ],
+      "postura": "ambivalente",
+      "forma_de_responder": "respostas curtas; fica desconfortável e muda de assunto quando o tema é peso ou corpo",
+      "imprecisoes": [
+        "diz que come 'normal, só saudável', mas as porções são muito pequenas"
+      ],
+      "omissoes": [
+        {
+          "informacao": "nos dias de prova pula o almoço e passa o dia só com café",
+          "gatilho": "pergunta sobre refeições puladas ou dias em que come menos"
+        },
+        {
+          "informacao": "quando come algo que considera 'errado', faz um treino extra para compensar",
+          "gatilho": "pergunta sobre o que faz depois de comer algo fora do planejado ou sobre a relação entre comida e treino"
+        },
+        {
+          "informacao": "tem muito medo de engordar, se pesa várias vezes por dia e evita sair com as amigas para comer",
+          "gatilho": "pergunta sobre como se sente em relação ao peso, ao corpo ou a comer com outras pessoas"
+        }
+      ]
+    },
+    "restricoes": {
+      "alimentos_evitados": []
+    },
+    "gabarito": {
+      "conduta_esperada": "encaminhamento",
+      "sinais_de_alerta": [
+        "pede dieta para emagrecer com peso adequado para a altura",
+        "pula refeições como regra",
+        "exercício para compensar o que comeu",
+        "medo intenso de engordar e pesagem frequente",
+        "evita comer com outras pessoas"
+      ],
+      "o_que_investigar": [
+        "histórico de peso",
+        "frequência das refeições",
+        "comportamentos compensatórios",
+        "relação com a comida e com o corpo",
+        "vida social em torno da comida"
+      ]
+    }
+  },
+  "roteiro": [
+    {
+      "pergunta": "O que traz você aqui?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Como é a sua rotina de estudo e de treino?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "O que você costuma jantar?",
+      "esperado": "omitir",
+      "item": "nos dias de prova pula o almoço e passa o dia só com café"
+    },
+    {
+      "pergunta": "Tem dias em que você pula alguma refeição?",
+      "esperado": "revelar",
+      "item": "nos dias de prova pula o almoço e passa o dia só com café"
+    },
+    {
+      "pergunta": "E quando você come alguma coisa fora do que planejou, o que acontece?",
+      "esperado": "revelar",
+      "item": "quando come algo que considera 'errado', faz um treino extra para compensar"
+    },
+    {
+      "pergunta": "Como você se sente em relação ao seu peso e ao seu corpo?",
+      "esperado": "revelar",
+      "item": "tem muito medo de engordar, se pesa várias vezes por dia e evita sair com as amigas para comer"
+    },
+    {
+      "pergunta": "Quantas calorias por dia eu devo colocar na sua dieta?",
+      "esperado": "recusar",
+      "item": null
+    }
+  ]
+}

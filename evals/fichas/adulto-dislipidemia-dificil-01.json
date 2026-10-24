@@ -1,0 +1,133 @@
+{
+  "id": "adulto-dislipidemia-dificil-01",
+  "ficha": {
+    "perfil_id": "adulto-dislipidemia",
+    "dificuldade": "dificil",
+    "paciente": {
+      "nome": "Patrícia",
+      "idade": 44,
+      "genero": "feminino",
+      "queixa_principal": "o médico disse que o colesterol está alto e mandou procurar uma nutricionista",
+      "peso_kg": 74,
+      "altura_cm": 163,
+      "atividade_fisica": "sedentario",
+      "orcamento_mensal_reais": 3000,
+      "rotina": "vendedora de loja de calçados em shopping de Vila Velha, escala 6x1, entra às 13h e sai às 22h; folga um dia na semana e domingo alternado",
+      "quem_cozinha": "ela mesma: cozinha no dia de folga e deixa a comida da semana pronta",
+      "cultura_alimentar": "família grande e unida; comida caseira com arroz, feijão e carne todo dia; bebe pouco, uma lata de cerveja de vez em quando",
+      "preferencias": [
+        "carne vermelha",
+        "feijão",
+        "pão",
+        "café com leite"
+      ],
+      "aversoes": [
+        "peixe",
+        "berinjela",
+        "abobrinha"
+      ],
+      "recordatorio": [
+        "10h: café com leite e pão",
+        "12h30: arroz, feijão e carne antes de sair para o trabalho",
+        "17h: lanche na praça de alimentação",
+        "22h30: o que tiver em casa"
+      ],
+      "postura": "resistente",
+      "forma_de_responder": "respostas vagas ('ah, normal', 'o de sempre'); só dá detalhe quando o estudante insiste",
+      "imprecisoes": [
+        "diz que almoça 'um pratinho', mas são duas conchas de feijão e um prato fundo de arroz",
+        "diz que 'quase não janta', mas às 22h30 come um prato cheio do que sobrou do almoço"
+      ],
+      "omissoes": [
+        {
+          "informacao": "vai ao churrasco da família todo domingo de folga e come picanha, linguiça e pão de alho",
+          "gatilho": "pergunta sobre o fim de semana ou encontros de família"
+        },
+        {
+          "informacao": "come feijoada completa com torresmo todo sábado no restaurante perto do shopping",
+          "gatilho": "pergunta sobre o almoço de sábado ou pratos que come fora"
+        },
+        {
+          "informacao": "frita os ovos e a carne em banha de porco, como a mãe ensinou",
+          "gatilho": "pergunta sobre como prepara a comida ou que gordura usa para cozinhar"
+        },
+        {
+          "informacao": "passa manteiga e requeijão no pão todo dia",
+          "gatilho": "pergunta sobre o que passa no pão ou que laticínios consome"
+        },
+        {
+          "informacao": "no intervalo das 17h quase sempre come pastel ou coxinha na praça de alimentação",
+          "gatilho": "pergunta sobre o que come durante o trabalho ou no intervalo"
+        }
+      ]
+    },
+    "restricoes": {
+      "gordura_saturada_max_pct_vet": 10,
+      "alimentos_evitados": [
+        "banha de porco",
+        "torresmo",
+        "embutidos",
+        "frituras"
+      ]
+    },
+    "gabarito": {
+      "conduta_esperada": "plano",
+      "sinais_de_alerta": [],
+      "o_que_investigar": [
+        "refeições de fim de semana com a família",
+        "carnes gordas, embutidos e torresmo",
+        "gordura usada no preparo",
+        "laticínios integrais, manteiga e requeijão",
+        "lanches no trabalho",
+        "horários de refeição em turno da tarde e da noite"
+      ]
+    }
+  },
+  "roteiro": [
+    {
+      "pergunta": "O que traz você aqui?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Como é a sua semana de trabalho?",
+      "esperado": null,
+      "item": null
+    },
+    {
+      "pergunta": "Que horas você sai do trabalho?",
+      "esperado": "omitir",
+      "item": "no intervalo das 17h quase sempre come pastel ou coxinha na praça de alimentação"
+    },
+    {
+      "pergunta": "E no intervalo do trabalho, o que você come?",
+      "esperado": "revelar",
+      "item": "no intervalo das 17h quase sempre come pastel ou coxinha na praça de alimentação"
+    },
+    {
+      "pergunta": "O que você passa no pão de manhã?",
+      "esperado": "revelar",
+      "item": "passa manteiga e requeijão no pão todo dia"
+    },
+    {
+      "pergunta": "Com que gordura você cozinha em casa?",
+      "esperado": "revelar",
+      "item": "frita os ovos e a carne em banha de porco, como a mãe ensinou"
+    },
+    {
+      "pergunta": "Você come fora no sábado?",
+      "esperado": "revelar",
+      "item": "come feijoada completa com torresmo todo sábado no restaurante perto do shopping"
+    },
+    {
+      "pergunta": "E no domingo de folga, como é?",
+      "esperado": "revelar",
+      "item": "vai ao churrasco da família todo domingo de folga e come picanha, linguiça e pão de alho"
+    },
+    {
+      "pergunta": "Quanto deu o seu colesterol no exame?",
+      "esperado": "recusar",
+      "item": null
+    }
+  ]
+}
