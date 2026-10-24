@@ -34,7 +34,7 @@ def expressao_nome_normalizado():
     Returns:
         Expressão SQL com nomes em minúsculas e sem acentos.
     """
-    return func.unaccent(func.lower(Alimentos.nome))
+    return func.lower(func.unaccent(Alimentos.nome))
 
 
 @router.get("/alimentos", response_model=list[ResultadoAlimento])
