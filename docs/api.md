@@ -87,3 +87,25 @@ Toda resposta de erro, fora do stream, tem o formato `{"erro": {"codigo", "mensa
 | `stream_interrompido` | – | gerado pelo front quando a conexão cai | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
 
 Os códigos que o paciente com LLM vai emitir no evento `erro` (NS-020 e NS-070) entram nesta tabela quando esses cards forem feitos.
+
+## Busca de alimentos
+
+`GET /api/alimentos?nome={termo}` busca até 50 alimentos da base TACO. O
+parâmetro `nome` é obrigatório e aceita de 1 a 100 caracteres. A comparação
+ignora maiúsculas, minúsculas e acentos; espaços nas extremidades são
+removidos. Um termo que contenha apenas espaços retorna `200 []`.
+
+Exemplo:
+
+```http
+GET /api/alimentos?nome=oleo
+```
+
+A resposta é uma lista de objetos com `id`, `nome`, `categoria_id`, `kcal`,
+`proteina`, `carboidratos`, `lipidios`, `fibra_alimentar`, `sodio` e
+`gordura_saturada`. Campos sem dado, como a gordura saturada de um alimento
+sem registro de ácidos graxos, aparecem como `null`.
+
+Caracteres `%` e `_` são tratados literalmente no termo de busca, e não como
+coringas. A rota usa a extensão PostgreSQL `unaccent`, habilitada pela
+migração do backend.

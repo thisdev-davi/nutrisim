@@ -40,3 +40,86 @@ class ChamadaLLM(Base):
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class Alimentos(Base):
+    """Tabela referente aos dados dos alimentos."""
+
+    __tablename__ = "alimentos"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categorias.id"))
+    nome: Mapped[str]
+
+
+class Nutrientes(Base):
+    """Tabela referente aos dados nutricionais dos alimentos."""
+
+    __tablename__ = "nutrientes"
+
+    id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), primary_key=True)
+    umidade: Mapped[float | None]
+    kcal: Mapped[float | None]
+    kj: Mapped[float | None]
+    proteina: Mapped[float | None]
+    lipidios: Mapped[float | None]
+    colesterol: Mapped[float | None]
+    carboidratos: Mapped[float | None]
+    fibra_alimentar: Mapped[float | None]
+    cinzas: Mapped[float | None]
+    calcio: Mapped[float | None]
+    magnesio: Mapped[float | None]
+    manganes: Mapped[float | None]
+    fosforo: Mapped[float | None] 
+    ferro: Mapped[float | None]
+    sodio: Mapped[float | None] 
+    potassio: Mapped[float | None]
+    cobre: Mapped[float | None]
+    zinco: Mapped[float | None]
+    retinol: Mapped[float | None]
+    re: Mapped[float | None]
+    rae: Mapped[float | None]
+    tiamina: Mapped[float | None]
+    riboflavina: Mapped[float | None]
+    piridoxina: Mapped[float | None]
+    niacina: Mapped[float | None]
+    vitamina_c: Mapped[float | None]
+
+
+class AcidosGraxos(Base):
+    """Tabela referente aos dados de ácidos graxos dos alimentos."""
+
+    __tablename__ = "acidos_graxos"
+
+    id: Mapped[int] = mapped_column(ForeignKey("alimentos.id"), primary_key=True)
+    gordura_saturada: Mapped[float | None]
+    gordura_monoinsaturada: Mapped[float | None]
+    gordura_poliinsaturada: Mapped[float | None]
+    acido_laurico: Mapped[float | None]
+    acido_miristico: Mapped[float | None]
+    acido_palmitico: Mapped[float | None]
+    acido_estearico: Mapped[float | None]
+    acido_araquidico: Mapped[float | None]
+    acido_behenico: Mapped[float | None]
+    acido_lignocerico: Mapped[float | None]
+    acido_miristoleico: Mapped[float | None]
+    acido_palmitoleico: Mapped[float | None]
+    acido_oleico: Mapped[float | None]
+    acido_eicosenoico: Mapped[float | None]
+    acido_linoleico: Mapped[float | None]
+    acido_linolenico: Mapped[float | None]
+    acido_araquidonico: Mapped[float | None]
+    acido_epa: Mapped[float | None]
+    acido_dpa: Mapped[float | None]
+    acido_dha: Mapped[float | None]
+    acido_oleico_trans: Mapped[float | None]
+    acido_linoleico_trans: Mapped[float | None]
+
+
+class Categorias(Base):
+    """Tabela que representa as categorias dos alimentos."""
+
+    __tablename__ = "categorias"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str]
