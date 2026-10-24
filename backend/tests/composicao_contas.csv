@@ -1,0 +1,11 @@
+taco_id,alimento,nutriente,por_100g,gramas,conta,resultado
+1,"Arroz, integral, cozido",kcal,124,150,124 * 150 / 100,186.0
+1,"Arroz, integral, cozido",carboidratos,25.8,150,25.8 * 150 / 100,38.7
+1,"Arroz, integral, cozido",calcio,5,150,5 * 150 / 100,7.5
+561,"Feijão, carioca, cozido",proteina,4.8,80,4.8 * 80 / 100,3.84
+561,"Feijão, carioca, cozido",fibra_alimentar,8.5,80,8.5 * 80 / 100,6.8
+561,"Feijão, carioca, cozido",ferro,1.3,80,1.3 * 80 / 100,1.04
+410,"Frango, peito, sem pele, grelhado",lipidios,2.5,120,2.5 * 120 / 100,3.0
+410,"Frango, peito, sem pele, grelhado",sodio,50,120,50 * 120 / 100,60.0
+182,"Banana, prata, crua",potassio,358,120,358 * 120 / 100,429.6
+182,"Banana, prata, crua",vitamina_c,21.6,120,21.6 * 120 / 100,25.92
