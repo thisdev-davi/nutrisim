@@ -1,4 +1,4 @@
-"""Importa categorias e alimentos da base TACO para o banco."""
+"""importa categorias e alimentos da base TACO para o banco."""
 
 import csv
 from pathlib import Path
@@ -14,17 +14,17 @@ DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "taco"
 
 
 def ler_csv(nome: str) -> list[dict[str, str]]:
-    """Lê um CSV da base TACO.
+    """le um CSV da base TACO.
 
     Returns:
-        Linhas do arquivo representadas como dicionários.
+        linhas do arquivo representadas como dicionarios.
     """
     with (DATA_DIR / nome).open(encoding="utf-8", newline="") as arquivo:
         return list(csv.DictReader(arquivo))
 
 
 def importar_categorias(sessao: Session) -> None:
-    """Insere ou atualiza as categorias da base TACO."""
+    """insere ou atualiza as categorias da base TACO."""
     registros = [
         {"id": int(linha["id"]), "nome": linha["name"]}
         for linha in ler_csv("categories.csv")
@@ -42,12 +42,12 @@ def importar_categorias(sessao: Session) -> None:
 
 
 def importar_alimentos(sessao: Session) -> None:
-    """Insere ou atualiza os alimentos da base TACO."""
+    """insere ou atualiza os alimentos da base TACO."""
     registros = [
         {
             "id": int(linha["id"]),
             "category_id": int(linha["categoryId"]),
-            "nome": linha["name"],
+            "nome": " ".join(linha["name"].split()),  # a taco tem espaco duplo
         }
         for linha in ler_csv("food.csv")
     ]
@@ -67,19 +67,19 @@ def importar_alimentos(sessao: Session) -> None:
 
 
 def converter_float(valor: str) -> float | None:
-    """Converte um valor da TACO, tratando campos vazios, ``Tr`` e ``NA``.
+    """converte um valor da TACO, tratando vazio, ``Tr``, ``NA`` e ``*``.
 
     Returns:
-        Valor convertido, zero para traço ou ``None`` para dado ausente.
+        valor convertido, zero para traco ou ``None`` para dado ausente.
     """
     valor = valor.strip().lower()
     if valor == "tr":
         return 0.0
-    return float(valor) if valor and valor != "na" else None
+    return None if valor in {"", "na", "*"} else float(valor)
 
 
 def importar_nutrientes(sessao: Session) -> None:
-    """Insere ou atualiza os nutrientes da base TACO."""
+    """insere ou atualiza os nutrientes da base TACO."""
     campos = {
         "moisture": "umidade",
         "kcal": "kcal",
@@ -135,7 +135,7 @@ def importar_nutrientes(sessao: Session) -> None:
 
 
 def importar_acidos_graxos(sessao: Session) -> None:
-    """Insere ou atualiza os ácidos graxos da base TACO."""
+    """insere ou atualiza os acidos graxos da base TACO."""
     campos = {
         "saturated": "gordura_saturada",
         "monounsaturated": "gordura_monoinsaturada",
@@ -187,7 +187,7 @@ def importar_acidos_graxos(sessao: Session) -> None:
 
 
 def main() -> None:
-    """Importa as tabelas da TACO em uma única transação."""
+    """importa as tabelas da TACO em uma unica transacao."""
     with Session(obter_engine()) as sessao:
         try:
             importar_categorias(sessao)

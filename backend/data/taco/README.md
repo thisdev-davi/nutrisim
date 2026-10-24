@@ -19,6 +19,7 @@ licença dos arquivos deve acompanhar a distribuição oficial da TACO.
 | número | `float` | quantidade informada na tabela |
 | `Tr` (inclusive com espaços ou maiúsculas) | `0.0` | traço, quantidade presente abaixo do limite de detecção ou quantificação |
 | `NA` | `None` | dado não disponível ou não analisado |
+| `*` | `None` | amostra em análise |
 | vazio ou apenas espaços | `None` | ausência de valor no arquivo |
 
 Os arquivos versionados atualmente não contêm literalmente `Tr`, `NA` ou

@@ -1,4 +1,4 @@
-"""Rotas de consulta dos alimentos."""
+"""rotas de consulta dos alimentos."""
 
 import unicodedata
 from typing import Annotated
@@ -16,25 +16,15 @@ SessaoBanco = Annotated[Session, Depends(obter_sessao)]
 
 
 def normalizar_busca(texto: str) -> str:
-    """Converte texto para comparação sem acentos e sem maiúsculas.
+    """deixa o termo sem acento, em minusculo e com espaco simples.
 
     Returns:
-        Texto normalizado e sem espaços nas extremidades.
+        termo normalizado.
     """
-    texto = texto.strip()
-    texto = unicodedata.normalize("NFKD", texto)
+    texto = unicodedata.normalize("NFKD", " ".join(texto.split()))
     return "".join(
         caractere for caractere in texto if not unicodedata.combining(caractere)
     ).lower()
-
-
-def expressao_nome_normalizado():
-    """Cria a expressão PostgreSQL para normalizar nomes na consulta.
-
-    Returns:
-        Expressão SQL com nomes em minúsculas e sem acentos.
-    """
-    return func.lower(func.unaccent(Alimentos.nome))
 
 
 @router.get("/alimentos", response_model=list[ResultadoAlimento])
@@ -42,14 +32,15 @@ def buscar_alimentos(
     sessao: SessaoBanco,
     nome: Annotated[str, Query(min_length=1, max_length=100)],
 ) -> list[ResultadoAlimento]:
-    """Busca alimentos por nome, ignorando acentos e maiúsculas.
+    """busca alimentos por nome, ignorando acento e maiuscula.
 
     Returns:
-        Até 50 alimentos que correspondem ao termo informado.
+        ate 50 alimentos que contem o termo.
     """
     termo = normalizar_busca(nome)
     if not termo:
         return []
+    nome_normalizado = func.lower(func.unaccent(Alimentos.nome))
 
     consulta = (
         select(
@@ -66,23 +57,11 @@ def buscar_alimentos(
         )
         .outerjoin(Nutrientes, Nutrientes.id == Alimentos.id)
         .outerjoin(AcidosGraxos, AcidosGraxos.id == Alimentos.id)
-        .where(expressao_nome_normalizado().contains(termo, autoescape=True))
+        .where(nome_normalizado.contains(termo, autoescape=True))
         .order_by(Alimentos.nome)
         .limit(50)
     )
-    alimentos = sessao.execute(consulta).all()
     return [
-        ResultadoAlimento(
-            id=alimento.id,
-            nome=alimento.nome,
-            categoria_id=alimento.categoria_id,
-            kcal=alimento.kcal,
-            proteina=alimento.proteina,
-            carboidratos=alimento.carboidratos,
-            lipidios=alimento.lipidios,
-            fibra_alimentar=alimento.fibra_alimentar,
-            sodio=alimento.sodio,
-            gordura_saturada=alimento.gordura_saturada,
-        )
-        for alimento in alimentos
+        ResultadoAlimento.model_validate(linha, from_attributes=True)
+        for linha in sessao.execute(consulta).all()
     ]

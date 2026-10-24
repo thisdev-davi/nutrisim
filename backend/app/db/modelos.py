@@ -43,7 +43,7 @@ class ChamadaLLM(Base):
 
 
 class Alimentos(Base):
-    """Tabela referente aos dados dos alimentos."""
+    """tabela referente aos dados dos alimentos."""
 
     __tablename__ = "alimentos"
 
@@ -53,7 +53,7 @@ class Alimentos(Base):
 
 
 class Nutrientes(Base):
-    """Tabela referente aos dados nutricionais dos alimentos."""
+    """tabela referente aos dados nutricionais dos alimentos."""
 
     __tablename__ = "nutrientes"
 
@@ -87,7 +87,7 @@ class Nutrientes(Base):
 
 
 class AcidosGraxos(Base):
-    """Tabela referente aos dados de ácidos graxos dos alimentos."""
+    """tabela referente aos dados de acidos graxos dos alimentos."""
 
     __tablename__ = "acidos_graxos"
 
@@ -117,7 +117,7 @@ class AcidosGraxos(Base):
 
 
 class Categorias(Base):
-    """Tabela que representa as categorias dos alimentos."""
+    """tabela que representa as categorias dos alimentos."""
 
     __tablename__ = "categorias"
 

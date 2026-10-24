@@ -1,7 +1,7 @@
 """cria tabela de acidos graxos.
 
 Revision ID: 9f4a2b7c1d8e
-Revises: dd4596ebf3c4
+Revises: 1a7c3e9b5d2f
 Create Date: 2026-10-16 20:10:00.000000
 
 """

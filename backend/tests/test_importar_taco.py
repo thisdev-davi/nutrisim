@@ -9,6 +9,7 @@ from scripts.importar_taco import converter_float
         ("Tr", 0.0),
         (" tr ", 0.0),
         ("NA", None),
+        ("*", None),
         ("", None),
         (" ", None),
         ("1.5", 1.5),

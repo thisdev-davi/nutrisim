@@ -4,20 +4,20 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.dialects import postgresql
 
-from app.api.alimentos import expressao_nome_normalizado, normalizar_busca
+from app.api.alimentos import normalizar_busca
 from app.db.deps import obter_sessao
 from app.main import app
 
 
 class ResultadoFalso:
-    """Linhas simuladas de uma consulta SQLAlchemy."""
+    """linhas simuladas de uma consulta SQLAlchemy."""
 
     @staticmethod
     def all():
-        """Retorna um alimento com seus nutrientes.
+        """retorna um alimento com seus nutrientes.
 
         Returns:
-            Lista com uma linha simulada.
+            lista com uma linha simulada.
         """
         return [
             SimpleNamespace(
@@ -36,30 +36,31 @@ class ResultadoFalso:
 
 
 class SessaoFalsa:
-    """Sessão simulada para o teste do endpoint."""
+    """sessao simulada que guarda a consulta recebida."""
 
-    @staticmethod
-    def execute(_consulta):
-        """Retorna resultados simulados.
+    def execute(self, consulta):
+        """guarda a consulta e devolve resultados simulados.
 
         Returns:
-            Resultado simulado da consulta.
+            resultado simulado da consulta.
         """
+        self.consulta = consulta
         return ResultadoFalso()
 
 
 def sessao_falsa():
-    """Fornece uma sessão simulada ao endpoint.
+    """fornece uma sessao simulada ao endpoint.
 
     Yields:
-        Sessão simulada.
+        sessao simulada.
     """
     yield SessaoFalsa()
 
 
 def test_normalizar_busca_remove_acentos_e_maiusculas():
-    """A normalização remove espaços, acentos e maiúsculas."""
+    """a normalizacao tira acento, maiuscula e espaco sobrando."""
     assert normalizar_busca("  ÁRROZ  ") == "arroz"
+    assert normalizar_busca("Coco,  verde") == "coco, verde"
 
 
 def test_busca_de_alimentos():
@@ -108,8 +109,14 @@ def test_busca_com_espacos_nao_consulta_o_banco():
 
 
 def test_busca_escapa_coringas_do_like():
-    """garante que o termo da busca use escape na expressão SQL."""
-    consulta = expressao_nome_normalizado().contains("%", autoescape=True)
-    sql = str(consulta.compile(dialect=postgresql.dialect()))
+    """% e _ do termo vao escapados na consulta do endpoint."""
+    sessao = SessaoFalsa()
+    app.dependency_overrides[obter_sessao] = lambda: sessao
+    try:
+        TestClient(app).get("/api/alimentos?nome=a_b%25")
+    finally:
+        app.dependency_overrides.clear()
 
-    assert "ESCAPE" in sql
+    sql = sessao.consulta.compile(dialect=postgresql.dialect())
+    assert "ESCAPE" in str(sql)
+    assert "a/_b/%" in sql.params.values()

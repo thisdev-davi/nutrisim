@@ -1,10 +1,10 @@
-"""Contratos da API de alimentos."""
+"""contratos da API de alimentos."""
 
 from pydantic import BaseModel
 
 
 class ResultadoAlimento(BaseModel):
-    """Alimento retornado pela busca."""
+    """alimento retornado pela busca."""
 
     id: int
     nome: str
