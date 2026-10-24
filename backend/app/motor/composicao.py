@@ -1,7 +1,6 @@
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-# nutrientes somados, com os mesmos nomes das colunas de db.modelos.Nutrientes
 NUTRIENTES = (
     "kcal",
     "proteina",
