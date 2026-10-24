@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
  */
 const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
-  const {theme, setTheme} = useTheme();
+  const {resolvedTheme, setTheme} = useTheme();
 
 useEffect(() => {
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -21,8 +21,8 @@ useEffect(() => {
 
   return (
       <div>
-          <button onClick={() => setTheme(theme == "dark" ? "light" : "dark")}>
-            Trocar Tema ({theme})
+          <button onClick={() => setTheme(resolvedTheme == "dark" ? "light" : "dark")}>
+            Trocar Tema ({resolvedTheme})
           </button>
       </div>
   );
