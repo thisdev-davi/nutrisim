@@ -6,7 +6,8 @@ import pytest
 from app.motor.energia import get, tmb
 
 # planilha com as contas feitas a mao (ultimas duas linhas sao os limites das faixas)
-CONTAS = list(csv.DictReader(Path(__file__).with_name("energia_contas.csv").open()))
+with Path(__file__).with_name("energia_contas.csv").open(encoding="utf-8") as f:
+    CONTAS = list(csv.DictReader(f))
 
 
 @pytest.mark.parametrize("linha", CONTAS)

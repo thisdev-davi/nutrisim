@@ -90,6 +90,7 @@ def test_busca_de_alimentos():
 
 def test_busca_com_espacos_nao_consulta_o_banco():
     """retorna lista vazia sem consultar o banco para termo em branco."""
+
     class SessaoQueFalha:
         @staticmethod
         def execute(_consulta):
