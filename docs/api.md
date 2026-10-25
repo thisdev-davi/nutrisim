@@ -6,7 +6,7 @@ Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As eta
 
 ## Regras gerais
 
-- Todas as rotas ficam sob `/api`. A URL do backend vem de variável de ambiente. Como as chamadas rodam no navegador, no Next.js ela precisa do prefixo `NEXT_PUBLIC_` (hoje o `.env.example` do front tem `BACK_END_API`).
+- Todas as rotas ficam sob `/api`. A URL do backend vem de variável de ambiente. Como as chamadas rodam no navegador, no Next.js ela precisa do prefixo `NEXT_PUBLIC_` (`NEXT_PUBLIC_BACK_END_API`, padrão `http://localhost:8000`).
 - **A ficha oculta nunca sai do backend.** O front só recebe o que o estudante pode ver do paciente (`nome`, `idade`, `queixa_principal`) e o histórico da conversa.
 - **Autenticação:** `Authorization: Bearer <token>` está declarado, mas só passa a ser exigido na NS-035. Até lá, o front pode mandar o header ou não.
 - **Mock:** até a NS-019 e a NS-020, as rotas devolvem dados fixos. A única sessão que existe é `mock`. O `POST /api/sessoes` sempre devolve essa sessão.

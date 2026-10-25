@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Sparkle } from "lucide-react";
@@ -29,11 +29,6 @@ const ETAPAS = ["Caso", "Anamnese", "Plano alimentar", "Cenários de adesão", "
 export default function NovoCasoPage() {
   const router = useRouter();
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const [perfilId, setPerfilId] = useState("");
   const [dificuldade, setDificuldade] = useState<Dificuldade | "">("");
 
@@ -46,7 +41,7 @@ export default function NovoCasoPage() {
     },
   });
 
-  const { mutate: gerarCaso, isPending: gerandoCaso, error: erroCriar, reset: limparErroCriar } = useMutation({
+  const { mutate: gerarCaso, isPending: gerandoCaso, error: erroCriar } = useMutation({
     mutationFn: async (dados: NovaSessao): Promise<Sessao> => {
       const resp = await fetch(`${env.api.url}/api/sessoes`, {
         method: "POST",
@@ -65,13 +60,11 @@ export default function NovoCasoPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!perfilId || !dificuldade || gerandoCaso) return;
-    limparErroCriar();
-    gerarCaso({ perfil_id: perfilId, dificuldade: dificuldade as Dificuldade });
+    gerarCaso({ perfil_id: perfilId, dificuldade });
   }
 
   const podeCriar = perfilId !== "" && dificuldade !== "" && !gerandoCaso;
   const perfilSelecionado = opcoes?.perfis.find((p) => p.id === perfilId);
-  const carregandoInterface = !mounted || carregandoOpcoes;
 
   return (
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
@@ -99,7 +92,7 @@ export default function NovoCasoPage() {
         <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <section aria-labelledby="parametros" className="flex flex-col gap-4 md:p-6 md:border md:border-line md:bg-surface md:rounded-lg">
             <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
-            {carregandoInterface ? (
+            {carregandoOpcoes ? (
               <div className="grid md:grid-cols-2 gap-4 animate-pulse" aria-busy="true">
                 <div className="h-[66px] bg-surface-raised rounded-md"></div>
                 <div className="h-[66px] bg-surface-raised rounded-md"></div>
@@ -162,7 +155,7 @@ export default function NovoCasoPage() {
                       Tentar de novo
                     </button>
                   }>
-                    {erroCriar instanceof Error ? erroCriar.message : "Erro ao criar."}
+                    {erroCriar.message}
                   </Alert>
                 )}
 

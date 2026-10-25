@@ -1,8 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 interface HeaderProps {
   activeMenu?: "inicio" | "casos" | "historico";
@@ -11,26 +7,13 @@ interface HeaderProps {
 const MENU = [["inicio", "Início"], ["casos", "Casos"], ["historico", "Histórico"]] as const;
 
 export function Header({ activeMenu = "casos" }: HeaderProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const logoSrc = mounted && resolvedTheme === "light" 
-    ? "/logo/nutrisim-claro.svg" 
-    : "/logo/nutrisim-escuro.svg";
-
   return (
     <header className="border-b border-line shrink-0">
       <div className="w-full max-w-[1040px] mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
         <Link href="/" aria-label="NutriSim, início">
-          {mounted ? (
-            <img src={logoSrc} alt="NutriSim" className="h-7 object-contain" />
-          ) : (
-            <div className="h-7 w-27.5" />
-          )}
+          {/* troca a logo pela classe do next-themes, sem esperar montar */}
+          <img src="/logo/nutrisim-escuro.svg" alt="NutriSim" className="h-7 object-contain [.light_&]:hidden" />
+          <img src="/logo/nutrisim-claro.svg" alt="NutriSim" className="h-7 object-contain hidden [.light_&]:block" />
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
