@@ -12,7 +12,7 @@ from app.motor.adequacao import (
 )
 from app.motor.composicao import NUTRIENTES, Item, Resultado, calcular_composicao
 
-# planilha com as contas feitas a mao (referencias de IOM, 2006)
+# planilha com as contas feitas a mao (referencias de IOM 2006, 2011 e NASEM 2019)
 with Path(__file__).with_name("adequacao_contas.csv").open(encoding="utf-8") as f:
     CONTAS = list(csv.DictReader(f))
 

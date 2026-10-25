@@ -1,14 +1,23 @@
 # adequacao dos nutrientes as DRIs (NS-025): funcao pura, sem ia
 #
-# fonte: INSTITUTE OF MEDICINE. Dietary Reference Intakes: the essential guide to
+# fontes:
+# INSTITUTE OF MEDICINE. Dietary Reference Intakes: the essential guide to
 # nutrient requirements. Washington, DC: The National Academies Press, 2006.
+# INSTITUTE OF MEDICINE. Dietary Reference Intakes for calcium and vitamin D.
+# Washington, DC: The National Academies Press, 2011.
+# NATIONAL ACADEMIES OF SCIENCES, ENGINEERING, AND MEDICINE. Dietary Reference
+# Intakes for sodium and potassium. Washington, DC: The National Academies Press,
+# 2019.
+# proteina, carboidratos, fibra, ferro e vitamina c seguem o guia de 2006; calcio
+# usa a revisao de 2011 e sodio e potassio a de 2019, que substituem os de 2006.
 # valores por dia, nas unidades da TACO (g para macronutrientes e fibra, mg para
 # minerais e vitamina c). gestantes, lactantes e fumantes ficam fora.
 #
 # limites da classificacao, tirados da propria DRI (sem margem arbitraria):
 #   abaixo:   consumo < referencia (RDA ou AI)
-#   adequado: referencia <= consumo <= UL (sem UL definido, nao ha teto)
-#   acima:    consumo > UL
+#   adequado: referencia <= consumo <= limite (sem limite definido, nao ha teto)
+#   acima:    consumo > limite
+# o limite e o UL; no sodio, que nao tem UL desde 2019, e a CDRR (2300 mg)
 from dataclasses import dataclass
 from typing import Literal
 
@@ -28,20 +37,20 @@ _TABELA: dict[str, tuple[Tipo, tuple, tuple, tuple | None]] = {
     "proteina": ("RDA", (46, 46, 46, 46, 46), (52, 56, 56, 56, 56), None),
     "carboidratos": ("RDA", (130,) * 5, (130,) * 5, None),
     "fibra_alimentar": ("AI", (26, 25, 25, 21, 21), (38, 38, 38, 30, 30), None),
-    "sodio": (
-        "AI",
-        (1500, 1500, 1500, 1300, 1200),
-        (1500, 1500, 1500, 1300, 1200),
-        (2300,) * 5,
-    ),
+    "sodio": ("AI", (1500,) * 5, (1500,) * 5, (2300,) * 5),
     "calcio": (
-        "AI",
+        "RDA",
         (1300, 1000, 1000, 1200, 1200),
-        (1300, 1000, 1000, 1200, 1200),
-        (2500,) * 5,
+        (1300, 1000, 1000, 1000, 1200),
+        (3000, 2500, 2500, 2000, 2000),
     ),
     "ferro": ("RDA", (15, 18, 18, 8, 8), (11, 8, 8, 8, 8), (45,) * 5),
-    "potassio": ("AI", (4700,) * 5, (4700,) * 5, None),
+    "potassio": (
+        "AI",
+        (2300, 2600, 2600, 2600, 2600),
+        (3000, 3400, 3400, 3400, 3400),
+        None,
+    ),
     "vitamina_c": (
         "RDA",
         (65, 75, 75, 75, 75),
@@ -58,7 +67,8 @@ class Referencia:
     Attributes:
         valor: RDA ou AI por dia, na unidade da TACO.
         tipo: "RDA" (ingestão recomendada) ou "AI" (ingestão adequada).
-        ul: limite superior tolerável (UL); None quando o IOM não definiu.
+        ul: limite superior tolerável (UL), ou a CDRR no sódio; None quando
+            não há limite definido.
     """
 
     valor: float
