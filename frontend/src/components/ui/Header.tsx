@@ -24,7 +24,6 @@ export function Header({ mobileTitle = "NutriSim", activeMenu = "casos" }: Heade
 
   return (
     <header className="border-b border-line bg-surface flex items-center justify-between px-4 md:px-8 h-14 md:h-16 shrink-0">
-
       <button 
         onClick={() => router.back()} 
         className="md:hidden text-[14px] text-fg-muted hover:text-fg cursor-pointer"

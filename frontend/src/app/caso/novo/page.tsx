@@ -67,27 +67,29 @@ export default function NovoCasoPage() {
 
   const podeCriar = perfilId !== "" && dificuldade !== "" && !gerandoCaso;
   const perfilSelecionado = opcoes?.perfis.find((p) => p.id === perfilId);
-
-  // Define se a interface inicial está carregando
   const carregandoInterface = !mounted || carregandoOpcoes;
 
   return (
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
-      
       <Header mobileTitle="Configurar Paciente" activeMenu="casos" />
 
       <main className="w-full max-w-[900px] mx-auto p-5 md:py-12 md:px-8 flex-1">
-        
-        <h1 className="md:hidden text-[20px] font-bold text-fg mb-6">Parâmetros da Simulação</h1>
-        <h1 className="hidden md:block font-display text-[28px] font-bold text-fg mb-10 text-center md:text-left">
-          Configurar Novo Paciente (Gerado por IA)
+        <h1 className="md:hidden text-[20px] font-bold text-fg mb-6">
+          Parâmetros da Simulação
         </h1>
+        
+        <div className="hidden md:flex flex-col items-start gap-3 mb-10">
+          <h1 className="font-display text-[28px] font-bold text-fg">
+            Configurar Novo Paciente
+          </h1>
+          <span className="inline-flex items-center h-6 px-2.5 gap-1.5 rounded-full bg-accent-soft text-accent font-sans text-[12px] font-medium">
+            ✨ Gerado por IA
+          </span>
+        </div>
 
         <div className="flex flex-col md:grid md:grid-cols-[1fr_1fr] gap-6 md:gap-10 items-start">
-          
           <div className="w-full">
             {carregandoInterface ? (
-              /* Estado de Carregamento (Skeleton) */
               <div className="flex flex-col gap-5 w-full animate-pulse">
                 <div className="flex flex-col gap-1.5">
                   <div className="h-4 w-32 bg-line-strong/20 rounded-sm"></div>
@@ -100,7 +102,6 @@ export default function NovoCasoPage() {
                 <div className="h-11 w-full bg-surface-raised rounded-md mt-2"></div>
               </div>
             ) : erroCarregar ? (
-              /* Estado de Erro de Conexão */
               <Alert 
                 type="danger" 
                 title="Falha de comunicação" 
@@ -116,7 +117,6 @@ export default function NovoCasoPage() {
                 Não foi possível conectar ao servidor para carregar os perfis clínicos. Verifique sua conexão ou tente novamente em instantes.
               </Alert>
             ) : (
-              /* Formulário Carregado */
               <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
                 <Select
                   id="perfil"
@@ -181,7 +181,6 @@ export default function NovoCasoPage() {
               <p>Você não verá esses dados previamente. O objetivo é testar suas habilidades investigativas conversando com ele em tempo real durante a etapa de Anamnese, como em um consultório de verdade.</p>
             </div>
           </aside>
-
         </div>
       </main>
     </div>
