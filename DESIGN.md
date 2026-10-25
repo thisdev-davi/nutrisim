@@ -49,7 +49,7 @@ Nunca coloque um número calculado dentro do balão do paciente.
 
 O tema **escuro é o padrão** e vem primeiro. O claro usa os mesmos nomes de token. Os neutros são zinc (frios).
 
-O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na ação principal da tela, no anel de foco e no badge de IA. Os estados têm paleta própria e nunca usam o lima. Todo estado vem com ícone e texto, nunca só com cor.
+O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na ação principal da tela, no anel de foco e no badge de IA. Navegação ativa, aba ativa e etapa atual usam `fg`, nunca o lima. Os estados têm paleta própria e nunca usam o lima. Todo estado vem com ícone e texto, nunca só com cor.
 
 ### Neutros
 
@@ -59,7 +59,7 @@ O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na açã
 | `surface` | `#18181b` | `#ffffff` | Cards, painéis, campos de formulário, balão do paciente |
 | `surface-raised` | `#27272a` | `#f4f4f5` | Balão do estudante, hover de botão fantasma, trilho da barra de adesão |
 | `line` | `#27272a` | `#e4e4e7` | Bordas de 1px entre áreas e em cards. Separa sem sombra. É decorativa e não marca controles |
-| `line-strong` | `#63636b` | `#8a8a93` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg` e `surface` |
+| `line-strong` | `#71717a` | `#8a8a93` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg`, `surface` e `surface-raised` |
 | `fg` | `#fafafa` | `#09090b` | Texto principal sobre `bg`, `surface` e `surface-raised` |
 | `fg-muted` | `#a1a1aa` | `#52525b` | Texto secundário, metadados, placeholders. 4.5:1 sobre `bg`, `surface` e `surface-raised` |
 
@@ -116,7 +116,8 @@ Pilhas de fallback:
 | `h3` | sans | 18 / 26px | 600 | 0 | Título de card e de grupo |
 | `body` | sans | 15 / 24px | 400 | 0 | Texto corrido e mensagens do chat |
 | `body-sm` | sans | 13 / 20px | 400 | 0 | Ajuda de campo, legenda |
-| `label` | sans | 13 / 16px | 500 | 0 | Rótulo de campo, aba, botão pequeno |
+| `control` | sans | 14 / 20px | 500 | 0 | Botão padrão e aba |
+| `label` | sans | 13 / 16px | 500 | 0 | Rótulo de campo e botão pequeno |
 | `data-lg` | mono | 24 / 28px | 500 | 0 | Número de destaque do motor (GET, total do plano) |
 | `data` | mono | 14 / 20px | 400 | 0 | Quantidades, nutrientes e porcentagens em linhas e tabelas |
 | `eyebrow` | mono | 12 / 16px | 500 | 0.04em | Rótulo técnico curto acima de título ou valor (fonte do dado, horário), em caixa alta |
@@ -256,7 +257,7 @@ Campo de texto com rótulo visível, ajuda opcional e mensagem de erro. A varian
 |---|---|
 | hover | borda `fg-muted` |
 | foco | anel de 2px `focus` com afastamento 0, borda transparente |
-| erro | `ns-field--error`: borda `danger` |
+| erro | `ns-field--error`: borda `danger` no input, select ou textarea |
 
 - Sempre `<label for>` visível. O placeholder é exemplo, nunca o rótulo.
 - Valores numéricos (peso, gramas, kcal) usam `ns-num` (Geist Mono, tabular) e o `inputmode` adequado.
@@ -296,7 +297,7 @@ Abas das ferramentas clínicas da consulta (Chat, Anotações, Plano alimentar, 
 
 Superfície para agrupar um caso clínico, um atendimento do histórico ou um bloco de funcionalidade.
 
-**Anatomia:** `div.ns-card` > eyebrow (mono) + `h3.ns-card__title` + `p.ns-card__text` + `div.ns-card__foot` (badges).
+**Anatomia:** `div.ns-card` > `span.ns-eyebrow` + `h3.ns-card__title` + `p.ns-card__text` + `div.ns-card__foot` (badges).
 
 | Parte | Especificação |
 |---|---|
@@ -429,11 +430,36 @@ section.ns-meal
 - A unidade vai junto do número (`50 g`, `127 kcal`), e o milhar é separado por espaço fino.
 - "Editar" é um botão ghost pequeno. "Adicionar refeição" fica fora do item, como botão secundário.
 
+### Alert
+
+Mensagem de estado dentro da tela: erro de carregamento, aviso ou dica de formulário.
+
+**Anatomia:** `div.ns-alert` (`--info | --success | --warning | --danger`) > `svg.ns-icon` + `div.ns-alert__body` > `p.ns-alert__title` (opcional) + texto + `button.ns-alert__action` (opcional).
+
+| Parte | Especificação |
+|---|---|
+| Caixa | flex com gap `space-2`, padding `space-3 space-4`, raio `radius-md`, `body-sm` (13/20px) |
+| Ícone | 16px, obrigatório, alinhado à primeira linha |
+| Título | Geist 600 14/20px |
+| Ação | botão de texto sublinhado, Geist 500 13/20px, na cor do alerta |
+
+| Variante | Fundo | Texto | Borda | Ícone |
+|---|---|---|---|---|
+| `--info` | transparente | `fg-muted` | `line` | `Info` em `fg` |
+| `--success` | `success-soft` | `success` | transparente | `Check` |
+| `--warning` | `warning-soft` | `warning` | transparente | `TriangleAlert` |
+| `--danger` | `danger-soft` | `danger` | transparente | `CircleAlert` |
+
+- Estado sempre com ícone e texto.
+- A mensagem de erro diz o que fazer, e a ação ("Tentar de novo") resolve ali mesmo quando dá.
+- `--info` é a dica de formulário. Não use alerta para conteúdo que cabe num `ns-help`.
+
 ### Utilitários
 
 | Classe | O que faz |
 |---|---|
 | `ns-num` | Geist Mono com `tabular-nums`, para qualquer número do motor |
+| `ns-eyebrow` | estilo `eyebrow` (Geist Mono 500 12/16px, tracking 0.04em, caixa alta, `fg-muted`) |
 | `ns-icon` | 16 × 16px, sem preenchimento, traço `currentColor` de 1,5px com pontas arredondadas |
 | `:focus-visible` | anel global de 2px em `focus`, afastado 2px |
 
@@ -447,8 +473,8 @@ As duas telas da vitrine mostram os componentes juntos. São a prova do sistema,
 - **Página:** largura máxima de 1040px, padding `space-8 space-6 space-12` e gap `space-8` entre blocos.
 - **Cabeçalho:** "Voltar" (ghost sm), eyebrow "ETAPA 1 DE 5 · CASO", `h1` com o badge "Gerado por IA" e um parágrafo `fg-muted` de até 62ch.
 - **Grade de duas colunas (1.35fr / 1fr):**
-  - **Formulário (Card):** quatro Selects em grade 2 × 2 (Patologia ou objetivo, Dificuldade, Faixa etária, Sexo), uma dica com ícone Info e borda `line`, e as ações separadas por uma linha `line`: o primário "Gerar ficha oculta e iniciar consulta" e o ghost "Cancelar".
-  - **Lateral (Card):** "Como funciona a geração?", badges neutros com o que a ficha contém e a lista das 5 etapas. A etapa atual tem círculo de 24px em `accent` com `aria-current="step"`; as outras têm círculo com borda `line-strong`.
+  - **Formulário (Card):** quatro Selects em grade 2 × 2 (Patologia ou objetivo, Dificuldade, Faixa etária, Sexo), um Alert `info`, e as ações separadas por uma linha `line`: o primário "Gerar ficha oculta e iniciar consulta" e o ghost "Cancelar".
+  - **Lateral (Card):** "Como funciona a geração?", badges neutros com o que a ficha contém e a lista das 5 etapas. A etapa atual tem círculo de 24px em `fg`, com o número em `bg`, e `aria-current="step"`; as outras têm círculo com borda `line-strong`.
 
 ### Consulta em andamento (etapa 2, aba Plano ativa)
 
@@ -460,7 +486,7 @@ As duas telas da vitrine mostram os componentes juntos. São a prova do sistema,
 
 ## Tokens no Tailwind 4
 
-Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="class"`. Como o escuro é o padrão, os valores dele ficam no `:root` e o claro sobrescreve com `.light`. Para isso, o `ThemeProvider` do `layout.tsx` precisa passar a usar `defaultTheme="dark"`.
+Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="class"`. Como o escuro é o padrão, os valores dele ficam no `:root` e o claro sobrescreve com `.light`. Por isso o `ThemeProvider` do `layout.tsx` usa `defaultTheme="dark"`.
 
 ```css
 @import "tailwindcss";
@@ -470,7 +496,7 @@ Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="cla
   --surface: #18181b;
   --surface-raised: #27272a;
   --line: #27272a;
-  --line-strong: #63636b;
+  --line-strong: #71717a;
   --fg: #fafafa;
   --fg-muted: #a1a1aa;
   --accent: #a3e635;
@@ -536,6 +562,13 @@ Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="cla
   --radius-pill: 9999px;
 
   --shadow-overlay: var(--overlay);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
 body {
