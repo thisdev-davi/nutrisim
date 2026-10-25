@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { Sparkle } from "lucide-react";
 import { env } from "@/lib/env";
 
 import { Header } from "@/components/ui/Header";
@@ -21,6 +22,9 @@ const ROTULOS_DIFICULDADE: Record<Dificuldade, string> = {
   medio: "Média",
   dificil: "Difícil",
 };
+
+const CONTEUDO_FICHA = ["História de vida", "Rotina de trabalho", "Limitações financeiras", "Resistências alimentares"];
+const ETAPAS = ["Caso", "Anamnese", "Plano alimentar", "Cenários de adesão", "Retorno e feedback"];
 
 export default function NovoCasoPage() {
   const router = useRouter();
@@ -71,115 +75,137 @@ export default function NovoCasoPage() {
 
   return (
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
-      <Header mobileTitle="Configurar Paciente" activeMenu="casos" />
+      <Header mobileTitle="Configurar paciente" activeMenu="casos" />
 
-      <main className="w-full max-w-[900px] mx-auto p-5 md:py-12 md:px-8 flex-1">
-        <h1 className="md:hidden text-[20px] font-bold text-fg mb-6">
-          Parâmetros da Simulação
-        </h1>
-        
-        <div className="hidden md:flex flex-col items-start gap-3 mb-10">
-          <h1 className="font-display text-[28px] font-bold text-fg">
-            Configurar Novo Paciente
-          </h1>
-          <span className="inline-flex items-center h-6 px-2.5 gap-1.5 rounded-full bg-accent-soft text-accent font-sans text-[12px] font-medium">
-            ✨ Gerado por IA
+      <main className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
+        <div className="flex flex-col items-start gap-3">
+          <span className="font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">
+            Etapa 1 de 5 · Caso
           </span>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-[24px] leading-[30px] md:text-[32px] md:leading-[38px] font-semibold tracking-[-0.02em] text-balance">
+              Configurar novo paciente
+            </h1>
+            <span className="inline-flex items-center h-6 px-2.5 gap-1.5 rounded-full bg-accent-soft text-accent text-[12px] font-medium">
+              <Sparkle size={12} strokeWidth={1.5} aria-hidden />
+              Gerado por IA
+            </span>
+          </div>
+          <p className="max-w-[62ch] text-fg-muted">
+            Escolha os parâmetros da simulação. A IA cria um paciente único a partir deles, e você descobre os detalhes conversando com ele na anamnese.
+          </p>
         </div>
 
-        <div className="flex flex-col md:grid md:grid-cols-[1fr_1fr] gap-6 md:gap-10 items-start">
-          <div className="w-full">
+        <div className="grid md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-6 items-start">
+          <section aria-labelledby="parametros" className="flex flex-col gap-4 p-6 border border-line bg-surface rounded-lg">
+            <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
             {carregandoInterface ? (
-              <div className="flex flex-col gap-5 w-full animate-pulse">
-                <div className="flex flex-col gap-1.5">
-                  <div className="h-4 w-32 bg-line-strong/20 rounded-sm"></div>
-                  <div className="h-11 w-full bg-surface-raised rounded-md"></div>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <div className="h-4 w-24 bg-line-strong/20 rounded-sm"></div>
-                  <div className="h-11 w-full bg-surface-raised rounded-md"></div>
-                </div>
-                <div className="h-11 w-full bg-surface-raised rounded-md mt-2"></div>
+              <div className="grid md:grid-cols-2 gap-4 animate-pulse" aria-busy="true">
+                <div className="h-[66px] bg-surface-raised rounded-md"></div>
+                <div className="h-[66px] bg-surface-raised rounded-md"></div>
               </div>
             ) : erroCarregar ? (
-              <Alert 
-                type="danger" 
-                title="Falha de comunicação" 
+              <Alert
+                type="danger"
+                title="Falha de comunicação"
                 action={
-                  <button 
-                    onClick={() => recarregarOpcoes()} 
-                    className="text-[13px] font-medium underline hover:opacity-80 transition-opacity"
+                  <button
+                    onClick={() => recarregarOpcoes()}
+                    className="text-[13px] font-medium underline hover:opacity-80 transition-opacity cursor-pointer"
                   >
                     Tentar buscar novamente
                   </button>
                 }
               >
-                Não foi possível conectar ao servidor para carregar os perfis clínicos. Verifique sua conexão ou tente novamente em instantes.
+                Não foi possível carregar os perfis clínicos. Verifique sua conexão e tente de novo.
               </Alert>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-                <Select
-                  id="perfil"
-                  label="Patologia/Objetivo"
-                  value={perfilId}
-                  onChange={(e) => setPerfilId(e.target.value)}
-                  disabled={gerandoCaso}
-                  required
-                  helpText={perfilSelecionado?.descricao}
-                >
-                  <option value="">Selecione...</option>
-                  {opcoes?.perfis.map((p) => (
-                    <option key={p.id} value={p.id}>{p.nome}</option>
-                  ))}
-                </Select>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Select
+                    id="perfil"
+                    label="Patologia ou objetivo"
+                    value={perfilId}
+                    onChange={(e) => setPerfilId(e.target.value)}
+                    disabled={gerandoCaso}
+                    required
+                    helpText={perfilSelecionado?.descricao}
+                  >
+                    <option value="">Selecione…</option>
+                    {opcoes?.perfis.map((p) => (
+                      <option key={p.id} value={p.id}>{p.nome}</option>
+                    ))}
+                  </Select>
 
-                <Select
-                  id="dificuldade"
-                  label="Dificuldade"
-                  value={dificuldade}
-                  onChange={(e) => setDificuldade(e.target.value as Dificuldade)}
-                  disabled={gerandoCaso}
-                  required
-                >
-                  <option value="">Selecione...</option>
-                  {opcoes?.dificuldades.map((d) => (
-                    <option key={d} value={d}>{ROTULOS_DIFICULDADE[d]}</option>
-                  ))}
-                </Select>
-
-                <div className="md:hidden mt-2">
-                  <Alert type="info">
-                    A IA criará um perfil único (história, rotina, gostos) com base nas suas escolhas. Descubra os detalhes conversando com ele na anamnese!
-                  </Alert>
+                  <Select
+                    id="dificuldade"
+                    label="Dificuldade"
+                    value={dificuldade}
+                    onChange={(e) => setDificuldade(e.target.value as Dificuldade)}
+                    disabled={gerandoCaso}
+                    required
+                  >
+                    <option value="">Selecione…</option>
+                    {opcoes?.dificuldades.map((d) => (
+                      <option key={d} value={d}>{ROTULOS_DIFICULDADE[d]}</option>
+                    ))}
+                  </Select>
                 </div>
 
+                <Alert type="info">
+                  A IA cria história, rotina e gostos com base nas suas escolhas. Nada disso aparece antes da consulta.
+                </Alert>
+
                 {erroCriar && (
-                  <div className="mt-2">
-                    <Alert type="danger" action={
-                      <button type="button" onClick={() => { limparErroCriar(); handleSubmit({ preventDefault: () => {} } as React.FormEvent); }} className="text-[13px] font-medium">
-                        Tentar de novo
-                      </button>
-                    }>
-                      {erroCriar instanceof Error ? erroCriar.message : "Erro ao criar."}
-                    </Alert>
-                  </div>
+                  <Alert type="danger" action={
+                    <button type="submit" className="text-[13px] font-medium underline hover:opacity-80 transition-opacity cursor-pointer">
+                      Tentar de novo
+                    </button>
+                  }>
+                    {erroCriar instanceof Error ? erroCriar.message : "Erro ao criar."}
+                  </Alert>
                 )}
 
-                <Button type="submit" disabled={!podeCriar} className="mt-2 w-full">
-                  {gerandoCaso ? "Gerando paciente..." : (
-                    <><span className="md:hidden">Gerar Paciente e Iniciar</span><span className="hidden md:inline">Gerar Ficha Oculta e Iniciar Consulta</span></>
-                  )}
-                </Button>
+                <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-line">
+                  <Button type="submit" disabled={!podeCriar}>
+                    {gerandoCaso ? "Gerando paciente…" : (
+                      <>
+                        <Sparkle size={16} strokeWidth={1.5} aria-hidden />
+                        <span className="md:hidden">Gerar paciente e iniciar</span>
+                        <span className="hidden md:inline">Gerar ficha oculta e iniciar consulta</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => router.back()}>
+                    Cancelar
+                  </Button>
+                </div>
               </form>
             )}
-          </div>
+          </section>
 
-          <aside className="hidden md:flex flex-col border border-line bg-surface rounded-lg p-6 xl:p-8 h-fit gap-4 w-full">
-            <h2 className="text-[18px] font-semibold text-fg">Como funciona a geração?</h2>
-            <div className="flex flex-col gap-4 text-[14px] leading-6 text-fg-muted">
-              <p>Ao clicar em 'Gerar Ficha Oculta', nossa Inteligência Artificial irá estruturar um paciente exclusivo contendo uma história de vida, rotina de trabalho, limitações financeiras e resistências alimentares.</p>
-              <p>Você não verá esses dados previamente. O objetivo é testar suas habilidades investigativas conversando com ele em tempo real durante a etapa de Anamnese, como em um consultório de verdade.</p>
-            </div>
+          <aside aria-labelledby="como-funciona" className="hidden md:flex flex-col gap-4 p-6 border border-line bg-surface rounded-lg">
+            <h2 id="como-funciona" className="text-[18px] leading-[26px] font-semibold">Como funciona a geração?</h2>
+            <p className="text-fg-muted">
+              Ao gerar a ficha oculta, a IA estrutura um paciente exclusivo. Você não vê esses dados antes: precisa descobri-los na anamnese, como num consultório de verdade.
+            </p>
+            <ul aria-label="O que a ficha oculta contém" className="flex flex-wrap gap-2">
+              {CONTEUDO_FICHA.map((item) => (
+                <li key={item} className="inline-flex items-center h-6 px-2.5 rounded-full border border-line-strong text-fg-muted text-[12px] font-medium">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <ol aria-label="Etapas da simulação" className="grid gap-2 pt-4 border-t border-line">
+              {ETAPAS.map((etapa, i) => (
+                <li key={etapa} aria-current={i === 0 ? "step" : undefined} className={`grid grid-cols-[24px_1fr] items-center gap-3 text-[14px] leading-5 ${i === 0 ? "text-fg font-medium" : "text-fg-muted"}`}>
+                  <span className={`grid place-items-center size-6 rounded-full border font-mono text-[12px] font-medium ${i === 0 ? "border-transparent bg-fg text-bg" : "border-line-strong"}`}>
+                    {i + 1}
+                  </span>
+                  {etapa}
+                </li>
+              ))}
+            </ol>
           </aside>
         </div>
       </main>

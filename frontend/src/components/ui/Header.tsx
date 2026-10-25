@@ -3,32 +3,36 @@
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { ChevronLeft } from "lucide-react";
 
 interface HeaderProps {
   mobileTitle?: string;
   activeMenu?: "inicio" | "casos" | "historico";
 }
 
+const MENU = [["inicio", "Início"], ["casos", "Casos"], ["historico", "Histórico"]] as const;
+
 export function Header({ mobileTitle = "NutriSim", activeMenu = "casos" }: HeaderProps) {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const logoSrc = mounted && theme === "light" 
+  const logoSrc = mounted && resolvedTheme === "light" 
     ? "/logo/nutrisim-claro.svg" 
     : "/logo/nutrisim-escuro.svg";
 
   return (
-    <header className="border-b border-line bg-surface flex items-center justify-between px-4 md:px-8 h-14 md:h-16 shrink-0">
+    <header className="border-b border-line flex items-center justify-between px-4 md:px-8 h-14 md:h-16 shrink-0">
       <button 
         onClick={() => router.back()} 
-        className="md:hidden text-[14px] text-fg-muted hover:text-fg cursor-pointer"
+        className="md:hidden inline-flex items-center gap-2 h-9 -ml-3 px-3 rounded-md text-[13px] font-medium text-fg-muted hover:bg-surface-raised hover:text-fg transition-colors cursor-pointer"
       >
-        &lt; Voltar
+        <ChevronLeft size={16} strokeWidth={1.5} aria-hidden />
+        Voltar
       </button>
 
       <div className="hidden md:flex items-center">
@@ -46,21 +50,15 @@ export function Header({ mobileTitle = "NutriSim", activeMenu = "casos" }: Heade
 
       <div className="hidden md:flex items-center gap-6">
         <nav className="flex gap-2">
-          <button 
-            className={`h-9 px-3 text-[14px] font-medium rounded-md transition-colors cursor-pointer ${activeMenu === 'inicio' ? 'bg-accent-soft text-accent' : 'text-fg-muted hover:bg-surface-raised hover:text-fg'}`}
-          >
-            Início
-          </button>
-          <button 
-            className={`h-9 px-3 text-[14px] font-medium rounded-md transition-colors cursor-pointer ${activeMenu === 'casos' ? 'bg-accent-soft text-accent' : 'text-fg-muted hover:bg-surface-raised hover:text-fg'}`}
-          >
-            Casos
-          </button>
-          <button 
-            className={`h-9 px-3 text-[14px] font-medium rounded-md transition-colors cursor-pointer ${activeMenu === 'historico' ? 'bg-accent-soft text-accent' : 'text-fg-muted hover:bg-surface-raised hover:text-fg'}`}
-          >
-            Histórico
-          </button>
+          {MENU.map(([chave, rotulo]) => (
+            <button
+              key={chave}
+              aria-current={activeMenu === chave ? "page" : undefined}
+              className={`h-9 px-3 text-[14px] font-medium rounded-md transition-colors cursor-pointer ${activeMenu === chave ? "bg-surface-raised text-fg" : "text-fg-muted hover:bg-surface-raised hover:text-fg"}`}
+            >
+              {rotulo}
+            </button>
+          ))}
         </nav>
 
         <div className="w-px h-6 bg-line"></div>

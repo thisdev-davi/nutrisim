@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Check, CircleAlert, Info, TriangleAlert } from "lucide-react";
 
 interface AlertProps {
   type?: "danger" | "info" | "warning" | "success";
@@ -7,19 +8,24 @@ interface AlertProps {
   action?: ReactNode;
 }
 
+const styles = {
+  danger: { box: "border-transparent bg-danger-soft text-danger", Icon: CircleAlert },
+  info: { box: "border-line text-fg-muted", Icon: Info },
+  warning: { box: "border-transparent bg-warning-soft text-warning", Icon: TriangleAlert },
+  success: { box: "border-transparent bg-success-soft text-success", Icon: Check },
+};
+
 export function Alert({ type = "danger", title, children, action }: AlertProps) {
-  const styles = {
-    danger: "bg-danger-soft border-danger/30 text-danger",
-    info: "bg-surface border-line text-fg-muted",
-    warning: "bg-warning-soft border-warning/30 text-warning",
-    success: "bg-success-soft border-success/30 text-success",
-  };
+  const { box, Icon } = styles[type];
 
   return (
-    <div className={`border p-4 rounded-md flex flex-col gap-2 ${styles[type]}`}>
-      {title && <h4 className="font-semibold text-[14px]">{title}</h4>}
-      <div className="text-[14px] leading-relaxed">{children}</div>
-      {action && <div className="mt-1">{action}</div>}
+    <div role={type === "danger" ? "alert" : undefined} className={`flex gap-2 border px-4 py-3 rounded-md text-[13px] leading-5 ${box}`}>
+      <Icon size={16} strokeWidth={1.5} aria-hidden className={`shrink-0 mt-0.5 ${type === "info" ? "text-fg" : ""}`} />
+      <div className="flex flex-col gap-1 min-w-0">
+        {title && <p className="font-semibold text-[14px] leading-5">{title}</p>}
+        <div>{children}</div>
+        {action && <div>{action}</div>}
+      </div>
     </div>
   );
 }
