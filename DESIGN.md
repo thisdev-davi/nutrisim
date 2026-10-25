@@ -47,7 +47,7 @@ Nunca coloque um número calculado dentro do balão do paciente.
 
 ## Cores
 
-O tema **escuro é o padrão** e vem primeiro. O claro usa os mesmos nomes de token. Os neutros são zinc (frios).
+O tema **escuro é a base** e vem primeiro. O claro usa os mesmos nomes de token. O app segue o tema do sistema operacional. Os neutros são zinc (frios).
 
 O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na ação principal da tela, no anel de foco e no badge de IA. Navegação ativa, aba ativa e etapa atual usam `fg`, nunca o lima. Os estados têm paleta própria e nunca usam o lima. Todo estado vem com ícone e texto, nunca só com cor.
 
@@ -486,7 +486,7 @@ As duas telas da vitrine mostram os componentes juntos. São a prova do sistema,
 
 ## Tokens no Tailwind 4
 
-Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="class"`. Como o escuro é o padrão, os valores dele ficam no `:root` e o claro sobrescreve com `.light`. Por isso o `ThemeProvider` do `layout.tsx` usa `defaultTheme="dark"`.
+Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="class"`. Como o escuro é a base, os valores dele ficam no `:root` e o claro sobrescreve com `.light`. O `ThemeProvider` do `layout.tsx` usa `defaultTheme="system"` para acompanhar o sistema operacional.
 
 ```css
 @import "tailwindcss";
