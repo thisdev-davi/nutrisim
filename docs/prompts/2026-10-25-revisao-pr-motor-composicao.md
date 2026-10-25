@@ -11,9 +11,9 @@ Mensagens do autor, na ordem, copiadas sem alteração.
 
 > /code-review revise o diff da minha branch atual para o PR que abri no github  https://github.com/thisdev-davi/nutrisim/pull/101
 
-> Primeiro preciso que realize os testes para que eu possa avaliar se realmente o que sugeriu de alteracao faz sentido.
+> Primeiro testa para comprovar se realmente o que sugeriu de alteracao faz sentido.
 
-> Nao entendi o real problema do 2, me explique de forma detalhada.
+> Nao entendi o real problema do 2
 
 ## Resultado
 
