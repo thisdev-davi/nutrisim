@@ -12,7 +12,7 @@ frontend/
 │   ├── app/                    rotas (App Router)
 │   │   ├── page.tsx            início
 │   │   ├── entrar/             login e cadastro (RF01)                           NS-036
-│   │   ├── casos/novo/         escolha de perfil e dificuldade (RF02)            NS-021
+│   │   ├── caso/novo/          escolha de perfil e dificuldade (RF02)            NS-021
 │   │   ├── sessoes/[id]/
 │   │   │   ├── anamnese/       chat em tempo real com o paciente (RF04)         NS-022
 │   │   │   ├── plano/          montagem do plano com busca na TACO (RF05, RF06) NS-042
@@ -36,6 +36,8 @@ As rotas são uma proposta e podem mudar com os wireframes (NS-010) e o contrato
 - **Projeções com aviso:** gráficos de peso e adequação sempre exibem a limitação do modelo.
 
 ## Como rodar?
+
+- Copie o `.env.example` para `.env.local` e aponte `NEXT_PUBLIC_BACK_END_API` para o backend (sem ela, usa `http://localhost:8000`).
 
 - Para inciar o servidor:
 >> npm run dev
