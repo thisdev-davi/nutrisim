@@ -470,10 +470,10 @@ As duas telas da vitrine mostram os componentes juntos. São a prova do sistema,
 ### Configurar novo paciente (etapa 1)
 
 - **Barra do app:** conteúdo alinhado à mesma largura de 1040px da página. Logo de 28px (link para o início, também no mobile), links de navegação (Início, Casos, Histórico) como botões ghost de 36px com `aria-current="page"` em `surface-raised`, e Perfil com avatar de 24px. No mobile, só a logo. Borda inferior `line`.
-- **Página:** formulário de 560px no centro, padding `space-8 space-6 space-12` e gap `space-8` entre blocos. É uma tela de uma ação só, então o formulário é o foco.
-- **Cabeçalho (centralizado):** eyebrow "ETAPA 1 DE 5 · CASO", `h1` com o badge "Gerado por IA" e um parágrafo `fg-muted` de até 62ch.
-- **Formulário (Card):** Selects em grade de 2 colunas (Patologia ou objetivo, Dificuldade), um Alert `info` e as ações separadas por uma linha `line`: o primário "Gerar ficha oculta e iniciar consulta" e o ghost "Cancelar".
-- **Como funciona:** a partir de 1024px, coluna lateral de 280px sem card, separada do formulário por uma borda esquerda `line`, com texto em `body-sm`; abaixo disso, Card embaixo do formulário. Contém "Como funciona a geração?", badges neutros com o que a ficha contém e a lista das 5 etapas. A etapa atual tem círculo de 24px em `fg`, com o número em `bg`, e `aria-current="step"`; as outras têm círculo com borda `line-strong`.
+- **Página:** largura máxima de 1040px, alinhada à barra do app, padding `space-8 space-6 space-12` e gap `space-8` entre blocos.
+- **Cabeçalho (alinhado à esquerda):** eyebrow "ETAPA 1 DE 5 · CASO", `h1` com o badge "Gerado por IA" e um parágrafo `fg-muted` de até 62ch.
+- **Formulário (Card):** ocupa a largura que sobra ao lado do "Como funciona", com Selects em grade de 2 colunas (Patologia ou objetivo, Dificuldade), um Alert `info` e as ações separadas por uma linha `line`: o primário "Gerar ficha oculta e iniciar consulta" e o ghost "Cancelar".
+- **Como funciona:** a partir de 1024px, coluna lateral de 300px sem card, separada do formulário por uma borda esquerda `line`, com texto em `body-sm`; abaixo disso, Card embaixo do formulário. Contém "Como funciona a geração?", badges neutros com o que a ficha contém e a lista das 5 etapas. A etapa atual tem círculo de 24px em `fg`, com o número em `bg`, e `aria-current="step"`; as outras têm círculo com borda `line-strong`.
 - **Mobile:** uma coluna com margem de 16px. Os cards perdem borda e fundo para não virar caixa dentro de caixa; o "Como funciona" fica separado por uma linha `line`.
 
 ### Consulta em andamento (etapa 2, aba Plano ativa)
