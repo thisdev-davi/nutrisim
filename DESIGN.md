@@ -1,8 +1,8 @@
 # Design do NutriSim
 
-Identidade visual e componentes da interface do NutriSim. Este arquivo é a referência para o código: quando ele e a vitrine divergirem, vale o que está aqui.
+Identidade visual e componentes da interface do NutriSim. Este arquivo é a fonte das regras. Os valores dos tokens (cores, raios, sombra) ficam só no `frontend/src/app/globals.css`.
 
-- **Vitrine visual (design system):** https://claude.ai/artifact/LyyG6Us3oibo3ad5YrhfZb. Lá estão os previews ao vivo de cada componente, as telas de prova e as logos em SVG.
+- **Vitrine visual (design system):** https://claude.ai/artifact/LyyG6Us3oibo3ad5YrhfZb. Só previews ao vivo, telas de prova e logos em SVG; as regras ficam aqui. Ao mudar um token no `globals.css`, atualize também o `tokens.json` da vitrine, que desenha as amostras.
 - **Implementação:** tokens no `@theme` do Tailwind 4 (`frontend/src/app/globals.css`) e componentes React em `frontend/src/components/ui/`. O mapeamento está em [Tokens no Tailwind 4](#tokens-no-tailwind-4).
 
 ## Sumário
@@ -53,38 +53,38 @@ O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na açã
 
 ### Neutros
 
-| Token | Escuro | Claro | Uso |
-|---|---|---|---|
-| `bg` | `#09090b` | `#fafafa` | Fundo da página |
-| `surface` | `#18181b` | `#ffffff` | Cards, painéis, campos de formulário, balão do paciente |
-| `surface-raised` | `#27272a` | `#f4f4f5` | Balão do estudante, hover de botão fantasma, trilho da barra de adesão |
-| `line` | `#27272a` | `#e4e4e7` | Bordas de 1px entre áreas e em cards. Separa sem sombra. É decorativa e não marca controles |
-| `line-strong` | `#71717a` | `#8a8a93` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg`, `surface` e `surface-raised` |
-| `fg` | `#fafafa` | `#09090b` | Texto principal sobre `bg`, `surface` e `surface-raised` |
-| `fg-muted` | `#a1a1aa` | `#52525b` | Texto secundário, metadados, placeholders. 4.5:1 sobre `bg`, `surface` e `surface-raised` |
+| Token | Uso |
+|---|---|
+| `bg` | Fundo da página |
+| `surface` | Cards, painéis, campos de formulário, balão do paciente |
+| `surface-raised` | Balão do estudante, hover de botão fantasma, trilho da barra de adesão |
+| `line` | Bordas de 1px entre áreas e em cards. Separa sem sombra. É decorativa e não marca controles |
+| `line-strong` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg`, `surface` e `surface-raised` |
+| `fg` | Texto principal sobre `bg`, `surface` e `surface-raised` |
+| `fg-muted` | Texto secundário, metadados, placeholders. 4.5:1 sobre `bg`, `surface` e `surface-raised` |
 
 ### Acento (lima)
 
-| Token | Escuro | Claro | Uso |
-|---|---|---|---|
-| `accent` | `#a3e635` | `#4d7c0f` | Ação principal, foco, badge de IA. Como texto, só sobre `bg`, `surface` ou `accent-soft` |
-| `accent-hover` | `#bef264` | `#3f6212` | Hover do botão primário |
-| `accent-soft` | `#1a2e05` | `#ecfccb` | Fundo tingido atrás de texto `accent` |
-| `on-accent` | `#09090b` | `#ffffff` | Texto e ícone sobre preenchimento `accent` |
-| `focus` | = `accent` | = `accent` | Anel de foco do teclado |
+| Token | Uso |
+|---|---|
+| `accent` | Ação principal, foco, badge de IA. Como texto, só sobre `bg`, `surface` ou `accent-soft` |
+| `accent-hover` | Hover do botão primário |
+| `accent-soft` | Fundo tingido atrás de texto `accent` |
+| `on-accent` | Texto e ícone sobre preenchimento `accent` |
+| `focus` | Anel de foco do teclado |
 
-O lima brilha no escuro. No claro ele escurece para `#4d7c0f` para manter o contraste. Nunca use o lima claro (`#a3e635`) sobre fundo claro.
+O lima brilha no escuro. No claro ele escurece para manter o contraste, então nunca use o lima do tema escuro sobre fundo claro.
 
 ### Estados
 
-| Token | Escuro | Claro | Uso |
-|---|---|---|---|
-| `success` | `#34d399` | `#047857` | Estado bom (adesão alta, meta atingida). É esmeralda, nunca o lima |
-| `success-soft` | `#022c22` | `#d1fae5` | Fundo de badge e alerta de sucesso |
-| `warning` | `#fbbf24` | `#92400e` | Atenção (adesão moderada, restrição perto do limite) |
-| `warning-soft` | `#451a03` | `#fef3c7` | Fundo de badge e alerta de atenção |
-| `danger` | `#f87171` | `#b91c1c` | Erro e estado crítico (adesão baixa, restrição violada) |
-| `danger-soft` | `#450a0a` | `#fee2e2` | Fundo de badge e alerta de erro |
+| Token | Uso |
+|---|---|
+| `success` | Estado bom (adesão alta, meta atingida). É esmeralda, nunca o lima |
+| `success-soft` | Fundo de badge e alerta de sucesso |
+| `warning` | Atenção (adesão moderada, restrição perto do limite) |
+| `warning-soft` | Fundo de badge e alerta de atenção |
+| `danger` | Erro e estado crítico (adesão baixa, restrição violada) |
+| `danger-soft` | Fundo de badge e alerta de erro |
 
 O texto de estado vai sobre `bg`, `surface` ou o `-soft` correspondente.
 
@@ -145,19 +145,19 @@ O card padrão tem `space-6` de padding, `space-4` entre elementos e `space-8` e
 
 ### Raios
 
-| Token | Valor | Uso |
-|---|---|---|
-| `radius-md` | 8px | Botões, inputs, selects, itens pequenos |
-| `radius-lg` | 12px | Cards, painéis, balões de chat |
-| `radius-pill` | 9999px | Só badges, chips e avatares |
+| Token | Uso |
+|---|---|
+| `radius-md` (8px) | Botões, inputs, selects, itens pequenos |
+| `radius-lg` (12px) | Cards, painéis, balões de chat |
+| `radius-pill` | Só badges, chips e avatares |
 
 ### Borda, não sombra
 
 As áreas se separam pela borda `line` (1px) e pelo contraste de `surface` sobre `bg`. Os controles usam `line-strong`. A única sombra do sistema é a de camadas flutuantes:
 
-| Token | Escuro | Claro | Uso |
-|---|---|---|---|
-| `shadow-overlay` | `0 8px 24px rgba(0,0,0,.5)` | `0 8px 24px rgba(9,9,11,.12)` | Menus, popovers e diálogos. Nunca em cards |
+| Token | Uso |
+|---|---|
+| `shadow-overlay` | Menus, popovers e diálogos. Nunca em cards |
 
 ## Movimento
 
@@ -227,8 +227,8 @@ Botão de ação. `primary` é para a única ação principal da tela, `secondar
 | Tamanho | Altura | Padding horizontal | Fonte |
 |---|---|---|---|
 | padrão | 44px | `space-4` (16px) | Geist 500, 14px |
-| `--sm` | 36px | `space-3` (12px) | Geist 500, 13px |
-| `--icon` | 44 × 44px | 0 | (só ícone) |
+| `--sm` | Geist 500, 13px |
+| `--icon` | (só ícone) |
 
 - **Geral:** raio `radius-md`, gap de `space-2` entre ícone (16px) e rótulo, `white-space: nowrap` e transição de 150ms.
 - **Disabled:** opacidade .45 e `cursor: not-allowed`.
@@ -488,96 +488,8 @@ As duas telas da vitrine mostram os componentes juntos. São a prova do sistema,
 
 Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="class"`. Como o escuro é a base, os valores dele ficam no `:root` e o claro sobrescreve com `.light`. O `ThemeProvider` do `layout.tsx` usa `defaultTheme="system"` para acompanhar o sistema operacional.
 
-```css
-@import "tailwindcss";
+O bloco `@theme inline` expõe esses valores ao Tailwind, e o mesmo arquivo define o anel de foco global (`:focus-visible`) e o texto base do `body` (15/24).
 
-:root {
-  --bg: #09090b;
-  --surface: #18181b;
-  --surface-raised: #27272a;
-  --line: #27272a;
-  --line-strong: #71717a;
-  --fg: #fafafa;
-  --fg-muted: #a1a1aa;
-  --accent: #a3e635;
-  --accent-hover: #bef264;
-  --accent-soft: #1a2e05;
-  --on-accent: #09090b;
-  --success: #34d399;
-  --success-soft: #022c22;
-  --warning: #fbbf24;
-  --warning-soft: #451a03;
-  --danger: #f87171;
-  --danger-soft: #450a0a;
-  --overlay: 0 8px 24px rgba(0, 0, 0, 0.5);
-}
-
-.light {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --surface-raised: #f4f4f5;
-  --line: #e4e4e7;
-  --line-strong: #8a8a93;
-  --fg: #09090b;
-  --fg-muted: #52525b;
-  --accent: #4d7c0f;
-  --accent-hover: #3f6212;
-  --accent-soft: #ecfccb;
-  --on-accent: #ffffff;
-  --success: #047857;
-  --success-soft: #d1fae5;
-  --warning: #92400e;
-  --warning-soft: #fef3c7;
-  --danger: #b91c1c;
-  --danger-soft: #fee2e2;
-  --overlay: 0 8px 24px rgba(9, 9, 11, 0.12);
-}
-
-@theme inline {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-raised: var(--surface-raised);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-fg: var(--fg);
-  --color-fg-muted: var(--fg-muted);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-soft: var(--accent-soft);
-  --color-on-accent: var(--on-accent);
-  --color-focus: var(--accent);
-  --color-success: var(--success);
-  --color-success-soft: var(--success-soft);
-  --color-warning: var(--warning);
-  --color-warning-soft: var(--warning-soft);
-  --color-danger: var(--danger);
-  --color-danger-soft: var(--danger-soft);
-
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
-  --font-display: var(--font-space-grotesk), var(--font-geist-sans), system-ui, sans-serif;
-
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-pill: 9999px;
-
-  --shadow-overlay: var(--overlay);
-}
-
-@layer base {
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-size: 15px;
-  line-height: 24px;
-}
-```
 
 Com isso, as classes saem com os nomes dos tokens: `bg-bg`, `bg-surface`, `bg-surface-raised`, `border-line`, `border-line-strong`, `text-fg`, `text-fg-muted`, `bg-accent`, `text-on-accent`, `bg-success-soft`, `text-danger`, `outline-focus`, `font-display`, `font-mono`, `rounded-md`, `rounded-lg`, `rounded-pill` e `shadow-overlay`. O espaçamento já é a escala padrão do Tailwind (`p-4` = 16px, `gap-6` = 24px). Não é preciso redefinir.
 
