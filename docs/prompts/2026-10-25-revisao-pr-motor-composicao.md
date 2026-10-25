@@ -11,6 +11,10 @@ Mensagens do autor, na ordem, copiadas sem alteração.
 
 > /code-review revise o diff da minha branch atual para o PR que abri no github  https://github.com/thisdev-davi/nutrisim/pull/101
 
+> Primeiro preciso que realize os testes para que eu possa avaliar se realmente o que sugeriu de alteracao faz sentido.
+
+> Nao entendi o real problema do 2, me explique de forma detalhada.
+
 ## Resultado
 
 A IA comparou o PR com a base `desenvolvimento`, conferiu as linhas de `backend/tests/composicao_contas.csv` com `backend/data/taco/nutrients.csv` (todas batem) e apontou 8 falhas em `backend/app/motor/composicao.py` e `backend/tests/test_composicao.py`. Depois, escreveu um script que reproduz cada falha no código do PR:
