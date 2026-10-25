@@ -11,7 +11,8 @@ from app.motor.composicao import (
 )
 
 # planilha com as contas feitas a mao (valores por 100 g de data/taco/nutrients.csv)
-CONTAS = list(csv.DictReader(Path(__file__).with_name("composicao_contas.csv").open()))
+with Path(__file__).with_name("composicao_contas.csv").open(encoding="utf-8") as f:
+    CONTAS = list(csv.DictReader(f))
 
 
 @pytest.mark.parametrize("linha", CONTAS)
@@ -98,3 +99,27 @@ def test_porcao_negativa_falha():
     """gramas negativas sao rejeitadas."""
     with pytest.raises(ValueError, match="negativa"):
         calcular_refeicao([Item("Arroz, integral, cozido", -1, {"kcal": 124})])
+
+
+@pytest.mark.parametrize("gramas", [float("nan"), float("inf")])
+def test_porcao_nao_finita_falha(gramas):
+    """NaN e infinito sao rejeitados em vez de contaminar o total."""
+    with pytest.raises(ValueError, match="finita"):
+        calcular_refeicao([Item("Arroz, integral, cozido", gramas, {"kcal": 124})])
+
+
+def test_nutriente_nao_finito_falha():
+    """valor por 100 g NaN e rejeitado."""
+    with pytest.raises(ValueError, match="finito"):
+        calcular_refeicao([Item("Arroz", 100, {"kcal": float("nan")})])
+
+
+def test_aviso_nao_repete_alimento():
+    """mesmo alimento em duas refeicoes (ou duas vezes na mesma) aparece uma vez."""
+    arroz = Item("Arroz, integral, cozido", 100, {"kcal": 124, "vitamina_c": None})
+
+    composicao = calcular_composicao({"almoco": [arroz, arroz], "jantar": [arroz]})
+
+    assert composicao.por_refeicao["almoco"].sem_dado["vitamina_c"] == [arroz.nome]
+    assert composicao.total.sem_dado["vitamina_c"] == [arroz.nome]
+    assert composicao.total.valores["kcal"] == pytest.approx(372)

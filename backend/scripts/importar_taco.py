@@ -111,12 +111,10 @@ def importar_nutrientes(sessao: Session) -> None:
     registros = []
     for linha in ler_csv("nutrients.csv"):
         registro = {"id": int(linha["foodId"])}
-        registro.update(
-            {
-                campo_destino: converter_float(linha[campo_origem])
+        registro.update({
+            campo_destino: converter_float(linha[campo_origem])
             for campo_origem, campo_destino in campos.items()
-            }
-        )
+        })
         registros.append(registro)
 
     if not registros:
@@ -125,10 +123,7 @@ def importar_nutrientes(sessao: Session) -> None:
     comando = insert(Nutrientes).values(registros)
     comando = comando.on_conflict_do_update(
         index_elements=[Nutrientes.id],
-        set_={
-            campo: getattr(comando.excluded, campo)
-            for campo in campos.values()
-        },
+        set_={campo: getattr(comando.excluded, campo) for campo in campos.values()},
     )
     sessao.execute(comando)
     logger.info("Registros de nutrientes importados: {}", len(registros))
@@ -163,12 +158,10 @@ def importar_acidos_graxos(sessao: Session) -> None:
     registros = []
     for linha in ler_csv("fatty-acids.csv"):
         registro = {"id": int(linha["foodId"])}
-        registro.update(
-            {
-                campo_destino: converter_float(linha[campo_origem])
-                for campo_origem, campo_destino in campos.items()
-            }
-        )
+        registro.update({
+            campo_destino: converter_float(linha[campo_origem])
+            for campo_origem, campo_destino in campos.items()
+        })
         registros.append(registro)
 
     if not registros:
@@ -177,10 +170,7 @@ def importar_acidos_graxos(sessao: Session) -> None:
     comando = insert(AcidosGraxos).values(registros)
     comando = comando.on_conflict_do_update(
         index_elements=[AcidosGraxos.id],
-        set_={
-            campo: getattr(comando.excluded, campo)
-            for campo in campos.values()
-        },
+        set_={campo: getattr(comando.excluded, campo) for campo in campos.values()},
     )
     sessao.execute(comando)
     logger.info("Registros de ácidos graxos importados: {}", len(registros))
