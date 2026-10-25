@@ -77,12 +77,12 @@ export default function NovoCasoPage() {
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
       <Header activeMenu="casos" />
 
-      <main className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
-        <div className="flex flex-col items-start gap-3">
+      <main className="w-full max-w-[608px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
+        <div className="flex flex-col items-center text-center gap-3">
           <span className="font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">
             Etapa 1 de 5 · Caso
           </span>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <h1 className="font-display text-[24px] leading-[30px] md:text-[32px] md:leading-[38px] font-semibold tracking-[-0.02em] text-balance">
               Configurar novo paciente
             </h1>
@@ -96,7 +96,7 @@ export default function NovoCasoPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-6 items-start">
+        <div className="flex flex-col gap-6">
           <section aria-labelledby="parametros" className="flex flex-col gap-4 md:p-6 md:border md:border-line md:bg-surface md:rounded-lg">
             <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
             {carregandoInterface ? (
@@ -184,7 +184,7 @@ export default function NovoCasoPage() {
             )}
           </section>
 
-          <aside aria-labelledby="como-funciona" className="hidden md:flex flex-col gap-4 p-6 border border-line bg-surface rounded-lg">
+          <aside aria-labelledby="como-funciona" className="flex flex-col gap-4 pt-6 border-t border-line md:p-6 md:border md:bg-surface md:rounded-lg">
             <h2 id="como-funciona" className="text-[18px] leading-[26px] font-semibold">Como funciona a geração?</h2>
             <p className="text-fg-muted">
               Ao gerar a ficha oculta, a IA estrutura um paciente exclusivo. Você não vê esses dados antes: precisa descobri-los na anamnese, como num consultório de verdade.
