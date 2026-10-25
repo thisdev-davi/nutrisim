@@ -77,12 +77,12 @@ export default function NovoCasoPage() {
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
       <Header activeMenu="casos" />
 
-      <main className="w-full max-w-[608px] lg:max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
-        <div className="flex flex-col items-center text-center gap-3">
+      <main className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
+        <div className="flex flex-col items-start gap-3">
           <span className="font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">
             Etapa 1 de 5 · Caso
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="font-display text-[24px] leading-[30px] md:text-[32px] md:leading-[38px] font-semibold tracking-[-0.02em] text-balance">
               Configurar novo paciente
             </h1>
@@ -96,7 +96,7 @@ export default function NovoCasoPage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,560px)_280px] lg:justify-center lg:items-start">
+        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <section aria-labelledby="parametros" className="flex flex-col gap-4 md:p-6 md:border md:border-line md:bg-surface md:rounded-lg">
             <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
             {carregandoInterface ? (
