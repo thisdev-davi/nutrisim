@@ -75,7 +75,7 @@ export default function NovoCasoPage() {
 
   return (
     <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
-      <Header mobileTitle="Configurar paciente" activeMenu="casos" />
+      <Header activeMenu="casos" />
 
       <main className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
         <div className="flex flex-col items-start gap-3">
@@ -97,7 +97,7 @@ export default function NovoCasoPage() {
         </div>
 
         <div className="grid md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-6 items-start">
-          <section aria-labelledby="parametros" className="flex flex-col gap-4 p-6 border border-line bg-surface rounded-lg">
+          <section aria-labelledby="parametros" className="flex flex-col gap-4 md:p-6 md:border md:border-line md:bg-surface md:rounded-lg">
             <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
             {carregandoInterface ? (
               <div className="grid md:grid-cols-2 gap-4 animate-pulse" aria-busy="true">
