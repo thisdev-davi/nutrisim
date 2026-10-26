@@ -5,6 +5,14 @@ from typing import TypeVar
 from uuid import UUID
 
 from google import genai
+from google.genai import types
+
+# sem alias publico no sdk 2.x para os erros da api de interactions
+from google.genai._gaos.lib.compat_errors import (  # noqa: PLC2701
+    APIConnectionError,
+    InternalServerError,
+    RateLimitError,
+)
 from pydantic import BaseModel, ValidationError
 from sqlalchemy.orm import Session
 
@@ -19,9 +27,16 @@ class SaidaInvalidaError(Exception):
     """o llm nao devolveu json valido no schema depois de todas as tentativas."""
 
 
+class LLMIndisponivelError(Exception):
+    """o provedor falhou (sobrecarga, fora do ar, conexao); vale tentar depois."""
+
+
 @cache
 def _cliente() -> genai.Client:
-    return genai.Client()  # le GEMINI_API_KEY do ambiente
+    # le GEMINI_API_KEY do ambiente; o padrao do sdk (3 retentativas) segurava
+    # o estudante ~2 min com o gemini sobrecarregado
+    retentativa = types.HttpRetryOptions(attempts=1)
+    return genai.Client(http_options=types.HttpOptions(retry_options=retentativa))
 
 
 def gerar(  # noqa: PLR0913
@@ -53,21 +68,26 @@ def gerar(  # noqa: PLR0913
 
     Raises:
         SaidaInvalidaError: nenhuma tentativa passou no schema.
+        LLMIndisponivelError: o provedor falhou de forma passageira.
     """
     modelo = modelo or os.environ["LLM_MODELO"]
     erro: ValidationError | None = None
     for tentativa in range(1, TENTATIVAS + 1):
-        resposta = _cliente().interactions.create(
-            model=modelo,
-            input=entrada,
-            system_instruction=instrucao,
-            store=False,  # nao guarda a conversa no servidor do provedor
-            response_format={
-                "type": "text",
-                "mime_type": "application/json",
-                "schema": schema.model_json_schema(),
-            },
-        )
+        try:
+            resposta = _cliente().interactions.create(
+                model=modelo,
+                input=entrada,
+                system_instruction=instrucao,
+                store=False,  # nao guarda a conversa no servidor do provedor
+                response_format={
+                    "type": "text",
+                    "mime_type": "application/json",
+                    "schema": schema.model_json_schema(),
+                },
+            )
+        # 4xx fica de fora de proposito: e bug nosso, nao sobrecarga
+        except (InternalServerError, RateLimitError, APIConnectionError) as e:
+            raise LLMIndisponivelError(f"{tarefa}: provedor indisponivel") from e
         uso = resposta.usage  # vem None quando a saida e bloqueada
         db.add(
             ChamadaLLM(

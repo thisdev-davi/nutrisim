@@ -1,14 +1,19 @@
+import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
 from app.db.deps import obter_sessao
 from app.main import app
+from tests.test_cliente_llm import provedor_falso
+from tests.test_ficha import EXEMPLO
 
 client = TestClient(app=app)
 
 
-def test_criar_sessao_e_conversar():
-    """fluxo do mock: cria a sessao e recebe a fala em sse."""
+@pytest.mark.usefixtures("banco")
+def test_criar_sessao_e_conversar(monkeypatch):
+    """cria a sessao com o llm falso e recebe a fala em sse."""
+    provedor_falso(monkeypatch, [EXEMPLO])
     sessao = client.post(
         "/api/sessoes", json={"perfil_id": "adulto-hipertensao", "dificuldade": "facil"}
     )
@@ -24,6 +29,7 @@ def test_criar_sessao_e_conversar():
     assert eventos[-1] == "event: fim"
 
 
+@pytest.mark.usefixtures("banco")
 def test_erros_no_formato_padrao():
     """todo erro sai como {"erro": {"codigo", "mensagem"}}."""
     nao_existe = client.get("/api/sessoes/nao-existe")

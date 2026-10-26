@@ -1,14 +1,18 @@
 # etapa 2: conversa com o paciente
-# mock: resposta fixa ate a NS-020 e a NS-070 ligarem o llm
+# mock: fala fixa ate a NS-020 e a NS-070 ligarem o llm
 import asyncio
 from collections.abc import AsyncIterable
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from fastapi.sse import EventSourceResponse, ServerSentEvent
+from sqlalchemy.orm import Session
 
-from app.api.caso import SESSAO_MOCK
+from app.api.caso import para_api
 from app.api.erros import ApiError
+from app.db import modelos
+from app.db.deps import obter_sessao
 from app.schemas.api import (
     Etapa,
     EtapaAtual,
@@ -27,11 +31,14 @@ router = APIRouter(
 FALA_MOCK = "Olha, eu como pao com manteiga todo dia de manha e quase nao bebo agua."
 
 
-def buscar_sessao(sessao_id: str) -> Sessao:
+def buscar_sessao(
+    sessao_id: str, db: Annotated[Session, Depends(obter_sessao)]
+) -> Sessao:
     """roda antes da rota, entao o 404 sai antes do stream abrir.
 
     Args:
         sessao_id: id da sessao na url.
+        db: sessao do banco.
 
     Returns:
         sessao encontrada.
@@ -39,9 +46,13 @@ def buscar_sessao(sessao_id: str) -> Sessao:
     Raises:
         ApiError: sessao inexistente.
     """
-    if sessao_id != SESSAO_MOCK.id:
+    try:
+        linha = db.get(modelos.Sessao, UUID(sessao_id))
+    except ValueError:
+        linha = None  # id que nao e uuid tambem e 404, nao 422
+    if linha is None:
         raise ApiError(404, "sessao_nao_encontrada", "sessao nao encontrada")
-    return SESSAO_MOCK
+    return para_api(linha)
 
 
 SessaoAtual = Annotated[Sessao, Depends(buscar_sessao)]

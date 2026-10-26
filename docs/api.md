@@ -9,7 +9,7 @@ Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As eta
 - Todas as rotas ficam sob `/api`. A URL do backend vem de variável de ambiente. Como as chamadas rodam no navegador, no Next.js ela precisa do prefixo `NEXT_PUBLIC_` (`NEXT_PUBLIC_BACK_END_API`, padrão `http://localhost:8000`).
 - **A ficha oculta nunca sai do backend.** O front só recebe o que o estudante pode ver do paciente (`nome`, `idade`, `queixa_principal`) e o histórico da conversa.
 - **Autenticação:** `Authorization: Bearer <token>` está declarado, mas só passa a ser exigido na NS-035. Até lá, o front pode mandar o header ou não.
-- **Mock:** até a NS-019 e a NS-020, as rotas devolvem dados fixos. A única sessão que existe é `mock`. O `POST /api/sessoes` sempre devolve essa sessão.
+- **Mock:** o `POST /api/sessoes` já gera o caso com o LLM e salva a sessão no banco (NS-019). Até a NS-020, a fala do paciente ainda é fixa e o histórico (`mensagens`) volta vazio.
 
 ## Fluxo das etapas 1 e 2
 
@@ -82,6 +82,7 @@ Toda resposta de erro, fora do stream, tem o formato `{"erro": {"codigo", "mensa
 | `sessao_nao_encontrada` | 404 | o id da URL não existe | a mensagem e um botão para começar um novo caso |
 | `perfil_invalido` | 422 | perfil escolhido não existe mais | a mensagem e recarrega a lista de perfis |
 | `dados_invalidos` | 422 | corpo fora do contrato (por exemplo, mensagem vazia ou acima de 2.000 caracteres) | bloqueie no formulário antes de enviar. Se chegar mesmo assim, é bug do front |
+| `caso_nao_gerado` | 503 | o LLM não devolveu uma ficha válida ou estava indisponível (sobrecarga, fora do ar) ao criar a sessão | a mensagem e um botão "Tentar de novo", reenviando o mesmo perfil e dificuldade |
 | `erro_interno` | 500 | falha inesperada no backend | a mensagem e um botão "Tentar de novo" |
 | `http_<status>` | outro | rota ou método inexistente | é bug do front: mensagem genérica |
 | `stream_interrompido` | – | gerado pelo front quando a conexão cai | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
