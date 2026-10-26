@@ -13,7 +13,7 @@ client = TestClient(app=app)
 @pytest.mark.usefixtures("banco")
 def test_criar_sessao_e_conversar(monkeypatch):
     """cria a sessao com o llm falso e recebe a fala em sse."""
-    provedor_falso(monkeypatch, [EXEMPLO])
+    provedor_falso(monkeypatch, [EXEMPLO, '{"texto": "oi"}'])
     sessao = client.post(
         "/api/sessoes", json={"perfil_id": "adulto-hipertensao", "dificuldade": "facil"}
     )

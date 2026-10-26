@@ -26,7 +26,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 
 ## Contrato da API
 
-O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api`. O `POST /api/sessoes` gera o caso com o LLM e salva a sessão no banco (NS-019). A fala do paciente continua fixa (mock) até a NS-020.
+O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api`. O `POST /api/sessoes` gera o caso com o LLM e salva a sessão no banco (NS-019). O paciente responde com o LLM (prompt em `app/llm/prompts/paciente-v1.md`) e cada pergunta e resposta fica na tabela `mensagens` (NS-020).
 
 | Rota | Etapa | O que faz |
 |---|---|---|
