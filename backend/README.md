@@ -26,7 +26,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 
 ## Contrato da API
 
-O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api` e, por enquanto, devolvem dados fixos (mock) até a NS-019 e a NS-020 ligarem o LLM. O mock só conhece a sessão `mock`.
+O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api`. O `POST /api/sessoes` gera o caso com o LLM e salva a sessão no banco (NS-019). A fala do paciente continua fixa (mock) até a NS-020.
 
 | Rota | Etapa | O que faz |
 |---|---|---|
@@ -114,5 +114,7 @@ Os detalhes estão em [`docs/arquitetura.md`](../docs/arquitetura.md#regras-de-f
 ## Prompts do produto × registro de uso de IA
 
 `app/llm/prompts/` guarda os prompts **que o NutriSim usa em produção**. Eles são versionados porque o eval registra a versão de cada prompt.
+
+A versão é o nome do arquivo (`caso-v1.md`). Um prompt que já entrou na `desenvolvimento` não é editado: a mudança vira um arquivo novo (`caso-v2.md`) e o código passa a apontar para ele.
 
 [`docs/prompts/`](../docs/prompts/README.md) é outra coisa: o **registro acadêmico** dos prompts que a equipe usou ao desenvolver o projeto com ajuda de IA.
