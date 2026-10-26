@@ -32,6 +32,7 @@ def gerar(  # noqa: PLR0913
     entrada: str,
     instrucao: str,
     sessao_id: UUID | None = None,
+    modelo: str | None = None,
 ) -> T:
     """pede ao llm uma saida no schema e valida com pydantic.
 
@@ -44,6 +45,8 @@ def gerar(  # noqa: PLR0913
         entrada: mensagem do usuario para o llm.
         instrucao: prompt de sistema.
         sessao_id: sessao do estudante, quando houver.
+        modelo: modelo do gemini; vazio usa LLM_MODELO (o juiz do eval passa
+            LLM_MODELO_JUIZ).
 
     Returns:
         saida validada.
@@ -51,7 +54,7 @@ def gerar(  # noqa: PLR0913
     Raises:
         SaidaInvalidaError: nenhuma tentativa passou no schema.
     """
-    modelo = os.environ["LLM_MODELO"]
+    modelo = modelo or os.environ["LLM_MODELO"]
     erro: ValidationError | None = None
     for tentativa in range(1, TENTATIVAS + 1):
         resposta = _cliente().interactions.create(

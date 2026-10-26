@@ -29,15 +29,22 @@ USO = SimpleNamespace(
 
 
 def provedor_falso(monkeypatch, textos, uso=USO):
-    """troca o gemini por respostas fixas, uma por chamada."""
-    respostas = iter(textos)
+    """troca o gemini por respostas fixas, uma por chamada.
 
-    def create(**_):
+    Returns:
+        argumentos de cada chamada ao provedor.
+    """
+    respostas = iter(textos)
+    chamadas = []
+
+    def create(**kwargs):
+        chamadas.append(kwargs)
         return SimpleNamespace(output_text=next(respostas), usage=uso)
 
     falso = SimpleNamespace(interactions=SimpleNamespace(create=create))
     monkeypatch.setattr(cliente, "_cliente", lambda: falso)
     monkeypatch.setenv("LLM_MODELO", "modelo-teste")
+    return chamadas
 
 
 def gerar(db):
@@ -75,3 +82,13 @@ def test_erro_claro_quando_as_tentativas_acabam(monkeypatch):
     with pytest.raises(cliente.SaidaInvalidaError, match="caso"):
         gerar(db)
     assert len(db) == cliente.TENTATIVAS
+
+
+def test_modelo_da_chamada_vence_o_padrao(monkeypatch):
+    """o juiz do eval passa o proprio modelo, que vai ao provedor e ao registro."""
+    chamadas = provedor_falso(monkeypatch, ['{"nota": 10}'])
+    db = BancoFalso()
+    cliente.gerar(
+        db, tarefa="juiz", schema=Saida, entrada="e", instrucao="i", modelo="juiz"
+    )
+    assert chamadas[0]["model"] == db[0].modelo == "juiz"
