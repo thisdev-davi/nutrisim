@@ -409,11 +409,13 @@ O paciente responde só com o que conheceria: hábitos, sintomas, rotina e prefe
 - [ ] Conversa completa salva junto ao resultado
 - [ ] Número de turnos limitado, para controlar o custo
 
-### NS-032 — Criar o juiz do eval no Groq
+### NS-032 — Criar o juiz do eval no Gemini
 `area:eval` `area:llm` `tipo:teste` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Arthur · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** NS-017 · **Bloqueia:** NS-033
 
 - [ ] Prompt do juiz versionado em `evals/juiz/`
-- [ ] Modelo aberto no Groq, de família diferente da usada no paciente, lido de variável de ambiente
+- [ ] Modelo do Gemini diferente do usado no paciente, lido de `LLM_MODELO_JUIZ` (ADR-005)
+- [ ] O runner não roda se `LLM_MODELO_JUIZ` for igual a `LLM_MODELO`
+- [ ] `LLM_MODELO_JUIZ` documentada em `backend/.env.example` e `backend/README.md`
 - [ ] Cada resposta classificada como consistente, omissão prevista, contradição, invenção relevante ou quebra de personagem
 - [ ] Saída do juiz em JSON validado
 

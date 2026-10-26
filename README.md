@@ -42,7 +42,7 @@ Cada pasta tem um README que descreve a estrutura interna prevista.
 | Frontend | Next.js (React) e Tailwind CSS |
 | Backend | FastAPI (Python) |
 | Banco de dados | PostgreSQL (Neon) |
-| IA | Gemini Flash via Google AI Studio (paciente) e Groq (juiz do eval) |
+| IA | Gemini Flash via Google AI Studio (paciente) e Gemini (juiz do eval, em modelo diferente) |
 | Testes | pytest e Playwright |
 | Integração contínua | GitHub Actions |
 | Deploy | Render |

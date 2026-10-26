@@ -21,7 +21,7 @@ O formato das fichas, das categorias do juiz, dos resultados e das métricas est
 
 1. Um LLM no papel de **estudante** entrevista o paciente simulado seguindo o roteiro da ficha.
 2. Um LLM no papel de **juiz** classifica cada resposta do paciente em uma destas categorias: *consistente*, *omissão prevista*, *contradição*, *invenção relevante* ou *quebra de personagem*.
-3. O juiz usa um modelo aberto no Groq, de **família diferente** da usada no paciente, para reduzir o viés de um modelo favorecer as próprias respostas.
+3. O juiz usa o Gemini, em um **modelo diferente** do usado no paciente (`LLM_MODELO_JUIZ`), para reduzir o viés de um modelo favorecer as próprias respostas (ADR-005).
 4. Antes do uso, o juiz é validado: a equipe rotula 50 vereditos à mão.
 
 ## Métricas e metas iniciais (Quadro 3 do relatório)

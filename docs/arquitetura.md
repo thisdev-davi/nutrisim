@@ -21,7 +21,7 @@ flowchart LR
     C["content/<br/>rubricas e roteiros"] --> S
     subgraph EV["evals/ (fora do caminho do usuário)"]
         R["Runner"] --> ES["Estudante simulado"]
-        R --> J["Juiz<br/>Groq"]
+        R --> J["Juiz<br/>Gemini"]
     end
     R --> S
 ```
