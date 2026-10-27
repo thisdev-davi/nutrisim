@@ -33,7 +33,7 @@ São cinco perfis. Quatro têm como conduta esperada um plano alimentar. Em um d
 
 VET: valor energético total do plano.
 
-> **Se mudar esta tabela:** os números de restrição e a conduta esperada também estão fixos em `backend/app/api/caso.py` (`RESTRICOES`), e o texto dos perfis está resumido no prompt de geração (`backend/app/llm/prompts/caso-v1.md`). Atualize os dois. No prompt, crie uma versão nova (`caso-v2.md`) em vez de editar a atual.
+> **Se mudar esta tabela:** os números de restrição, os alimentos evitados e a conduta esperada também estão fixos em `backend/app/api/caso.py` (`RESTRICOES`), e o texto dos perfis está resumido no prompt de geração (`backend/app/llm/prompts/caso-v1.md`). Atualize os dois. No prompt, crie uma versão nova (`caso-v2.md`) em vez de editar a atual.
 
 ### Adulto com hipertensão (`adulto-hipertensao`)
 

@@ -78,6 +78,25 @@ def test_perfil_de_encaminhamento_impoe_a_conduta(monkeypatch, banco):
     assert linha.ficha["restricoes"]["sodio_max_mg"] is None
 
 
+@pytest.mark.parametrize(
+    ("perfil_id", "evitados"),
+    [
+        ("adulto-diabetes-tipo2", ["bebidas adoçadas", "doces"]),
+        ("adulto-hipertensao", []),
+        ("adulto-dislipidemia", []),
+        ("idoso-baixa-ingestao", []),
+        ("adulto-jovem-emagrecimento", []),
+    ],
+)
+def test_alimentos_evitados_vem_do_perfil(monkeypatch, banco, perfil_id, evitados):
+    """o llm punha comportamentos na lista; o motor so casa nome de alimento."""
+    provedor_falso(monkeypatch, [EXEMPLO])
+    nova = {"perfil_id": perfil_id, "dificuldade": "facil"}
+    assert client.post("/api/sessoes", json=nova).status_code == status.HTTP_201_CREATED
+    (linha,) = [o for o in banco.objetos if isinstance(o, Sessao)]
+    assert linha.ficha["restricoes"]["alimentos_evitados"] == evitados
+
+
 def test_llm_sem_saida_valida_da_503_e_guarda_os_tokens(monkeypatch, banco):
     """sem ficha valida nao cria sessao, mas registra o que foi gasto."""
     provedor_falso(monkeypatch, ["nao e json"] * cliente.TENTATIVAS)
