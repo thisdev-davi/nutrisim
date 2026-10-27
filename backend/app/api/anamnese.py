@@ -141,6 +141,10 @@ async def enviar_mensagem(
         eventos do stream.
     """
     paciente = FichaPaciente.model_validate(sessao.ficha["paciente"])
+    # trava a sessao ate o commit: o turno seguinte espera e ve este no historico
+    # ponytail: reenvio feito enquanto o llm responde ainda duplica; chave de
+    # idempotencia resolve
+    db.refresh(sessao, with_for_update=True)
     historico = para_api(sessao).mensagens
     try:
         # gerar bloqueia; fora do threadpool travaria as outras requisicoes

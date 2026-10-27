@@ -86,7 +86,7 @@ Toda resposta de erro, fora do stream, tem o formato `{"erro": {"codigo", "mensa
 | `erro_interno` | 500 | falha inesperada no backend | a mensagem e um botão "Tentar de novo" |
 | `http_<status>` | outro | rota ou método inexistente | é bug do front: mensagem genérica |
 | `paciente_indisponivel` | – (evento `erro`) | o LLM estava indisponível ou não devolveu uma fala válida. A pergunta não é salva | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
-| `stream_interrompido` | – | gerado pelo front quando a conexão cai | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
+| `stream_interrompido` | – | gerado pelo front quando a conexão cai. O backend segue até o fim e pode ter salvo a pergunta e a fala | a mensagem e "Tentar de novo". Antes de reenviar, faça `GET /api/sessoes/{id}`: se a última fala do estudante for a mesma pergunta, mostre a fala do paciente que vem depois dela, sem reenviar. Se não for, reenvie |
 
 ## Busca de alimentos
 

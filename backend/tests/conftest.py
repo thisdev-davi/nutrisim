@@ -22,6 +22,9 @@ class BancoFalso:
             for i, mensagem in enumerate(getattr(objeto, "mensagens", []), 1):
                 mensagem.id = mensagem.id or i
 
+    def refresh(self, objeto, **kwargs):
+        """nada a recarregar: tudo ja esta em memoria."""
+
     def get(self, modelo, id_):
         """busca pela chave primaria.
 
