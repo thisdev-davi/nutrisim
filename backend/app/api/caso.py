@@ -140,7 +140,7 @@ def gerar_ficha(db: Session, dados: NovaSessao) -> Ficha:
         tarefa="caso",
         schema=Ficha,
         entrada=json.dumps(dados.model_dump() | sorteio, ensure_ascii=False),
-        instrucao=PROMPT.read_text(),
+        instrucao=PROMPT.read_text(encoding="utf-8"),
     )
     emagrecimento = dados.perfil_id == "adulto-jovem-emagrecimento"
     conduta = "encaminhamento" if emagrecimento else "plano"
