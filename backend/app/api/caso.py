@@ -30,7 +30,7 @@ router = APIRouter(
     responses={422: {"model": RespostaErro}, 503: {"model": RespostaErro}},
 )
 
-PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "caso-v2.md"
+PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "caso-v1.md"
 
 # perfis do content/perfis.md (NS-015); a descricao nao revela a conduta esperada
 PERFIS = [
@@ -61,11 +61,14 @@ PERFIS = [
     ),
 ]
 
-# numeros do content/perfis.md: o motor confere o plano com eles, entao nao
+# restricoes do content/perfis.md: o motor confere o plano com elas, entao nao
 # ficam a criterio do llm
 RESTRICOES = {
     "adulto-hipertensao": {"sodio_max_mg": 2000},
-    "adulto-diabetes-tipo2": {"fibras_min_g_por_1000kcal": 14},
+    "adulto-diabetes-tipo2": {
+        "fibras_min_g_por_1000kcal": 14,
+        "alimentos_evitados": ["bebidas adoçadas", "doces"],
+    },
     "adulto-dislipidemia": {"gordura_saturada_max_pct_vet": 10},
     "idoso-baixa-ingestao": {"proteina_g_kg_min": 1.2, "proteina_g_kg_max": 1.5},
 }
@@ -138,10 +141,7 @@ def gerar_ficha(db: Session, dados: NovaSessao) -> Ficha:
     emagrecimento = dados.perfil_id == "adulto-jovem-emagrecimento"
     conduta = "encaminhamento" if emagrecimento else "plano"
     gabarito = ficha.gabarito.model_copy(update={"conduta_esperada": conduta})
-    restricoes = Restricoes(
-        **RESTRICOES.get(dados.perfil_id, {}),
-        alimentos_evitados=ficha.restricoes.alimentos_evitados,
-    )
+    restricoes = Restricoes(**RESTRICOES.get(dados.perfil_id, {}))
     return ficha.model_copy(
         update=dados.model_dump() | {"gabarito": gabarito, "restricoes": restricoes}
     )
