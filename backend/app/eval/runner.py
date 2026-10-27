@@ -14,6 +14,7 @@ from loguru import logger
 
 from app.db.modelos import ChamadaLLM
 from app.eval import juiz
+from app.eval.estudante import Estudante, EstudanteLLM, EstudanteRoteiro
 from app.eval.paciente import FichaEval, Paciente, PacienteFalso, PacienteReal
 from app.llm.cliente import LLMIndisponivelError, SaidaInvalidaError
 
@@ -22,6 +23,8 @@ PASTA_EVALS = Path(__file__).parents[3] / "evals"
 PAUSA_PACIENTE_S = 60 / 4
 PAUSA_JUIZ_S = 60 / 12
 ESPERAS_COTA_S = (30, 60, 120)
+# o maior roteiro tem 9 perguntas; o limite segura o custo se um roteiro crescer
+MAX_TURNOS = 10
 INCONSISTENTES = {"contradicao", "invencao_relevante"}
 
 T = TypeVar("T")
@@ -103,8 +106,11 @@ def rodar_ficha(  # noqa: PLR0913
     db: BancoMemoria,
     ritmos: tuple[Ritmo, Ritmo],
     esperas_cota: tuple[float, ...] = ESPERAS_COTA_S,
+    estudante: Estudante | None = None,
+    ritmo_estudante: Ritmo | None = None,
+    max_turnos: int = MAX_TURNOS,
 ) -> dict[str, Any]:
-    """faz as perguntas do roteiro e julga cada resposta.
+    """o estudante faz as perguntas do roteiro e o juiz julga cada resposta.
 
     Args:
         ficha: ficha de eval.
@@ -113,18 +119,32 @@ def rodar_ficha(  # noqa: PLR0913
         db: onde o cliente do llm registra os tokens.
         ritmos: ritmo do paciente e do juiz, nessa ordem.
         esperas_cota: esperas entre tentativas em erro de cota.
+        estudante: quem pergunta; vazio le o roteiro como esta.
+        ritmo_estudante: ritmo do estudante; vazio nao espera.
+        max_turnos: perguntas por execucao; o resto do roteiro fica de fora.
 
     Returns:
         linha de `fichas` no arquivo de resultado, com a conversa.
     """
     ritmo_paciente, ritmo_juiz = ritmos
+    estudante = EstudanteRoteiro() if estudante is None else estudante
+    ritmo_estudante = Ritmo(0) if ritmo_estudante is None else ritmo_estudante
     conversa: list[juiz.Turno] = []
     vereditos: list[juiz.Veredito] = []
     linha: dict[str, Any] = {"id": ficha.id, "execucao": execucao}
-    for passo in ficha.roteiro:
+    roteiro = ficha.roteiro[:max_turnos]
+    if len(ficha.roteiro) > max_turnos:
+        linha["turnos_cortados"] = len(ficha.roteiro) - max_turnos
+        logger.warning("{}: roteiro cortado em {} turnos", ficha.id, max_turnos)
+    for passo in roteiro:
+        pergunta = com_ritmo(
+            lambda p=passo: estudante.perguntar(conversa, p),
+            ritmo_estudante,
+            esperas_cota,
+        )
         try:
             resposta = com_ritmo(
-                lambda p=passo: paciente.responder(conversa, p.pergunta),
+                lambda q=pergunta: paciente.responder(conversa, q),
                 ritmo_paciente,
                 esperas_cota,
             )
@@ -132,7 +152,7 @@ def rodar_ficha(  # noqa: PLR0913
             # sem resposta nao ha o que julgar; o resto do roteiro perde o sentido
             linha["falha"] = "paciente_saida_invalida"
             break
-        conversa.append(juiz.Turno(pergunta=passo.pergunta, resposta=resposta))
+        conversa.append(juiz.Turno(pergunta=pergunta, resposta=resposta))
         vereditos.append(
             com_ritmo(
                 lambda: juiz.julgar(db, ficha=ficha.ficha, conversa=conversa),
@@ -141,8 +161,13 @@ def rodar_ficha(  # noqa: PLR0913
             )
         )
     linha["conversa"] = [
-        {**t.model_dump(), "esperado": p.esperado, "item": p.item}
-        for t, p in zip(conversa, ficha.roteiro, strict=False)
+        {
+            **t.model_dump(),
+            "pergunta_roteiro": p.pergunta,
+            "esperado": p.esperado,
+            "item": p.item,
+        }
+        for t, p in zip(conversa, roteiro, strict=False)
     ]
     linha["vereditos"] = [v.model_dump() for v in vereditos]
     return linha
@@ -230,6 +255,9 @@ def rodar(  # noqa: PLR0913
     ritmos: tuple[Ritmo, Ritmo],
     esperas_cota: tuple[float, ...] = ESPERAS_COTA_S,
     db: BancoMemoria | None = None,
+    estudante: Estudante | None = None,
+    ritmo_estudante: Ritmo | None = None,
+    max_turnos: int = MAX_TURNOS,
 ) -> dict[str, Any]:
     """roda um lote e salva depois de cada execucao.
 
@@ -244,11 +272,15 @@ def rodar(  # noqa: PLR0913
         ritmos: ritmo do paciente e do juiz.
         esperas_cota: esperas entre tentativas em erro de cota.
         db: onde o cliente do llm registra os tokens (o mesmo do paciente).
+        estudante: quem pergunta; vazio le o roteiro como esta.
+        ritmo_estudante: ritmo do estudante; vazio nao espera.
+        max_turnos: perguntas por execucao.
 
     Returns:
         resultado completo.
     """
     db = BancoMemoria() if db is None else db
+    estudante = EstudanteRoteiro() if estudante is None else estudante
     if arquivo.exists():
         resultado = json.loads(arquivo.read_text(encoding="utf-8"))
     else:
@@ -262,7 +294,10 @@ def rodar(  # noqa: PLR0913
             modelo_juiz=juiz.modelo_do_juiz(),
             versao_prompt=paciente.versao_prompt,
             versao_prompt_juiz=juiz.VERSAO_PROMPT,
+            modelo_estudante=estudante.modelo,
+            versao_prompt_estudante=estudante.versao_prompt,
             execucoes_por_caso=execucoes,
+            max_turnos=max_turnos,
         )
         for execucao in range(1, execucoes + 1):
             if (ficha.id, execucao) in feitas:
@@ -276,6 +311,9 @@ def rodar(  # noqa: PLR0913
                 db=db,
                 ritmos=ritmos,
                 esperas_cota=esperas_cota,
+                estudante=estudante,
+                ritmo_estudante=ritmo_estudante,
+                max_turnos=max_turnos,
             )
             resultado["fichas"].append(linha)
             resultado["uso_do_lote"] = uso(db)
@@ -320,6 +358,18 @@ def main(argv: list[str] | None = None) -> int:
         help="falso: respostas fixas, sem llm; real: paciente da NS-020 no gemini",
     )
     p.add_argument(
+        "--estudante",
+        choices=["roteiro", "llm"],
+        default="roteiro",
+        help="roteiro: perguntas como estao, sem llm; llm: estudante simulado",
+    )
+    p.add_argument(
+        "--max-turnos",
+        type=int,
+        default=MAX_TURNOS,
+        help=f"perguntas por execucao (padrao: {MAX_TURNOS})",
+    )
+    p.add_argument(
         "--pausa-paciente",
         type=float,
         default=PAUSA_PACIENTE_S,
@@ -346,6 +396,14 @@ def main(argv: list[str] | None = None) -> int:
         modelo, versao = PacienteFalso.modelo, PacienteFalso.versao_prompt
         pausa_paciente = 0  # o falso nao chama o llm
     ritmos = (Ritmo(pausa_paciente), Ritmo(args.pausa_juiz))
+    estudante, ritmo_estudante = EstudanteRoteiro(), Ritmo(0)
+    if args.estudante == "llm":
+        estudante = EstudanteLLM(db)
+        # o mesmo modelo divide a cota por minuto, entao divide o ritmo
+        ritmo_estudante = {
+            juiz.modelo_do_juiz(): ritmos[1],
+            os.environ.get("LLM_MODELO", ""): ritmos[0],
+        }.get(estudante.modelo, Ritmo(args.pausa_juiz))
     arquivo = caminho_resultado(args.saida, date.today(), modelo, versao)
     try:
         rodar(
@@ -355,6 +413,9 @@ def main(argv: list[str] | None = None) -> int:
             arquivo=arquivo,
             ritmos=ritmos,
             db=db,
+            estudante=estudante,
+            ritmo_estudante=ritmo_estudante,
+            max_turnos=args.max_turnos,
         )
     except CotaEsgotadaError:
         logger.error("cota esgotada; rode de novo depois, o que foi feito e pulado")
