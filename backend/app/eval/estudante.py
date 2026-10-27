@@ -21,6 +21,8 @@ class Estudante(Protocol):
 
     modelo: str
     versao_prompt: str
+    # perguntas que ficaram com a original por saida invalida (metrica de formato)
+    saidas_invalidas: int
 
     def perguntar(self, historico: list[Turno], passo: Passo) -> str:
         """pergunta que o estudante faz neste passo.
@@ -40,6 +42,7 @@ class EstudanteRoteiro:
 
     modelo = "estudante-roteiro"
     versao_prompt = "roteiro-literal-v1"
+    saidas_invalidas = 0
 
     @staticmethod
     def perguntar(historico: list[Turno], passo: Passo) -> str:
@@ -83,6 +86,7 @@ class EstudanteLLM:
             db: onde o cliente do llm registra os tokens.
         """
         self.db, self.modelo = db, modelo_do_estudante()
+        self.saidas_invalidas = 0
         self.instrucao = (PASTA_PROMPTS / f"{VERSAO_PROMPT}.md").read_text(
             encoding="utf-8"
         )
@@ -117,5 +121,6 @@ class EstudanteLLM:
                 modelo=self.modelo,
             )
         except cliente.SaidaInvalidaError:
+            self.saidas_invalidas += 1
             return passo.pergunta
         return saida.pergunta.strip()
