@@ -115,6 +115,30 @@ O juiz está em `backend/app/eval/juiz.py`, junto com o resto do backend, para p
 
 Vereditos com `falha` ficam fora das taxas de consistência e de robustez, e o resultado registra quantos foram. Erros do provedor (cota, rede) não viram veredito: o runner (NS-026) decide pausar e repetir.
 
+## Runner
+
+O runner faz as perguntas do roteiro de cada ficha ao paciente, manda cada resposta ao juiz e grava o resultado. A lógica está em `backend/app/eval/runner.py` (para passar pelo lint e pelos testes da CI), e `scripts/rodar_eval.py` é só o comando:
+
+```bash
+cd backend
+# a chave fica no ambiente, nunca no repositório
+# (no PowerShell: $env:GEMINI_API_KEY="..." e o mesmo para os modelos)
+export GEMINI_API_KEY=... LLM_MODELO=... LLM_MODELO_JUIZ=...
+uv run python ../evals/scripts/rodar_eval.py --fichas adulto-hipertensao-facil-01 --execucoes 1
+```
+
+Sem `--fichas`, roda todas. `--help` lista as opções.
+
+**Decisão: o runner importa os serviços do backend em vez de chamar a API.** Pela API, cada rodada precisaria do servidor no ar, de uma sessão no banco (Neon) para cada conversa e da leitura do streaming das respostas. Importando, o runner chama direto o paciente e o juiz, sem banco, e controla o histórico de cada conversa. O preço é não testar a rota HTTP, que já tem testes próprios no backend.
+
+- **Interface do paciente:** o runner só conhece `Paciente` (`backend/app/eval/paciente.py`): o histórico e a pergunta entram, o texto da resposta sai, e o paciente informa o `modelo` e a `versao_prompt` que vão para o resultado. O paciente real da NS-020 entra na NS-034 embrulhando `responder` de `app/api/anamnese.py`, que já tem esse formato.
+- **Paciente falso:** enquanto a NS-034 não liga o paciente real, `--paciente falso` responde com frases fixas tiradas do roteiro: revela o `item` quando `esperado` é `revelar`, recusa quando é `recusar` e dá uma resposta neutra no resto. Ele não chama o LLM; só o juiz chama.
+- **Pausa:** o plano gratuito permite 5 chamadas por minuto no modelo do paciente e 15 no do juiz. O runner espera 15 s entre chamadas ao paciente (4 por minuto) e 5 s entre chamadas ao juiz (12 por minuto), deixando folga para as novas tentativas. As duas pausas mudam com `--pausa-paciente` e `--pausa-juiz`.
+- **Erro de cota ou de rede:** o runner espera 30 s, 60 s e 120 s, tentando de novo depois de cada espera. Se ainda falhar, para com código de saída 1.
+- **Lotes:** o resultado é gravado depois de cada execução. Rodar de novo no mesmo dia continua no mesmo arquivo e pula as execuções já feitas, então um lote parado pela cota retoma de onde parou, e fichas diferentes podem rodar em lotes separados.
+- Cada linha de `fichas` guarda também a `conversa` (pergunta, resposta, `esperado` e `item` de cada turno), e `uso_do_lote` soma as chamadas e os tokens do último lote, por tarefa.
+- Por enquanto o runner calcula só `taxa_inconsistencia` e `vereditos_com_falha`. As outras métricas e os ataques entram na NS-034.
+
 ## Formato dos resultados
 
 Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versao-prompt>.json`:
