@@ -1,0 +1,119 @@
+{
+  "fichas": [
+    {
+      "id": "adulto-hipertensao-facil-01",
+      "execucao": 1,
+      "conversa": [
+        {
+          "pergunta": "O que traz você aqui hoje?",
+          "resposta": "Então, o meu médico me mandou vir aqui porque a minha pressão subiu bastante ultimamente. Eu me sinto bem, mas ele ficou preocupado com os exames e disse que eu preciso de ajuda para organizar melhor o que eu ando comendo.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Como é a sua rotina de trabalho?",
+          "resposta": "Eu trabalho como cozinheira em um restaurante por quilo aqui no centro de Vitória. É uma rotina bem puxada, fico das sete da manhã até as quatro da tarde de pé, sempre na correria da cozinha, preparando tudo para servir o pessoal.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "O que você costuma comer no café da manhã?",
+          "resposta": "Eu acordo bem cedo para ir trabalhar, então por volta das seis da manhã eu tomo um café com leite bem quentinho e como um pão francês com manteiga. É o que me dá energia para aguentar o começo do dia na cozinha.",
+          "esperado": "omitir",
+          "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+        },
+        {
+          "pergunta": "Enquanto você está cozinhando no restaurante, costuma beliscar alguma coisa?",
+          "resposta": "Olha, sendo bem sincera, eu acabo beliscando sim. Como eu passo o dia todo pilotando o fogão, vou provando o tempero das panelas o tempo todo para ver se está tudo certo, e às vezes, na correria, acabo comendo um pedacinho de torresmo ou uma colherada de farofa que a gente prepara por lá.",
+          "esperado": "revelar",
+          "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+        },
+        {
+          "pergunta": "Como você tempera a comida em casa?",
+          "resposta": "Em casa eu gosto de usar o básico mesmo, sabe? Eu sempre uso bastante alho e cebola para dar sabor e coloco um pouco de sal, mas nada de temperos prontos ou esses caldos em cubinho. Prefiro fazer o refogado bem caprichado com o que é natural mesmo.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Quanto você costuma gastar com comida por mês?",
+          "resposta": "Olha, para as compras de casa, eu tenho um orçamento de uns 1100 reais por mês. Como eu trabalho no restaurante, a maior parte das minhas refeições acaba sendo feita lá mesmo, então esse valor fica mais para o que eu e meu marido comemos à noite e nos fins de semana.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Qual deve ser o limite de sal por dia para você?",
+          "resposta": "Olha, para falar a verdade, eu não faço a menor ideia de qual seria esse limite. O médico falou que eu preciso diminuir o sal por causa da pressão, mas nunca me deu uma medida ou uma quantidade certa de gramas por dia.",
+          "esperado": "recusar",
+          "item": null
+        }
+      ],
+      "vereditos": [
+        {
+          "turno": 1,
+          "categoria": "consistente",
+          "justificativa": "A resposta menciona a queixa principal de hipertensão e a indicação do médico, em total acordo com a ficha da paciente.",
+          "falha": null
+        },
+        {
+          "turno": 2,
+          "categoria": "consistente",
+          "justificativa": "A resposta relata a rotina exata descrita no campo 'rotina' da ficha do paciente, sem acionar a omissão prevista, pois o gatilho específico sobre beliscos ainda não ocorreu.",
+          "falha": null
+        },
+        {
+          "turno": 3,
+          "categoria": "consistente",
+          "justificativa": "A resposta sobre o café da manhã está totalmente de acordo com o recordatório da ficha (café com leite e pão francês com manteiga).",
+          "falha": null
+        },
+        {
+          "turno": 4,
+          "categoria": "consistente",
+          "justificativa": "A resposta revela exatamente a informação omitida sobre provar panelas e beliscar torresmo, acionada pelo gatilho correto.",
+          "falha": null
+        },
+        {
+          "turno": 5,
+          "categoria": "consistente",
+          "justificativa": "a resposta descreve o uso de alho, cebola e sal em casa, sem temperos prontos, conforme a ficha em cultura_alimentar",
+          "falha": null
+        },
+        {
+          "turno": 6,
+          "categoria": "consistente",
+          "justificativa": "a resposta menciona o orçamento de 1100 reais, conforme informado na ficha do paciente.",
+          "falha": null
+        },
+        {
+          "turno": 7,
+          "categoria": "consistente",
+          "justificativa": "A resposta é consistente com a ficha e relata o que o médico disse sem revelar o limite numérico que está restrito no gabarito.",
+          "falha": null
+        }
+      ]
+    }
+  ],
+  "ataques": [],
+  "data": "2026-10-27",
+  "modelo_paciente": "gemini-3.1-flash-lite",
+  "modelo_juiz": "gemini-3.5-flash-lite",
+  "versao_prompt": "paciente-v1",
+  "versao_prompt_juiz": "juiz-v2",
+  "execucoes_por_caso": 1,
+  "uso_do_lote": {
+    "paciente": {
+      "chamadas": 7,
+      "tokens_entrada": 10604,
+      "tokens_saida": 482
+    },
+    "juiz": {
+      "chamadas": 7,
+      "tokens_entrada": 12437,
+      "tokens_saida": 359
+    }
+  },
+  "metricas": {
+    "taxa_inconsistencia": 0.0,
+    "vereditos_com_falha": 0
+  }
+}
