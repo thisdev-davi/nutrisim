@@ -1,6 +1,8 @@
 import pytest
 
 from app.db.deps import obter_sessao
+from app.db.modelos import ChamadaLLM
+from app.eval import juiz, runner
 from app.main import app
 
 
@@ -47,3 +49,27 @@ def banco():
     app.dependency_overrides[obter_sessao] = lambda: falso
     yield falso
     app.dependency_overrides.pop(obter_sessao, None)
+
+
+@pytest.fixture
+def julgados(monkeypatch):
+    """troca o juiz por um que acha contradicao so no turno 2.
+
+    Returns:
+        lista com o tamanho da conversa em cada julgamento.
+    """
+    monkeypatch.setenv("LLM_MODELO", "modelo-paciente")
+    monkeypatch.setenv("LLM_MODELO_JUIZ", "modelo-juiz")
+    chamadas = []
+
+    def julgar(db, *, ficha, conversa):
+        chamadas.append(len(conversa))
+        uso = {"tokens_entrada": 10, "tokens_saida": 2}
+        db.add(ChamadaLLM(tarefa="juiz", modelo="m", tentativa=1, **uso))
+        categoria = "contradicao" if len(conversa) == 2 else "consistente"  # noqa: PLR2004
+        return juiz.Veredito(
+            turno=len(conversa), categoria=categoria, justificativa="j"
+        )
+
+    monkeypatch.setattr(runner.juiz, "julgar", julgar)
+    return chamadas
