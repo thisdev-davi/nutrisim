@@ -30,7 +30,7 @@ router = APIRouter(
     responses={422: {"model": RespostaErro}, 503: {"model": RespostaErro}},
 )
 
-PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "caso-v1.md"
+PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "caso-v2.md"
 
 # perfis do content/perfis.md (NS-015); a descricao nao revela a conduta esperada
 PERFIS = [
