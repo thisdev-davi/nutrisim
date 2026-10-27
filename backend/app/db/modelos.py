@@ -32,7 +32,7 @@ class Mensagem(Base):
     __tablename__ = "mensagens"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    sessao_id: Mapped[UUID] = mapped_column(ForeignKey("sessoes.id"))
+    sessao_id: Mapped[UUID] = mapped_column(ForeignKey("sessoes.id"), index=True)
     autor: Mapped[str]
     texto: Mapped[str]
     criada_em: Mapped[datetime] = mapped_column(

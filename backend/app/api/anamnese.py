@@ -1,14 +1,14 @@
 # etapa 2: conversa com o paciente simulado (NS-020)
 # a fala vai inteira num trecho so; a NS-070 quebra em varios
 import html
-from collections.abc import AsyncIterable
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from fastapi.concurrency import run_in_threadpool
 from fastapi.sse import EventSourceResponse, ServerSentEvent
+from loguru import logger
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -22,7 +22,6 @@ from app.schemas.api import (
     Etapa,
     EtapaAtual,
     Fim,
-    Mensagem,
     NovaMensagem,
     RespostaErro,
     Sessao,
@@ -37,7 +36,6 @@ router = APIRouter(
 
 PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "paciente-v1.md"
 
-# alias antes da rota obter_sessao, que sombreia a dependencia de mesmo nome
 Banco = Annotated[Session, Depends(obter_sessao)]
 
 
@@ -50,7 +48,7 @@ class Fala(BaseModel):
 def responder(
     db: Session,
     paciente: FichaPaciente,
-    historico: list[Mensagem],
+    historico: list[modelos.Mensagem],
     pergunta: str,
     sessao_id: UUID | None = None,
 ) -> str:
@@ -71,10 +69,9 @@ def responder(
     """
 
     def marcar(autor: str, texto: str) -> str:
-        if autor == "paciente":
-            return f"<resposta>{texto}</resposta>"
-        # escapa para o estudante nao fechar a tag e falar como sistema
-        return f"<pergunta>{html.escape(texto, quote=False)}</pergunta>"
+        tag = "resposta" if autor == "paciente" else "pergunta"
+        # escapa para nenhuma fala fechar a tag e forjar outro turno
+        return f"<{tag}>{html.escape(texto, quote=False)}</{tag}>"
 
     conversa = [marcar(m.autor, m.texto) for m in historico]
     conversa.append(marcar("estudante", pergunta))
@@ -114,7 +111,7 @@ SessaoAtual = Annotated[modelos.Sessao, Depends(buscar_sessao)]
 
 
 @router.get("/sessoes/{sessao_id}")
-async def obter_sessao(sessao: SessaoAtual) -> Sessao:
+def ler_sessao(sessao: SessaoAtual) -> Sessao:
     """estado e historico, para retomar depois de recarregar a pagina.
 
     Args:
@@ -127,9 +124,9 @@ async def obter_sessao(sessao: SessaoAtual) -> Sessao:
 
 
 @router.post("/sessoes/{sessao_id}/mensagens", response_class=EventSourceResponse)
-async def enviar_mensagem(
+def enviar_mensagem(
     sessao: SessaoAtual, dados: NovaMensagem, db: Banco
-) -> AsyncIterable[ServerSentEvent]:
+) -> Iterable[ServerSentEvent]:
     """resposta do paciente em sse: "trecho", depois "fim" (ou "erro").
 
     Args:
@@ -145,18 +142,20 @@ async def enviar_mensagem(
     # ponytail: reenvio feito enquanto o llm responde ainda duplica; chave de
     # idempotencia resolve
     db.refresh(sessao, with_for_update=True)
-    historico = para_api(sessao).mensagens
     try:
-        # gerar bloqueia; fora do threadpool travaria as outras requisicoes
-        texto = await run_in_threadpool(
-            responder, db, paciente, historico, dados.texto, sessao.id
-        )
+        texto = responder(db, paciente, sessao.mensagens, dados.texto, sessao.id)
     except (SaidaInvalidaError, LLMIndisponivelError):
         db.commit()  # guarda os tokens; a pergunta nao entra, o front reenvia
         erro = Erro(
             codigo="paciente_indisponivel",
             mensagem="o paciente nao conseguiu responder, tente de novo",
         )
+        yield ServerSentEvent(event="erro", data=erro)
+        return
+    except Exception:
+        # o stream ja abriu com 200: sem o evento, o front fica sem resposta
+        logger.exception("erro inesperado na sessao {}", sessao.id)
+        erro = Erro(codigo="erro_interno", mensagem="erro inesperado, tente de novo")
         yield ServerSentEvent(event="erro", data=erro)
         return
     fala = modelos.Mensagem(autor="paciente", texto=texto)
