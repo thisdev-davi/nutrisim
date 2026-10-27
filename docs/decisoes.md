@@ -44,7 +44,7 @@ Cada decisão importante fica registrada aqui, com contexto e consequências, pa
 
 ## ADR-003 — Gemini Flash para o paciente, Groq para o juiz e modelo definido por variável de ambiente
 
-**Status:** aceita · **Data:** 18/09/2026
+**Status:** substituída em parte pela ADR-005 (juiz do eval) · **Data:** 18/09/2026
 
 **Contexto.** O edital recomenda o Groq, mas aceita outros provedores gratuitos. As tarefas do produto precisam de saída estruturada por JSON schema, de chamada de ferramentas (busca na TACO) e de contexto longo, porque o histórico da conversa é reenviado a cada turno. O eval precisa de um juiz que não favoreça as respostas do próprio modelo (ZHENG et al., 2023).
 
@@ -56,7 +56,7 @@ Cada decisão importante fica registrada aqui, com contexto e consequências, pa
 **Consequências.**
 - (+) As saídas estruturadas e o function calling nativos reduzem o código de validação.
 - (+) Um modelo descontinuado pode ser trocado sem mudar código, e a bateria de eval valida a troca.
-- (−) São duas chaves e dois conjuntos de limites de uso. É preciso ter cache de respostas, registro de tokens por chamada e evals executados em lotes.
+- (−) São duas chaves e dois conjuntos de limites de uso (revisto na ADR-005). É preciso ter cache de respostas, registro de tokens por chamada e evals executados em lotes.
 
 ---
 
@@ -72,6 +72,25 @@ Cada decisão importante fica registrada aqui, com contexto e consequências, pa
 - (+) A recuperação é simples, determinística e não exige infraestrutura extra.
 - (+) Os professores editam texto comum, e o histórico das revisões fica no Git.
 - (−) Se o material crescer além do contexto disponível, será preciso adotar busca por similaridade, registrada em uma nova ADR.
+
+---
+
+## ADR-005 — Juiz do eval no Gemini, em modelo diferente do paciente
+
+**Status:** aceita · **Data:** 25/10/2026
+
+**Contexto.** A ADR-003 colocou o juiz do eval em um modelo aberto no Groq, de família diferente da usada pelo paciente, para reduzir a tendência de um modelo favorecer as próprias respostas (ZHENG et al., 2023). A equipe decidiu usar só o Gemini no projeto, para trabalhar com uma única chave e um único provedor.
+
+**Decisão.**
+- O juiz do eval usa o **Gemini**, via Google AI Studio, como o resto do projeto.
+- O juiz usa um **modelo diferente** do paciente, lido da variável `LLM_MODELO_JUIZ`, nunca fixado no código.
+- O estudante simulado (NS-031) também usa o Gemini.
+- A validação com vereditos rotulados à mão (NS-033) passa a ser a principal garantia de que o juiz é confiável.
+
+**Consequências.**
+- (+) Uma chave, um SDK e um conjunto de limites de uso.
+- (−) Paciente e juiz são da mesma família, então o viés de autopreferência diminui, mas não some. Isso entra como limitação no relatório da C2.
+- (−) Paciente, estudante simulado e juiz dividem a mesma cota gratuita, então o runner precisa executar em lotes, com pausa entre as chamadas.
 
 ---
 
