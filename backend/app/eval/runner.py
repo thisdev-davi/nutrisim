@@ -2,9 +2,11 @@
 # importa os servicos do backend em vez de chamar a api (decisao em evals/README.md)
 import argparse
 import json
+import os
 import time
 from collections.abc import Callable
 from datetime import date
+from functools import partial
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -12,7 +14,7 @@ from loguru import logger
 
 from app.db.modelos import ChamadaLLM
 from app.eval import juiz
-from app.eval.paciente import FichaEval, Paciente, PacienteFalso
+from app.eval.paciente import FichaEval, Paciente, PacienteFalso, PacienteReal
 from app.llm.cliente import LLMIndisponivelError, SaidaInvalidaError
 
 PASTA_EVALS = Path(__file__).parents[3] / "evals"
@@ -227,6 +229,7 @@ def rodar(  # noqa: PLR0913
     arquivo: Path,
     ritmos: tuple[Ritmo, Ritmo],
     esperas_cota: tuple[float, ...] = ESPERAS_COTA_S,
+    db: BancoMemoria | None = None,
 ) -> dict[str, Any]:
     """roda um lote e salva depois de cada execucao.
 
@@ -240,11 +243,12 @@ def rodar(  # noqa: PLR0913
         arquivo: arquivo de resultado.
         ritmos: ritmo do paciente e do juiz.
         esperas_cota: esperas entre tentativas em erro de cota.
+        db: onde o cliente do llm registra os tokens (o mesmo do paciente).
 
     Returns:
         resultado completo.
     """
-    db = BancoMemoria()
+    db = BancoMemoria() if db is None else db
     if arquivo.exists():
         resultado = json.loads(arquivo.read_text(encoding="utf-8"))
     else:
@@ -309,8 +313,12 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description="roda as fichas de eval")
     p.add_argument("--fichas", nargs="*", help="ids das fichas (padrao: todas)")
     p.add_argument("--execucoes", type=int, default=3, help="execucoes por caso")
-    # so o falso ate a NS-034 ligar o paciente real
-    p.add_argument("--paciente", choices=["falso"], default="falso")
+    p.add_argument(
+        "--paciente",
+        choices=["falso", "real"],
+        default="falso",
+        help="falso: respostas fixas, sem llm; real: paciente da NS-020 no gemini",
+    )
     p.add_argument(
         "--pausa-paciente",
         type=float,
@@ -328,19 +336,25 @@ def main(argv: list[str] | None = None) -> int:
 
     fichas = ler_fichas(args.fichas, PASTA_EVALS / "fichas")
     juiz.modelo_do_juiz()  # falha antes de gastar cota se o ambiente estiver errado
-    # o paciente falso nao chama o llm, entao nao precisa de pausa
-    pausa_paciente = 0 if args.paciente == "falso" else args.pausa_paciente
+    db = BancoMemoria()
+    if args.paciente == "real":
+        paciente_de: Callable[[FichaEval], Paciente] = partial(PacienteReal, db=db)
+        modelo, versao = os.environ["LLM_MODELO"], PacienteReal.versao_prompt
+        pausa_paciente = args.pausa_paciente
+    else:
+        paciente_de = PacienteFalso
+        modelo, versao = PacienteFalso.modelo, PacienteFalso.versao_prompt
+        pausa_paciente = 0  # o falso nao chama o llm
     ritmos = (Ritmo(pausa_paciente), Ritmo(args.pausa_juiz))
-    arquivo = caminho_resultado(
-        args.saida, date.today(), PacienteFalso.modelo, PacienteFalso.versao_prompt
-    )
+    arquivo = caminho_resultado(args.saida, date.today(), modelo, versao)
     try:
         rodar(
             fichas,
-            PacienteFalso,
+            paciente_de,
             execucoes=args.execucoes,
             arquivo=arquivo,
             ritmos=ritmos,
+            db=db,
         )
     except CotaEsgotadaError:
         logger.error("cota esgotada; rode de novo depois, o que foi feito e pulado")

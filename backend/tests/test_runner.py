@@ -3,9 +3,16 @@ from datetime import date
 
 import pytest
 
+from app.api import anamnese
 from app.db.modelos import ChamadaLLM
 from app.eval import juiz, runner
-from app.eval.paciente import NEUTRA, RECUSA, FichaEval, PacienteFalso
+from app.eval.paciente import (
+    NEUTRA,
+    RECUSA,
+    FichaEval,
+    PacienteFalso,
+    PacienteReal,
+)
 from app.llm.cliente import LLMIndisponivelError, SaidaInvalidaError
 
 ID = "adulto-hipertensao-facil-01"
@@ -206,3 +213,57 @@ def test_fichas_do_repo_passam_no_schema_do_runner():
     fichas = runner.ler_fichas(None, runner.PASTA_EVALS / "fichas")
     assert fichas
     assert all(isinstance(f, FichaEval) for f in fichas)
+
+
+@pytest.fixture
+def respostas_reais(monkeypatch):
+    """troca o llm do paciente real por uma resposta fixa.
+
+    Returns:
+        lista com os argumentos de cada chamada ao paciente.
+    """
+    chamadas = []
+
+    def responder(db, paciente, historico, pergunta):
+        chamadas.append((db, paciente, historico, pergunta))
+        return "Belisco um torresmo de vez em quando."
+
+    monkeypatch.setattr(anamnese, "responder", responder)
+    return chamadas
+
+
+def test_paciente_real_passa_o_historico_no_formato_da_anamnese(
+    monkeypatch, respostas_reais
+):
+    """so a parte do paciente vai ao llm, e cada turno vira duas mensagens."""
+    monkeypatch.setenv("LLM_MODELO", "modelo-paciente")
+    db = runner.BancoMemoria()
+    paciente = PacienteReal(FICHA, db)
+    historico = [juiz.Turno(pergunta="Oi?", resposta="Oi.")]
+
+    assert paciente.responder(historico, "Belisca?") == (
+        "Belisco um torresmo de vez em quando."
+    )
+    assert paciente.modelo == "modelo-paciente"
+    assert paciente.versao_prompt == "paciente-v1"
+    banco, enviado, mensagens, pergunta = respostas_reais[0]
+    assert banco is db
+    assert enviado == FICHA.ficha.paciente
+    assert [(m.autor, m.texto) for m in mensagens] == [
+        ("estudante", "Oi?"),
+        ("paciente", "Oi."),
+    ]
+    assert pergunta == "Belisca?"
+
+
+def test_linha_de_comando_com_o_paciente_real(julgados, respostas_reais, tmp_path):
+    """o arquivo leva o modelo e o prompt do paciente real no nome."""
+    args = ["--fichas", ID, "--execucoes", "1", "--paciente", "real"]
+    pausas = ["--pausa-paciente", "0", "--pausa-juiz", "0"]
+    assert runner.main([*args, *pausas, "--saida", str(tmp_path)]) == 0
+
+    arquivo = next(tmp_path.iterdir())
+    assert arquivo.name.endswith("_modelo-paciente_paciente-v1.json")
+    resultado = json.loads(arquivo.read_text(encoding="utf-8"))
+    assert resultado["modelo_paciente"] == "modelo-paciente"
+    assert len(respostas_reais) == len(FICHA.roteiro)

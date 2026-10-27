@@ -124,20 +124,21 @@ cd backend
 # a chave fica no ambiente, nunca no repositório
 # (no PowerShell: $env:GEMINI_API_KEY="..." e o mesmo para os modelos)
 export GEMINI_API_KEY=... LLM_MODELO=... LLM_MODELO_JUIZ=...
-uv run python ../evals/scripts/rodar_eval.py --fichas adulto-hipertensao-facil-01 --execucoes 1
+uv run python ../evals/scripts/rodar_eval.py --fichas adulto-hipertensao-facil-01 --execucoes 1 --paciente real
 ```
 
 Sem `--fichas`, roda todas. `--help` lista as opções.
 
 **Decisão: o runner importa os serviços do backend em vez de chamar a API.** Pela API, cada rodada precisaria do servidor no ar, de uma sessão no banco (Neon) para cada conversa e da leitura do streaming das respostas. Importando, o runner chama direto o paciente e o juiz, sem banco, e controla o histórico de cada conversa. O preço é não testar a rota HTTP, que já tem testes próprios no backend.
 
-- **Interface do paciente:** o runner só conhece `Paciente` (`backend/app/eval/paciente.py`): o histórico e a pergunta entram, o texto da resposta sai, e o paciente informa o `modelo` e a `versao_prompt` que vão para o resultado. O paciente real da NS-020 entra na NS-034 embrulhando `responder` de `app/api/anamnese.py`, que já tem esse formato.
-- **Paciente falso:** enquanto a NS-034 não liga o paciente real, `--paciente falso` responde com frases fixas tiradas do roteiro: revela o `item` quando `esperado` é `revelar`, recusa quando é `recusar` e dá uma resposta neutra no resto. Ele não chama o LLM; só o juiz chama.
+- **Interface do paciente:** o runner só conhece `Paciente` (`backend/app/eval/paciente.py`): o histórico e a pergunta entram, o texto da resposta sai, e o paciente informa o `modelo` e a `versao_prompt` que vão para o resultado.
+- **Paciente real** (`--paciente real`): chama `responder` de `app/api/anamnese.py` (NS-020) direto, sem a rota e sem o banco. Só a parte `paciente` da ficha chega ao LLM; o juiz continua recebendo a ficha completa. O resultado registra `LLM_MODELO` e o prompt do paciente (`paciente-v1`).
+- **Paciente falso** (`--paciente falso`, o padrão): responde com frases fixas tiradas do roteiro: revela o `item` quando `esperado` é `revelar`, recusa quando é `recusar` e dá uma resposta neutra no resto. Ele não chama o LLM, então serve para testar o runner gastando cota só do juiz. Foi com ele que o runner foi desenvolvido, antes da NS-020 ficar pronta.
 - **Pausa:** o plano gratuito permite 5 chamadas por minuto no modelo do paciente e 15 no do juiz. O runner espera 15 s entre chamadas ao paciente (4 por minuto) e 5 s entre chamadas ao juiz (12 por minuto), deixando folga para as novas tentativas. As duas pausas mudam com `--pausa-paciente` e `--pausa-juiz`.
 - **Erro de cota ou de rede:** o runner espera 30 s, 60 s e 120 s, tentando de novo depois de cada espera. Se ainda falhar, para com código de saída 1.
 - **Lotes:** o resultado é gravado depois de cada execução. Rodar de novo no mesmo dia continua no mesmo arquivo e pula as execuções já feitas, então um lote parado pela cota retoma de onde parou, e fichas diferentes podem rodar em lotes separados.
 - Cada linha de `fichas` guarda também a `conversa` (pergunta, resposta, `esperado` e `item` de cada turno), e `uso_do_lote` soma as chamadas e os tokens do último lote, por tarefa.
-- Por enquanto o runner calcula só `taxa_inconsistencia` e `vereditos_com_falha`. As outras métricas e os ataques entram na NS-034.
+- Por enquanto o runner calcula só `taxa_inconsistencia` e `vereditos_com_falha`. As outras métricas, os ataques e a rodada completa com o paciente real entram na NS-034.
 
 ## Formato dos resultados
 

@@ -1,9 +1,13 @@
 # paciente do eval (NS-026): o runner so conhece esta interface
-# o paciente real (NS-020) entra na NS-034, embrulhando anamnese.responder
+# o real embrulha anamnese.responder (NS-020); o falso serve para testar o runner
+import os
 from typing import Literal, Protocol
 
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
+from app.api import anamnese
+from app.db import modelos
 from app.eval.juiz import Turno
 from app.schemas.ficha import Ficha
 
@@ -82,3 +86,37 @@ class PacienteFalso:
             texto da fala.
         """
         return self.respostas.get(pergunta, NEUTRA)
+
+
+class PacienteReal:
+    """o paciente simulado do backend, chamado direto, sem a rota nem o banco."""
+
+    versao_prompt = anamnese.PROMPT.stem
+
+    def __init__(self, ficha: FichaEval, db: Session) -> None:
+        """guarda so a parte do paciente: restricoes e gabarito nao chegam ao llm.
+
+        Args:
+            ficha: ficha de eval.
+            db: onde o cliente do llm registra os tokens.
+        """
+        self.paciente, self.db = ficha.ficha.paciente, db
+        self.modelo = os.environ["LLM_MODELO"]
+
+    def responder(self, historico: list[Turno], pergunta: str) -> str:
+        """fala do paciente, com o historico no formato da anamnese.
+
+        Args:
+            historico: turnos anteriores da conversa, em ordem.
+            pergunta: pergunta nova do estudante.
+
+        Returns:
+            texto da fala.
+        """
+        mensagens = []
+        for t in historico:
+            mensagens += [
+                modelos.Mensagem(autor="estudante", texto=t.pergunta),
+                modelos.Mensagem(autor="paciente", texto=t.resposta),
+            ]
+        return anamnese.responder(self.db, self.paciente, mensagens, pergunta)
