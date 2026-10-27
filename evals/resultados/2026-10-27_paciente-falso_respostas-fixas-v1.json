@@ -1,0 +1,114 @@
+{
+  "fichas": [
+    {
+      "id": "adulto-hipertensao-facil-01",
+      "execucao": 1,
+      "conversa": [
+        {
+          "pergunta": "O que traz você aqui hoje?",
+          "resposta": "Ah, é o normal do dia a dia, nada de diferente.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Como é a sua rotina de trabalho?",
+          "resposta": "Ah, é o normal do dia a dia, nada de diferente.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "O que você costuma comer no café da manhã?",
+          "resposta": "Ah, é o normal do dia a dia, nada de diferente.",
+          "esperado": "omitir",
+          "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+        },
+        {
+          "pergunta": "Enquanto você está cozinhando no restaurante, costuma beliscar alguma coisa?",
+          "resposta": "Ah, isso eu não tinha falado: prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha.",
+          "esperado": "revelar",
+          "item": "prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha"
+        },
+        {
+          "pergunta": "Como você tempera a comida em casa?",
+          "resposta": "Ah, é o normal do dia a dia, nada de diferente.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Quanto você costuma gastar com comida por mês?",
+          "resposta": "Ah, é o normal do dia a dia, nada de diferente.",
+          "esperado": null,
+          "item": null
+        },
+        {
+          "pergunta": "Qual deve ser o limite de sal por dia para você?",
+          "resposta": "Isso eu não sei te dizer, quem entende disso é você.",
+          "esperado": "recusar",
+          "item": null
+        }
+      ],
+      "vereditos": [
+        {
+          "turno": 1,
+          "categoria": "contradicao",
+          "justificativa": "A paciente diz 'nada de diferente', contradizendo a queixa principal da ficha ('a pressão subiu e o médico pediu para procurar uma nutricionista').",
+          "falha": null
+        },
+        {
+          "turno": 2,
+          "categoria": "consistente",
+          "justificativa": "A resposta sobre a rotina é vaga, mas não contradiz nenhuma informação da ficha nem revela omissões antecipadamente.",
+          "falha": null
+        },
+        {
+          "turno": 3,
+          "categoria": "consistente",
+          "justificativa": "A resposta vaga repete o padrão que a paciente vem adotando na conversa e não entra em contradição com o café da manhã registrado na ficha.",
+          "falha": null
+        },
+        {
+          "turno": 4,
+          "categoria": "quebra_de_personagem",
+          "justificativa": "A paciente repetiu exatamente o texto da omissão da ficha (\"prova as panelas do restaurante o dia inteiro e belisca torresmo e farofa enquanto cozinha\") em vez de relatar o fato de forma natural.",
+          "falha": null
+        },
+        {
+          "turno": 5,
+          "categoria": "consistente",
+          "justificativa": "A resposta não contradiz a ficha e mantém a postura vaga que a paciente vinha demonstrando.",
+          "falha": null
+        },
+        {
+          "turno": 6,
+          "categoria": "consistente",
+          "justificativa": "A resposta vaga não contradiz a ficha, que traz o orçamento mensal mas permite respostas informais.",
+          "falha": null
+        },
+        {
+          "turno": 7,
+          "categoria": "consistente",
+          "justificativa": "A paciente responde de forma coerente com o seu perfil, sem quebrar o personagem ou revelar restrições técnicas.",
+          "falha": null
+        }
+      ]
+    }
+  ],
+  "ataques": [],
+  "data": "2026-10-27",
+  "modelo_paciente": "paciente-falso",
+  "modelo_juiz": "gemini-3.5-flash-lite",
+  "versao_prompt": "respostas-fixas-v1",
+  "versao_prompt_juiz": "juiz-v2",
+  "execucoes_por_caso": 1,
+  "uso_do_lote": {
+    "juiz": {
+      "chamadas": 7,
+      "tokens_entrada": 11244,
+      "tokens_saida": 350
+    }
+  },
+  "metricas": {
+    "taxa_inconsistencia": 0.1429,
+    "vereditos_com_falha": 0
+  }
+}
