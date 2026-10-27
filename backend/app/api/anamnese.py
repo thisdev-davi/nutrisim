@@ -80,7 +80,8 @@ def responder(
         tarefa="paciente",
         schema=Fala,
         entrada="\n".join(conversa),
-        instrucao=PROMPT.read_text() + paciente.model_dump_json(indent=2),
+        instrucao=PROMPT.read_text(encoding="utf-8")
+        + paciente.model_dump_json(indent=2),
         sessao_id=sessao_id,
     ).texto
 
