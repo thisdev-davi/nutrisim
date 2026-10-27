@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -19,6 +19,22 @@ class Sessao(Base):
     dificuldade: Mapped[str]
     etapa: Mapped[str]
     ficha: Mapped[dict] = mapped_column(JSONB)
+    criada_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    # pelo id, e nao pelo criada_em: pergunta e fala saem na mesma transacao
+    mensagens: Mapped[list["Mensagem"]] = relationship(order_by="Mensagem.id")
+
+
+class Mensagem(Base):
+    """uma fala da anamnese, do estudante ou do paciente."""
+
+    __tablename__ = "mensagens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    sessao_id: Mapped[UUID] = mapped_column(ForeignKey("sessoes.id"), index=True)
+    autor: Mapped[str]
+    texto: Mapped[str]
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

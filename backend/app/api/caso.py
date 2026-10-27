@@ -16,6 +16,7 @@ from app.motor.energia import Sexo
 from app.schemas.api import (
     Dificuldade,
     Etapa,
+    Mensagem,
     NovaSessao,
     Opcoes,
     Paciente,
@@ -101,7 +102,10 @@ def para_api(linha: modelos.Sessao) -> Sessao:
         dificuldade=linha.dificuldade,
         # extra e ignorado: so passam nome, idade e queixa
         paciente=Paciente.model_validate(linha.ficha["paciente"]),
-        mensagens=[],  # a NS-020 grava o historico
+        mensagens=[
+            Mensagem(id=str(m.id), autor=m.autor, texto=m.texto)
+            for m in linha.mensagens
+        ],
     )
 
 

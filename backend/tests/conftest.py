@@ -16,8 +16,14 @@ class BancoFalso:
         self.objetos.append(objeto)
 
     def commit(self):
-        """so conta o commit."""
+        """conta o commit e numera as mensagens, como faria o insert."""
         self.commits += 1
+        for objeto in self.objetos:
+            for i, mensagem in enumerate(getattr(objeto, "mensagens", []), 1):
+                mensagem.id = mensagem.id or i
+
+    def refresh(self, objeto, **kwargs):
+        """nada a recarregar: tudo ja esta em memoria."""
 
     def get(self, modelo, id_):
         """busca pela chave primaria.

@@ -9,7 +9,7 @@ Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As eta
 - Todas as rotas ficam sob `/api`. A URL do backend vem de variável de ambiente. Como as chamadas rodam no navegador, no Next.js ela precisa do prefixo `NEXT_PUBLIC_` (`NEXT_PUBLIC_BACK_END_API`, padrão `http://localhost:8000`).
 - **A ficha oculta nunca sai do backend.** O front só recebe o que o estudante pode ver do paciente (`nome`, `idade`, `queixa_principal`) e o histórico da conversa.
 - **Autenticação:** `Authorization: Bearer <token>` está declarado, mas só passa a ser exigido na NS-035. Até lá, o front pode mandar o header ou não.
-- **Mock:** o `POST /api/sessoes` já gera o caso com o LLM e salva a sessão no banco (NS-019). Até a NS-020, a fala do paciente ainda é fixa e o histórico (`mensagens`) volta vazio.
+- **LLM:** o `POST /api/sessoes` gera o caso e salva a sessão no banco (NS-019). O paciente responde com o LLM e o histórico fica salvo por sessão (NS-020). Até a NS-070, a fala chega inteira num único `trecho`.
 
 ## Fluxo das etapas 1 e 2
 
@@ -85,9 +85,8 @@ Toda resposta de erro, fora do stream, tem o formato `{"erro": {"codigo", "mensa
 | `caso_nao_gerado` | 503 | o LLM não devolveu uma ficha válida ou estava indisponível (sobrecarga, fora do ar) ao criar a sessão | a mensagem e um botão "Tentar de novo", reenviando o mesmo perfil e dificuldade |
 | `erro_interno` | 500 | falha inesperada no backend | a mensagem e um botão "Tentar de novo" |
 | `http_<status>` | outro | rota ou método inexistente | é bug do front: mensagem genérica |
-| `stream_interrompido` | – | gerado pelo front quando a conexão cai | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
-
-Os códigos que o paciente com LLM vai emitir no evento `erro` (NS-020 e NS-070) entram nesta tabela quando esses cards forem feitos.
+| `paciente_indisponivel` | – (evento `erro`) | o LLM estava indisponível ou não devolveu uma fala válida. A pergunta não é salva | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
+| `stream_interrompido` | – | gerado pelo front quando a conexão cai. O backend segue até o fim e pode ter salvo a pergunta e a fala | a mensagem e "Tentar de novo". Antes de reenviar, faça `GET /api/sessoes/{id}`: se a última fala do estudante for a mesma pergunta, mostre a fala do paciente que vem depois dela, sem reenviar. Se não for, reenvie |
 
 ## Busca de alimentos
 
