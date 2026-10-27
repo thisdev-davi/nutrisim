@@ -10,6 +10,7 @@ Harness de avaliação (*eval*) do componente de IA: uma bateria fixa de casos e
 evals/
 ├── fichas/       10 a 15 fichas ocultas com roteiro de perguntas e resultado esperado  NS-027
 ├── ataques/      cerca de 30 tentativas de prompt injection                             NS-028
+├── estudante/    prompt do estudante simulado (estudante-v1.md)                         NS-031
 ├── juiz/         prompt do juiz (juiz-v2.md) e os 50 vereditos rotulados à mão          NS-032/033
 ├── scripts/      runner, estudante simulado, juiz e cálculo das métricas                NS-026/031
 └── resultados/   uma execução por arquivo, versionada no repositório                    NS-034+
@@ -139,6 +140,22 @@ Sem `--fichas`, roda todas. `--help` lista as opções.
 - **Lotes:** o resultado é gravado depois de cada execução. Rodar de novo no mesmo dia continua no mesmo arquivo e pula as execuções já feitas, então um lote parado pela cota retoma de onde parou, e fichas diferentes podem rodar em lotes separados.
 - Cada linha de `fichas` guarda também a `conversa` (pergunta, resposta, `esperado` e `item` de cada turno), e `uso_do_lote` soma as chamadas e os tokens do último lote, por tarefa.
 - Por enquanto o runner calcula só `taxa_inconsistencia` e `vereditos_com_falha`. As outras métricas, os ataques e a rodada completa com o paciente real entram na NS-034.
+
+## Estudante simulado
+
+Quem faz as perguntas ao paciente é o estudante (`backend/app/eval/estudante.py`). Ele recebe a conversa até ali e o passo do roteiro, e devolve a pergunta.
+
+- **Estudante do roteiro** (`--estudante roteiro`, o padrão): faz a pergunta do roteiro como está, sem LLM. Serve para testar o runner e o paciente sem gastar cota com o estudante.
+- **Estudante LLM** (`--estudante llm`): o Gemini, no papel de estudante, reformula a pergunta do roteiro com as próprias palavras e pode retomar o que o paciente já disse, sem mudar o tema nem juntar outro assunto. O prompt fica em `estudante/estudante-v<n>.md`. Se a saída não passar no schema depois das novas tentativas, a entrevista segue com a pergunta original.
+- **O estudante não vê a ficha.** Ele recebe só a conversa e a `pergunta` do passo; `esperado` e `item` ficam de fora, como numa consulta de verdade, em que o estudante não sabe o que o paciente esconde. Assim ele não entrega o gatilho de uma omissão sem querer, nem o evita.
+- **Decisão: uma pergunta do estudante por passo do roteiro, sem perguntas extras.** Como cada passo tem um `esperado`, o juiz e as métricas continuam comparáveis entre execuções e entre modelos. Perguntas livres de acompanhamento ficam para depois, se a rodada mostrar que fazem falta.
+- **Modelo:** vem de `LLM_MODELO_ESTUDANTE`. Vazia, o estudante usa o `LLM_MODELO_JUIZ`, que tem mais cota por minuto que o modelo do paciente. Quando o estudante usa o mesmo modelo do juiz (ou do paciente), os dois dividem a mesma pausa, porque dividem a mesma cota.
+- **Limite de turnos:** `--max-turnos` (padrão 10) corta o roteiro nas primeiras perguntas, para controlar o custo. O maior roteiro de hoje tem 9 perguntas, então nada é cortado; quando cortar, a linha da ficha registra `turnos_cortados`.
+- Na `conversa` do resultado, `pergunta` é o que o estudante perguntou de fato e `pergunta_roteiro` é a pergunta original do passo. O cabeçalho registra `modelo_estudante`, `versao_prompt_estudante` e `max_turnos`.
+
+```bash
+uv run python ../evals/scripts/rodar_eval.py --fichas adulto-hipertensao-facil-01 --execucoes 1 --paciente real --estudante llm
+```
 
 ## Formato dos resultados
 
