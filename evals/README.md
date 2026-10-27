@@ -10,7 +10,7 @@ Harness de avaliação (*eval*) do componente de IA: uma bateria fixa de casos e
 evals/
 ├── fichas/       10 a 15 fichas ocultas com roteiro de perguntas e resultado esperado  NS-027
 ├── ataques/      cerca de 30 tentativas de prompt injection                             NS-028
-├── juiz/         prompt do juiz e os 50 vereditos rotulados à mão                       NS-032/033
+├── juiz/         prompt do juiz (juiz-v1.md) e os 50 vereditos rotulados à mão          NS-032/033
 ├── scripts/      runner, estudante simulado, juiz e cálculo das métricas                NS-026/031
 └── resultados/   uma execução por arquivo, versionada no repositório                    NS-034+
 ```
@@ -103,6 +103,18 @@ O juiz responde em JSON, um veredito por resposta:
 { "turno": 4, "categoria": "contradicao", "justificativa": "nega o consumo de álcool diante da pergunta-gatilho" }
 ```
 
+O juiz está em `backend/app/eval/juiz.py`, junto com o resto do backend, para passar pelo lint e pelos testes da CI. O prompt fica em `juiz/juiz-v<n>.md`, e uma mudança no prompt vira um arquivo novo, para os resultados antigos continuarem comparáveis.
+
+- O juiz recebe a ficha completa (com `restricoes` e `gabarito`, para pegar vazamento), as respostas anteriores e o turno avaliado. O número do turno é preenchido pelo código, e não pelo LLM.
+- O modelo vem de `LLM_MODELO_JUIZ`. Se ela estiver vazia ou for igual a `LLM_MODELO` (o modelo do paciente), o juiz para com `ModeloJuizError` antes de chamar o Gemini (ADR-005).
+- A saída é validada contra o schema, que aceita só as cinco categorias. O cliente do LLM tenta de novo até 3 vezes. Se nenhuma tentativa passar, o veredito sai com a falha marcada, e a rodada continua:
+
+```json
+{ "turno": 4, "categoria": null, "justificativa": null, "falha": "saida_invalida" }
+```
+
+Vereditos com `falha` ficam fora das taxas de consistência e de robustez, e o resultado registra quantos foram. Erros do provedor (cota, rede) não viram veredito: o runner (NS-026) decide pausar e repetir.
+
 ## Formato dos resultados
 
 Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versao-prompt>.json`:
@@ -113,12 +125,14 @@ Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versa
   "modelo_paciente": "<valor de LLM_MODELO>",
   "modelo_juiz": "<valor de LLM_MODELO_JUIZ>",
   "versao_prompt": "paciente-v1",
+  "versao_prompt_juiz": "juiz-v1",
   "execucoes_por_caso": 3,
   "metricas": {
     "taxa_inconsistencia": 0.03,
     "taxa_quebra_ou_vazamento": 0.07,
     "taxa_json_valido": 1.0,
-    "taxa_json_valido_primeira_tentativa": 0.96
+    "taxa_json_valido_primeira_tentativa": 0.96,
+    "vereditos_com_falha": 0
   },
   "fichas": [
     {
@@ -135,6 +149,7 @@ Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versa
 
 - Os nomes dos modelos vêm das variáveis de ambiente usadas na execução, nunca escritos à mão.
 - `versao_prompt` é o nome do arquivo de prompt usado, em `backend/app/llm/prompts/`.
+- `versao_prompt_juiz` é o nome do arquivo de prompt do juiz, em `evals/juiz/`.
 - As métricas que dependem do professor (realismo, rubrica) não entram neste arquivo: ficam no relatório da rodada em que forem medidas.
 
 ## Fórmulas das métricas
