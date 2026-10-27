@@ -23,6 +23,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 | `GEMINI_API_KEY` | chave da API do Gemini ([Google AI Studio](https://aistudio.google.com/apikey)) | – |
 | `LLM_MODELO` | modelo do Gemini usado pelo produto (por exemplo, `gemini-3.8-flash`); nunca fixado no código | – |
 | `LLM_MODELO_JUIZ` | modelo do Gemini usado só pelo juiz do eval; precisa ser diferente de `LLM_MODELO` (ADR-005); nunca fixado no código | – |
+| `LLM_MODELO_ESTUDANTE` | modelo do Gemini do estudante simulado do eval (`--estudante llm`); vazia, usa o `LLM_MODELO_JUIZ` | – |
 
 ## Contrato da API
 
