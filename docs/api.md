@@ -8,7 +8,7 @@ Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As eta
 
 - Todas as rotas ficam sob `/api`. A URL do backend vem de variável de ambiente. Como as chamadas rodam no navegador, no Next.js ela precisa do prefixo `NEXT_PUBLIC_` (`NEXT_PUBLIC_BACK_END_API`, padrão `http://localhost:8000`).
 - **A ficha oculta nunca sai do backend.** O front só recebe o que o estudante pode ver do paciente (`nome`, `idade`, `queixa_principal`) e o histórico da conversa.
-- **Autenticação:** `Authorization: Bearer <token>` está declarado, mas só passa a ser exigido na NS-035. Até lá, o front pode mandar o header ou não.
+- **Autenticação (NS-035):** `POST /api/auth/cadastro` e `POST /api/auth/login` devolvem `{"token", "usuario"}`. Todas as outras rotas sob `/api` exigem `Authorization: Bearer <token>`. Sem token, a resposta é `401` com `nao_autenticado`; com token expirado (8 horas) ou inválido, `401` com `token_invalido`, e o front volta para o login. Login errado é `401` com `credenciais_invalidas`, e e-mail já cadastrado é `409` com `email_em_uso`. A sessão de outro estudante responde `404`.
 - **LLM:** o `POST /api/sessoes` gera o caso e salva a sessão no banco (NS-019). O paciente responde com o LLM e o histórico fica salvo por sessão (NS-020). Até a NS-070, a fala chega inteira num único `trecho`.
 
 ## Fluxo das etapas 1 e 2

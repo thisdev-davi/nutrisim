@@ -16,6 +16,9 @@ from app.main import app
 from tests.test_cliente_llm import provedor_falso
 from tests.test_ficha import EXEMPLO
 
+# as rotas da simulacao exigem login (NS-035)
+pytestmark = pytest.mark.usefixtures("usuario")
+
 client = TestClient(app=app)
 NOVA = {"perfil_id": "adulto-dislipidemia", "dificuldade": "dificil"}
 

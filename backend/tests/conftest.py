@@ -1,7 +1,10 @@
+from uuid import uuid4
+
 import pytest
 
+from app.api.auth import usuario_atual
 from app.db.deps import obter_sessao
-from app.db.modelos import ChamadaLLM
+from app.db.modelos import ChamadaLLM, Usuario
 from app.eval import juiz, runner
 from app.main import app
 
@@ -24,8 +27,29 @@ class BancoFalso:
             for i, mensagem in enumerate(getattr(objeto, "mensagens", []), 1):
                 mensagem.id = mensagem.id or i
 
+    def rollback(self):
+        """nada a desfazer: o falso nao tem transacao."""
+
     def refresh(self, objeto, **kwargs):
         """nada a recarregar: tudo ja esta em memoria."""
+
+    def scalar(self, consulta):
+        """primeiro objeto que casa com um where de igualdade (coluna == valor).
+
+        Returns:
+            objeto encontrado ou None.
+        """
+        modelo = consulta.column_descriptions[0]["entity"]
+        filtro = consulta.whereclause
+        return next(
+            (
+                o
+                for o in self.objetos
+                if isinstance(o, modelo)
+                and getattr(o, filtro.left.key) == filtro.right.value
+            ),
+            None,
+        )
 
     def get(self, modelo, id_):
         """busca pela chave primaria.
@@ -49,6 +73,21 @@ def banco():
     app.dependency_overrides[obter_sessao] = lambda: falso
     yield falso
     app.dependency_overrides.pop(obter_sessao, None)
+
+
+@pytest.fixture
+def usuario():
+    """pula o token: as rotas protegidas recebem este usuario.
+
+    A autenticacao em si e testada em test_auth.py.
+
+    Yields:
+        usuario logado nas rotas.
+    """
+    logado = Usuario(id=uuid4(), nome="Ana", email="ana@exemplo.com", senha_hash="")
+    app.dependency_overrides[usuario_atual] = lambda: logado
+    yield logado
+    app.dependency_overrides.pop(usuario_atual, None)
 
 
 @pytest.fixture
