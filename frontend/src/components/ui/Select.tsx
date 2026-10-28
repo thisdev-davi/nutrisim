@@ -15,12 +15,12 @@ export function Select({ label, helpText, id, className = "", children, ...props
       <div className="relative">
         <select
           id={id}
-          className={`w-full h-11 pl-3 pr-10 border border-line-strong bg-surface text-fg rounded-md text-[15px] leading-6 appearance-none cursor-pointer transition-colors hover:border-fg-muted focus-visible:outline-offset-0 focus-visible:border-transparent disabled:opacity-45 disabled:cursor-not-allowed ${className}`}
+          className={`w-full h-11 md:h-9 pl-3 pr-10 border border-line-strong bg-surface text-fg rounded-md text-[15px] leading-6 appearance-none cursor-pointer transition-colors hover:border-fg-muted focus-visible:outline-offset-0 focus-visible:border-transparent disabled:opacity-45 disabled:cursor-not-allowed ${className}`}
           {...props}
         >
           {children}
         </select>
-        <ChevronDown size={16} strokeWidth={1.5} aria-hidden className="absolute right-3 top-3.5 text-fg-muted pointer-events-none" />
+        <ChevronDown size={16} strokeWidth={1.5} aria-hidden className="absolute right-3 top-3.5 md:top-2.5 text-fg-muted pointer-events-none" />
       </div>
       {helpText && (
         <p className="text-[13px] leading-5 text-fg-muted">

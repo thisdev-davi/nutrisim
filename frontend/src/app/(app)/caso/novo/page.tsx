@@ -162,7 +162,8 @@ export default function NovoCasoPage() {
                   <Button type="submit" disabled={!podeCriar}>
                     {gerandoCaso ? "Gerando paciente…" : (
                       <>
-                        <Sparkle size={16} strokeWidth={1.5} aria-hidden />
+                        {/* icone de ia acende no hover; lima do tema oposto sobre o fundo fg */}
+                        <Sparkle size={16} strokeWidth={1.5} aria-hidden className="transition-colors group-hover:group-enabled:text-accent-inverse" />
                         <span className="md:hidden">Gerar paciente e iniciar</span>
                         <span className="hidden md:inline">Gerar ficha oculta e iniciar consulta</span>
                       </>
