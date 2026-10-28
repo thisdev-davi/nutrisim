@@ -23,7 +23,7 @@ describe("ThemeSwitch", () => {
     render(<ThemeSwitch />);
 
     // Verifica se o botão apareceu na tela com o texto certo
-    const button = screen.getByRole("button", { name: /Trocar Tema \(light\)/i });
+    const button = screen.getByRole("button", { name: "Usar tema escuro" });
     expect(button).toBeInTheDocument();
   });
 

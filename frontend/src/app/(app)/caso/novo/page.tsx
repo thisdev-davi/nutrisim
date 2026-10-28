@@ -6,7 +6,6 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Sparkle } from "lucide-react";
 import { env } from "@/lib/env";
 
-import { Header } from "@/components/ui/Header";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -67,10 +66,10 @@ export default function NovoCasoPage() {
   const perfilSelecionado = opcoes?.perfis.find((p) => p.id === perfilId);
 
   return (
-    <div className="min-h-screen bg-bg text-fg font-sans flex flex-col">
-      <Header activeMenu="casos" />
+    <div className="flex-1 flex flex-col">
 
-      <main className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
+
+      <div className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
         <div className="flex flex-col items-start gap-3">
           <span className="font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">
             Etapa 1 de 5 · Caso
@@ -202,7 +201,7 @@ export default function NovoCasoPage() {
             </ol>
           </aside>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
