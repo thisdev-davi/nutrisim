@@ -9,12 +9,28 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 
+class Usuario(Base):
+    """estudante cadastrado; a senha fica so como hash argon2."""
+
+    __tablename__ = "usuarios"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    nome: Mapped[str]
+    # sempre em minusculo, para o login nao depender de como foi digitado
+    email: Mapped[str] = mapped_column(unique=True)
+    senha_hash: Mapped[str]
+    criado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 class Sessao(Base):
     """sessao de atendimento; a ficha oculta fica aqui e nunca vai ao front."""
 
     __tablename__ = "sessoes"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    usuario_id: Mapped[UUID] = mapped_column(ForeignKey("usuarios.id"), index=True)
     perfil_id: Mapped[str]
     dificuldade: Mapped[str]
     etapa: Mapped[str]
