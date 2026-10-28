@@ -177,9 +177,16 @@ O movimento se limita ao necessário: transições de 150ms em hover (cor de fun
 | Chevron para a esquerda | `ChevronLeft` | Voltar |
 | Enviar | `Send` | Composer do chat |
 | Lápis | `Pencil` | Editar refeição |
-| Mais | `Plus` | Adicionar refeição |
+| Mais | `Plus` | Adicionar refeição, Nova sessão |
 | Info | `Info` | Dica em formulário |
-| Check, triângulo, círculo | `Check`, `TriangleAlert`, `CircleAlert` | Badges de sucesso, atenção e erro |
+| Check, triângulo, círculo | `Check`, `TriangleAlert`, `CircleAlert` | Badges de sucesso, atenção e erro; etapa concluída |
+| Casa, relógio | `House`, `History` | Início e Histórico na barra lateral |
+| Estetoscópio | `Stethoscope` | Sessão em andamento na barra lateral |
+| Painel à esquerda | `PanelLeft` | Recolher e expandir a barra lateral |
+| Painel à direita | `PanelRight` | Abrir e fechar o painel da consulta |
+| Menu, X | `Menu`, `X` | Abrir a gaveta no mobile; fechar gaveta e painel |
+| Lua, sol | `Moon`, `Sun` | Trocar o tema |
+| Sair | `LogOut` | Sair da conta |
 
 ## Logo
 
@@ -277,7 +284,7 @@ Lista de opções sobre o `<select>` nativo, com a mesma caixa do Input e um che
 
 ### Tabs
 
-Abas das ferramentas clínicas da consulta (Chat, Anotações, Plano alimentar, Adesão), com o padrão ARIA de tablist e navegação pelas setas.
+Abas no padrão ARIA de tablist, com navegação pelas setas. Hoje aparecem no painel da consulta (Conversa e Anotações).
 
 **Anatomia:** `div.ns-tabs[role=tablist]` > `button.ns-tab[role=tab]`. Os painéis (`role="tabpanel"`) ficam com o consumidor, ligados à aba por `aria-controls`.
 
@@ -290,7 +297,6 @@ Abas das ferramentas clínicas da consulta (Chat, Anotações, Plano alimentar, 
 
 - A aba ativa usa `fg`, não lima: o lima fica para a ação principal.
 - Aba inativa recebe `tabindex="-1"`, e as setas movem o foco.
-- No mobile, Chat é uma aba. No desktop o chat fica fixo à esquerda e as abas mostram só as ferramentas.
 - Se não couber, a lista rola na horizontal. Nunca quebre em duas linhas.
 
 ### Card
@@ -454,6 +460,91 @@ Mensagem de estado dentro da tela: erro de carregamento, aviso ou dica de formul
 - A mensagem de erro diz o que fazer, e a ação ("Tentar de novo") resolve ali mesmo quando dá.
 - `--info` é a dica de formulário. Não use alerta para conteúdo que cabe num `ns-help`.
 
+### Sidebar
+
+Navegação principal do app. Fica expandida nas páginas comuns, recolhida dentro da sessão e vira gaveta no celular.
+
+**Anatomia:**
+
+```text
+aside.ns-sidebar (.ns-sidebar--collapsed)
+├── div.ns-sidebar__top      → logo (link para o início) + botão Recolher/Expandir
+├── a.ns-btn--secondary.ns-btn--sm.ns-sidebar__new   "Nova sessão"
+├── nav.ns-sidebar__nav      → a.ns-navitem: Início, Histórico
+├── div.ns-sidebar__group    → eyebrow "Em andamento" + a.ns-navitem--session
+└── div.ns-sidebar__foot     → .ns-user (avatar, nome, papel) + tema + Sair
+```
+
+| Parte | Especificação |
+|---|---|
+| Barra | 240px, coluna com gap `space-4`, padding `space-3`, fundo `bg`, borda direita `line` |
+| Topo | altura 40px; logo de 28px; botão ghost `--sm --icon` com `PanelLeft` |
+| Nova sessão | botão secundário `--sm` de largura total, ícone `Plus` |
+| Item | altura mínima 36px, padding `0 space-3`, gap `space-3`, raio `radius-md`, Geist 500 14/20px, `fg-muted` |
+| hover e ativo (`aria-current="page"`) | fundo `surface-raised`, texto `fg` |
+| Sessão em andamento | ícone `Stethoscope`, nome do paciente e a etapa em Geist Mono 12/16px `fg-muted` ("Etapa 2 · Anamnese") |
+| Rodapé | borda superior `line`; avatar de 28px, nome Geist 500 13px, papel em mono 12px `fg-muted`; tema e Sair como ghost `--sm --icon` |
+| Recolhida (`--collapsed`) | 64px, só ícones em botões de 40px, logo vira o símbolo e o rodapé vira coluna |
+| Barra do topo (mobile) | `ns-topbar`: altura 56px, botão ghost `--icon` com `Menu` + logo de 24px, borda inferior `line` |
+| Gaveta (mobile) | `dialog.ns-drawer`: 280px, à esquerda, `shadow-overlay`, fundo atrás em preto a 60%; itens com 44px |
+
+| Largura da tela | Comportamento |
+|---|---|
+| a partir de 1024px | expandida nas páginas comuns, recolhida nas telas da sessão |
+| 768 a 1023px | sempre recolhida |
+| abaixo de 768px | some; barra do topo com botão de menu que abre a gaveta |
+
+- O item ativo usa `fg` sobre `surface-raised`, nunca o lima. "Nova sessão" é secundário para não brigar com o primário da tela.
+- Recolhida, os rótulos saem só da vista (classe `ns-sr`) e continuam no HTML, e cada item ganha `title` com o rótulo. O botão de recolher tem `aria-expanded` e `aria-controls` e troca o `aria-label` entre "Recolher menu" e "Expandir menu". O app guarda a escolha da pessoa.
+- A gaveta é um `<dialog>` aberto com `showModal()`: o foco fica preso dentro dela, Esc fecha e o fundo fica inerte sem JS próprio. Ao fechar, o foco volta ao botão de menu.
+- Só a sessão em andamento mais recente aparece. As outras ficam no Histórico.
+
+### Stepper
+
+Indicador das 5 etapas da sessão (Caso, Anamnese, Plano alimentar, Cenários, Retorno e feedback), no cabeçalho de toda tela da sessão.
+
+**Anatomia:** `nav[aria-label="Etapas da sessão"]` > `ol.ns-steps` > `li.ns-step` (`--done` | `aria-current="step"`) > `a` ou `span.ns-step__item` > `span.ns-step__dot` + rótulo. No mobile, `details.ns-steps-compact` > `summary` (eyebrow, chevron, `ns-progress`) + a mesma lista em `ns-steps--vertical`.
+
+| Parte | Especificação |
+|---|---|
+| Lista | flex com gap `space-2`; entre as etapas, um traço de 24 × 1px em `line-strong` |
+| Rótulo | Geist 500 13/20px, `fg-muted` |
+| Círculo | 24px, borda 1px `line`, número em Geist Mono 500 12px |
+| Concluída (`--done`) | círculo com borda `line-strong` e `Check` de 12px em `fg`; é um link para rever a etapa |
+| Atual (`aria-current="step"`) | círculo cheio em `fg` com o número em `bg`; rótulo em `fg` |
+| Futura | círculo com borda `line` e número em `fg-muted`; não é link |
+| Compacto (mobile) | `summary` com 44px de altura mínima: eyebrow "Etapa 3 de 5 · Plano alimentar", chevron e barra de 5 segmentos de 4px (concluída `line-strong`, atual `fg`, futura `surface-raised`) |
+
+- A etapa atual usa `fg`, não lima.
+- A etapa concluída abre em modo leitura. A futura fica desativada até o estudante chegar nela.
+- A concluída leva o texto "(concluída)" só para o leitor de tela (`ns-sr`), porque o check sozinho não diz nada.
+- A barra de segmentos é decorativa (`aria-hidden`). Quem informa a etapa é o texto do eyebrow.
+- Ao abrir uma sessão em andamento, o app leva direto à etapa atual.
+
+### SidePanel
+
+Painel da consulta à direita: guarda a conversa e as anotações para o estudante consultar nas etapas seguintes.
+
+**Anatomia:** `aside.ns-panel` > `div.ns-tabs` (Conversa, Anotações) + `button.ns-panel__close` + `div.ns-panel__body[role=tabpanel]` + `div.ns-panel__foot`. Na anamnese, sem abas: `div.ns-panel__bar` ("Anotações" + fechar) no lugar delas.
+
+| Parte | Especificação |
+|---|---|
+| Painel | 380px, borda esquerda `line`, fundo `bg` |
+| Abas | Tabs com padding direito de 52px para o botão de fechar (ghost `--sm --icon`, `X`) |
+| Corpo | rola sozinho, padding `space-4`, gap `space-3` |
+| Conversa | eyebrow "Somente leitura · N mensagens" + ChatBubbles sem Composer, balão em 14/20px e largura máxima de 92% |
+| Anotações | Textarea que ocupa a altura do corpo (mínimo 240px), com rótulo escondido só visualmente |
+| Rodapé | Geist Mono 12/16px `fg-muted`, borda superior `line`: "Anotações salvas às 09:14" |
+
+| Etapa | Conteúdo |
+|---|---|
+| Anamnese | só Anotações (a conversa já é o conteúdo principal) |
+| Plano, Cenários, Retorno | abas Conversa (somente leitura) e Anotações (editável) |
+
+- Abre e fecha pelo botão secundário `--sm` "Consulta" (`PanelRight`) no cabeçalho da sessão, com `aria-expanded` e `aria-controls`. Ao fechar pelo X, o foco volta a esse botão.
+- Abaixo de 1024px vira gaveta à direita, e no celular ocupa a tela toda. Lá o botão do cabeçalho é só ícone, com `aria-label="Abrir conversa e anotações"`.
+- As anotações salvam sozinhas, e o rodapé diz quando foi a última vez.
+
 ### Utilitários
 
 | Classe | O que faz |
@@ -461,22 +552,37 @@ Mensagem de estado dentro da tela: erro de carregamento, aviso ou dica de formul
 | `ns-num` | Geist Mono com `tabular-nums`, para qualquer número do motor |
 | `ns-eyebrow` | estilo `eyebrow` (Geist Mono 500 12/16px, tracking 0.04em, caixa alta, `fg-muted`) |
 | `ns-icon` | 16 × 16px, sem preenchimento, traço `currentColor` de 1,5px com pontas arredondadas |
+| `ns-sr` | esconde só da vista; o leitor de tela continua lendo (rótulos escondidos, "(concluída)") |
+| `[hidden]` | `display: none !important`, para o atributo `hidden` vencer o `display` dos componentes |
 | `:focus-visible` | anel global de 2px em `focus`, afastado 2px |
 
 ## Telas de referência
 
-As duas telas da vitrine mostram os componentes juntos. São a prova do sistema, em desktop.
+As telas da vitrine (grupo Telas) mostram os componentes juntos. São a prova do sistema.
+
+### Estrutura do app
+
+Toda tela usa uma de duas estruturas. Cards `EstruturaApp`, `EstruturaSessao` e `EstruturaMobile` na vitrine.
+
+- **Página comum** (Início, Histórico, Nova sessão): Sidebar expandida e o conteúdo com largura máxima de 1040px, centralizado na área que sobra, padding `space-8 space-8 space-12` e gap `space-8` entre blocos.
+- **Sessão** (etapas 2 a 5): Sidebar recolhida, cabeçalho da sessão em cima e, embaixo, o conteúdo da etapa (padding `space-6`) com o SidePanel à direita.
+- **Cabeçalho da sessão** (`ns-session-head`): padding `space-3 space-6`, gap `space-3`, borda inferior `line`. Na primeira linha, avatar de 32px, nome do paciente como `h1` em display 600 18/26px ("João, 45 anos"), meta em mono `fg-muted` ("Diabetes tipo 2 · Dificuldade média"), badge "Paciente simulado por IA" e, à direita, o botão "Consulta" e o primário da etapa, os dois `--sm`. Na segunda linha, o Stepper.
+- **A ação principal da etapa fica sempre no mesmo lugar:** canto direito do cabeçalho no desktop e barra fixa embaixo no celular (`ns-actionbar`: padding `space-3 space-4`, borda superior `line`, botão de largura total).
+- A dificuldade é texto na meta, não badge: as cores de estado ficam só para estado.
+- **Celular (360px):** barra do topo com menu e logo. Na sessão, embaixo dela vêm o nome do paciente (display 600 16/24px), a meta, o botão só de ícone do painel e o Stepper compacto.
 
 ### Configurar novo paciente (etapa 1)
 
-- **Barra do app:** conteúdo alinhado à mesma largura de 1040px da página. Logo de 28px (link para o início, também no mobile), links de navegação (Início, Casos, Histórico) como botões ghost de 36px com `aria-current="page"` em `surface-raised`, e Perfil com avatar de 24px. No mobile, só a logo. Borda inferior `line`.
-- **Página:** largura máxima de 1040px, alinhada à barra do app, padding `space-8 space-6 space-12` e gap `space-8` entre blocos.
+- **Estrutura:** página comum. Esta tela ainda mostra a barra do topo antiga e vai ser refeita (cards de perfil, dificuldade segmentada e "Como funciona" fora da lateral).
+- **Página:** largura máxima de 1040px, padding `space-8 space-6 space-12` e gap `space-8` entre blocos.
 - **Cabeçalho (alinhado à esquerda):** eyebrow "ETAPA 1 DE 5 · CASO", `h1` com o badge "Gerado por IA" e um parágrafo `fg-muted` de até 62ch.
 - **Formulário (Card):** ocupa a largura que sobra ao lado do "Como funciona", com Selects em grade de 2 colunas (Patologia ou objetivo, Dificuldade), um Alert `info` e as ações separadas por uma linha `line`: o primário "Gerar ficha oculta e iniciar consulta" e o ghost "Cancelar".
 - **Como funciona:** a partir de 1024px, coluna lateral de 300px sem card, separada do formulário por uma borda esquerda `line`, com texto em `body-sm`; abaixo disso, Card embaixo do formulário. Contém "Como funciona a geração?", badges neutros com o que a ficha contém e a lista das 5 etapas. A etapa atual tem círculo de 24px em `fg`, com o número em `bg`, e `aria-current="step"`; as outras têm círculo com borda `line-strong`.
 - **Mobile:** uma coluna com margem de 16px. Os cards perdem borda e fundo para não virar caixa dentro de caixa; o "Como funciona" fica separado por uma linha `line`.
 
 ### Consulta em andamento (etapa 2, aba Plano ativa)
+
+Em revisão: vai ser substituída pela tela da anamnese. O plano deixou de ser aba da consulta e virou a etapa 3, com rota própria.
 
 - **Topo:** logo, `h1` "Consulta em andamento" em display 18/26px, badge de dificuldade (`warning`), cronômetro em mono e o primário "Concluir e gerar simulação de adesão".
 - **Corpo em duas colunas (1.1fr / 1fr), separadas por uma borda `line`:**
