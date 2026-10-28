@@ -5,7 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Button({ variant = "primary", className = "", children, ...props }: ButtonProps) {
-  const baseStyles = "h-11 px-4 font-medium text-[14px] rounded-pill border border-transparent whitespace-nowrap transition-colors flex items-center justify-center gap-2 disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer";
+  const baseStyles = "group h-11 md:h-9 px-4 font-medium text-[14px] rounded-md border border-transparent whitespace-nowrap transition-colors flex items-center justify-center gap-2 disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer";
   
   const variants = {
     // primario em fg: a lima fica so na assinatura (ia, foco, progresso)
