@@ -12,16 +12,24 @@ from app.schemas.api import Erro, RespostaErro
 class ApiError(Exception):
     """erro com codigo estavel para o front."""
 
-    def __init__(self, status: int, codigo: str, mensagem: str) -> None:
-        """guarda status http, codigo e mensagem.
+    def __init__(
+        self,
+        status: int,
+        codigo: str,
+        mensagem: str,
+        headers: dict[str, str] | None = None,
+    ) -> None:
+        """guarda status http, codigo, mensagem e cabecalhos extras.
 
         Args:
             status: status http da resposta.
             codigo: identificador estavel do erro.
             mensagem: texto legivel para o estudante.
+            headers: cabecalhos da resposta (WWW-Authenticate no 401, por exemplo).
         """
         super().__init__(mensagem)
         self.status, self.erro = status, Erro(codigo=codigo, mensagem=mensagem)
+        self.headers = headers
 
 
 def _resposta(
@@ -42,7 +50,7 @@ def registrar_erros(app: FastAPI) -> None:
 
     @app.exception_handler(ApiError)
     async def erro_api(_: Request, exc: ApiError) -> JSONResponse:
-        return _resposta(exc.status, exc.erro)
+        return _resposta(exc.status, exc.erro, exc.headers)
 
     # rota inexistente, metodo errado etc.
     @app.exception_handler(HTTPException)

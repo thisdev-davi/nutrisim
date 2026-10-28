@@ -20,6 +20,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 |---|---|---|
 | `FRONTEND_URL` | origem do frontend liberada no CORS | `http://localhost:3000` |
 | `DATABASE_URL` | conexão do PostgreSQL (string do Neon, `postgresql://...?sslmode=require`) | – |
+| `JWT_SEGREDO` | chave que assina os tokens de acesso, com 32 bytes ou mais (a API não sobe sem ela); gere com `openssl rand -hex 32` e use valores diferentes em dev e prod | – |
 | `GEMINI_API_KEY` | chave da API do Gemini ([Google AI Studio](https://aistudio.google.com/apikey)) | – |
 | `LLM_MODELO` | modelo do Gemini usado pelo produto (por exemplo, `gemini-3.8-flash`); nunca fixado no código | – |
 | `LLM_MODELO_JUIZ` | modelo do Gemini usado só pelo juiz do eval; precisa ser diferente de `LLM_MODELO` (ADR-005); nunca fixado no código | – |
@@ -31,6 +32,9 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 
 | Rota | Etapa | O que faz |
 |---|---|---|
+| `POST /api/auth/cadastro` | NS-035 | cria a conta (nome, e-mail, senha) e devolve o token |
+| `POST /api/auth/login` | NS-035 | troca e-mail e senha pelo token |
+| `GET /api/auth/eu` | NS-035 | usuário dono do token |
 | `GET /api/perfis` | 1 | perfis e níveis de dificuldade |
 | `POST /api/sessoes` | 1 | cria o caso e a sessão |
 | `GET /api/sessoes/{id}` | 2 | estado e histórico, para retomar |
@@ -40,7 +44,7 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 
 - **Streaming (SSE):** vários eventos `trecho` (`{"texto"}`), depois `fim` (`{"mensagem_id"}`) ou `erro` (`{"codigo", "mensagem"}`).
 - **Erros:** toda resposta de erro tem o formato `{"erro": {"codigo", "mensagem"}}`. O frontend decide o que exibir pelo `codigo`.
-- **Autenticação:** `Authorization: Bearer <token>` já está declarado, mas só passa a ser exigido na NS-035.
+- **Autenticação (NS-035):** cadastro e login devolvem `{"token", "usuario"}`. As demais rotas exigem `Authorization: Bearer <token>` (JWT válido por 8 horas) e respondem `401` com `nao_autenticado` (sem token) ou `token_invalido` (expirado ou adulterado). A senha fica só como hash Argon2id. Cada sessão pertence a quem a criou: a de outro estudante responde `404`. A migração `e3b8f1a2c4d5` apaga as sessões de antes da NS-035, que não têm dono, junto com as mensagens; o registro de tokens é mantido.
 
 ## Banco e migrações
 

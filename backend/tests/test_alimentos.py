@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.dialects import postgresql
@@ -7,6 +8,9 @@ from sqlalchemy.dialects import postgresql
 from app.api.alimentos import normalizar_busca
 from app.db.deps import obter_sessao
 from app.main import app
+
+# as rotas da simulacao exigem login (NS-035)
+pytestmark = pytest.mark.usefixtures("usuario")
 
 
 class ResultadoFalso:
