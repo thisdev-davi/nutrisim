@@ -2,7 +2,8 @@
 
 Identidade visual e componentes da interface do NutriSim. Este arquivo é a fonte das regras. Os valores dos tokens (cores, raios, sombra) ficam só no `frontend/src/app/globals.css`.
 
-- **Vitrine visual (design system):** https://claude.ai/artifact/LyyG6Us3oibo3ad5YrhfZb. Só previews ao vivo, telas de prova e logos em SVG; as regras ficam aqui. Ao mudar um token no `globals.css`, atualize também o `tokens.json` da vitrine, que desenha as amostras.
+- **Vitrine visual (design system):** https://claude.ai/artifact/LyyG6Us3oibo3ad5YrhfZb. Só tokens, logos em SVG e previews ao vivo dos componentes; as regras ficam aqui.
+- **Telas (canvas):** https://claude.ai/artifact/BPiTZUo6kXH96TD2mwkgUK. As telas do app em tamanho real, desktop e celular, com tema escuro e claro. Ao mudar um token no `globals.css`, atualize também o `tokens.json` da vitrine, que desenha as amostras.
 - **Implementação:** tokens no `@theme` do Tailwind 4 (`frontend/src/app/globals.css`) e componentes React em `frontend/src/components/ui/`. O mapeamento está em [Tokens no Tailwind 4](#tokens-no-tailwind-4).
 
 ## Sumário
@@ -558,11 +559,11 @@ Painel da consulta à direita: guarda a conversa e as anotações para o estudan
 
 ## Telas de referência
 
-As telas da vitrine (grupo Telas) mostram os componentes juntos. São a prova do sistema.
+As telas ficam no canvas de telas (link no topo), em tamanho real. São a prova do sistema.
 
 ### Estrutura do app
 
-Toda tela usa uma de duas estruturas. Cards `EstruturaApp`, `EstruturaSessao` e `EstruturaMobile` na vitrine.
+Toda tela usa uma de duas estruturas. No canvas, a linha "Tela 1 · Estrutura do app".
 
 - **Página comum** (Início, Histórico, Nova sessão): Sidebar expandida e o conteúdo com largura máxima de 1040px, centralizado na área que sobra, padding `space-8 space-8 space-12` e gap `space-8` entre blocos.
 - **Sessão** (etapas 2 a 5): Sidebar recolhida, cabeçalho da sessão em cima e, embaixo, o conteúdo da etapa (padding `space-6`) com o SidePanel à direita.
