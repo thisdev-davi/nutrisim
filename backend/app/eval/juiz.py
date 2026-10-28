@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from app.llm import cliente
 from app.schemas.ficha import Ficha
 
-VERSAO_PROMPT = "juiz-v2"
+VERSAO_PROMPT = "juiz-v3"
 PASTA_PROMPTS = Path(__file__).parents[3] / "evals" / "juiz"
 
 Categoria = Literal[
