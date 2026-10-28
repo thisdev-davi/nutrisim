@@ -1,35 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Sparkle } from "lucide-react";
+import { LoaderCircle, Sparkle } from "lucide-react";
 import { env } from "@/lib/env";
 
 import { Select } from "@/components/ui/Select";
-import { Button } from "@/components/ui/Button";
+import { Button, estiloBotao } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { Etapas } from "@/components/ui/Etapas";
 
 interface Perfil { id: string; nome: string; descricao: string; }
 type Dificuldade = "facil" | "medio" | "dificil";
 interface Opcoes { perfis: Perfil[]; dificuldades: Dificuldade[]; }
 interface NovaSessao { perfil_id: string; dificuldade: Dificuldade; }
-interface Sessao { id: string; etapa: string; perfil_id: string; dificuldade: Dificuldade; }
+interface Sessao { id: string; }
 
-const ROTULOS_DIFICULDADE: Record<Dificuldade, string> = {
-  facil: "Fácil",
-  medio: "Média",
-  dificil: "Difícil",
+const DIFICULDADES: Record<Dificuldade, { rotulo: string; texto: string }> = {
+  facil: { rotulo: "Fácil", texto: "Colaborativo: conta a rotina com detalhes e quase não esconde nada." },
+  medio: { rotulo: "Média", texto: "Ambivalente: responde curto, subestima porções e esconde alguns hábitos." },
+  dificil: { rotulo: "Difícil", texto: "Resistente: respostas vagas, esquece itens e só revela hábitos com as perguntas certas." },
 };
 
 const CONTEUDO_FICHA = ["História de vida", "Rotina de trabalho", "Limitações financeiras", "Resistências alimentares"];
-const ETAPAS = ["Caso", "Anamnese", "Plano alimentar", "Cenários de adesão", "Retorno e feedback"];
 
 export default function NovoCasoPage() {
   const router = useRouter();
+  const alertaErro = useRef<HTMLDivElement>(null);
 
   const [perfilId, setPerfilId] = useState("");
-  const [dificuldade, setDificuldade] = useState<Dificuldade | "">("");
+  const [dificuldade, setDificuldade] = useState<Dificuldade>("medio");
 
   const { data: opcoes, isPending: carregandoOpcoes, error: erroCarregar, refetch: recarregarOpcoes } = useQuery({
     queryKey: ["perfis-e-dificuldades"],
@@ -47,160 +49,144 @@ export default function NovoCasoPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dados),
       });
-      if (!resp.ok) {
-        const errorBody = await resp.json().catch(() => null);
-        throw new Error(errorBody?.erro?.mensagem || "Falha ao criar o caso clínico.");
-      }
+      if (!resp.ok) throw new Error("Falha ao criar o caso clínico.");
       return resp.json();
     },
     onSuccess: (sessao) => router.push(`/sessoes/${sessao.id}`),
   });
 
+  // o erro da ia fica acima dos botoes e recebe o foco
+  useEffect(() => {
+    if (erroCriar) alertaErro.current?.focus();
+  }, [erroCriar]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!perfilId || !dificuldade || gerandoCaso) return;
+    if (!perfilId || gerandoCaso) return;
     gerarCaso({ perfil_id: perfilId, dificuldade });
   }
 
-  const podeCriar = perfilId !== "" && dificuldade !== "" && !gerandoCaso;
   const perfilSelecionado = opcoes?.perfis.find((p) => p.id === perfilId);
 
   return (
-    <div className="flex-1 flex flex-col">
+    <>
+      <Etapas atual={1} compacta />
 
+      <div className="w-full max-w-[960px] mx-auto px-4 pt-6 md:px-10 md:pt-10 md:pb-16 md:my-auto flex flex-col gap-6 md:gap-8">
+        <Etapas atual={1} />
 
-      <div className="w-full max-w-[1040px] mx-auto px-4 py-6 md:pt-8 md:px-6 md:pb-12 flex-1 flex flex-col gap-8">
-        <div className="flex flex-col items-start gap-3">
-          <span className="font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">
-            Etapa 1 de 5 · Caso
-          </span>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-[24px] leading-[30px] md:text-[32px] md:leading-[38px] font-semibold tracking-[-0.02em] text-balance">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="m-0 font-display font-medium text-[24px] leading-[30px] md:text-[28px] md:leading-[34px] tracking-[-0.02em] text-balance">
               Configurar novo paciente
             </h1>
-            <span className="inline-flex items-center h-6 px-2.5 gap-1.5 rounded-full bg-accent-soft text-accent text-[12px] font-medium">
+            <span className="md:hidden inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full bg-accent-soft text-accent text-[12px] font-medium">
               <Sparkle size={12} strokeWidth={1.5} aria-hidden />
               Gerado por IA
             </span>
           </div>
-          <p className="max-w-[62ch] text-fg-muted">
-            Escolha os parâmetros da simulação. A IA cria um paciente único a partir deles, e você descobre os detalhes conversando com ele na anamnese.
+          <p className="m-0 max-w-[62ch] text-fg-muted">
+            <span className="md:hidden">Escolha os parâmetros. A IA cria um paciente único para a anamnese.</span>
+            <span className="hidden md:inline">Escolha os parâmetros da simulação. A IA cria um paciente único a partir deles, e você descobre os detalhes conversando com ele na anamnese.</span>
           </p>
         </div>
 
-        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
-          <section aria-labelledby="parametros" className="flex flex-col gap-4 md:p-6 md:border md:border-line md:bg-surface md:rounded-lg">
-            <h2 id="parametros" className="text-[18px] leading-[26px] font-semibold">Parâmetros da simulação</h2>
-            {carregandoOpcoes ? (
-              <div className="grid md:grid-cols-2 gap-4 animate-pulse" aria-busy="true">
-                <div className="h-[66px] bg-surface-raised rounded-md"></div>
-                <div className="h-[66px] bg-surface-raised rounded-md"></div>
-              </div>
-            ) : erroCarregar ? (
-              <Alert
-                type="danger"
-                title="Falha de comunicação"
-                action={
-                  <button
-                    onClick={() => recarregarOpcoes()}
-                    className="text-[13px] font-medium underline hover:opacity-80 transition-opacity cursor-pointer"
-                  >
-                    Tentar buscar novamente
-                  </button>
-                }
-              >
-                Não foi possível carregar os perfis clínicos. Verifique sua conexão e tente de novo.
-              </Alert>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} aria-label="Parâmetros da simulação" className="flex flex-col gap-6 md:p-6 md:border md:border-line md:rounded-lg md:bg-surface">
+          {carregandoOpcoes ? (
+            <div className="grid md:grid-cols-2 gap-4" aria-busy="true" aria-label="Carregando os perfis">
+              {[0, 1].map((i) => (
+                <div key={i} className="flex flex-col gap-1.5">
+                  <div className="w-1/2 h-4 rounded-md bg-surface-raised" />
+                  <div className="h-11 rounded-md bg-surface-raised" />
+                </div>
+              ))}
+            </div>
+          ) : erroCarregar ? (
+            <Alert
+              type="danger"
+              action={
+                <button type="button" onClick={() => recarregarOpcoes()} className="text-[13px] font-medium underline cursor-pointer">
+                  Tentar de novo
+                </button>
+              }
+            >
+              Não foi possível carregar os perfis. Verifique a conexão.
+            </Alert>
+          ) : (
+            <>
+              <fieldset disabled={gerandoCaso} className="m-0 p-0 border-0 min-w-0 flex flex-col gap-4 md:gap-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <Select
                     id="perfil"
                     label="Patologia ou objetivo"
                     value={perfilId}
                     onChange={(e) => setPerfilId(e.target.value)}
-                    disabled={gerandoCaso}
                     required
-                    helpText={perfilSelecionado?.descricao}
+                    helpText={perfilSelecionado?.descricao ?? "O perfil define a condição de saúde do paciente."}
                   >
                     <option value="">Selecione…</option>
                     {opcoes?.perfis.map((p) => (
                       <option key={p.id} value={p.id}>{p.nome}</option>
                     ))}
                   </Select>
+                </div>
 
-                  <Select
-                    id="dificuldade"
-                    label="Dificuldade"
-                    value={dificuldade}
-                    onChange={(e) => setDificuldade(e.target.value as Dificuldade)}
-                    disabled={gerandoCaso}
-                    required
-                  >
-                    <option value="">Selecione…</option>
+                <fieldset className="m-0 p-0 border-0 min-w-0">
+                  <legend className="mb-1.5 p-0 text-[13px] leading-4 font-medium">Dificuldade</legend>
+                  <div className="grid md:grid-cols-3 gap-3">
                     {opcoes?.dificuldades.map((d) => (
-                      <option key={d} value={d}>{ROTULOS_DIFICULDADE[d]}</option>
+                      <label
+                        key={d}
+                        className="relative flex flex-col gap-1 px-4 py-3.5 border border-line-strong rounded-lg cursor-pointer transition-colors hover:border-fg-muted has-checked:border-fg has-checked:bg-surface-raised has-checked:shadow-[inset_0_0_0_1px_var(--fg)] has-focus-visible:outline-2 has-focus-visible:outline-accent has-focus-visible:outline-offset-2"
+                      >
+                        <input type="radio" name="dificuldade" value={d} checked={dificuldade === d} onChange={() => setDificuldade(d)} className="absolute opacity-0 pointer-events-none" />
+                        <span className="text-[14px] leading-5 font-medium">{DIFICULDADES[d].rotulo}</span>
+                        <span className="text-[13px] leading-5 text-fg-muted">{DIFICULDADES[d].texto}</span>
+                      </label>
                     ))}
-                  </Select>
-                </div>
+                  </div>
+                </fieldset>
+              </fieldset>
 
-                <Alert type="info">
-                  A IA cria história, rotina e gostos com base nas suas escolhas. Nada disso aparece antes da consulta.
-                </Alert>
-
-                {erroCriar && (
-                  <Alert type="danger" action={
-                    <button type="submit" className="text-[13px] font-medium underline hover:opacity-80 transition-opacity cursor-pointer">
-                      Tentar de novo
-                    </button>
-                  }>
-                    {erroCriar.message}
-                  </Alert>
-                )}
-
-                <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-line">
-                  <Button type="submit" disabled={!podeCriar}>
-                    {gerandoCaso ? "Gerando paciente…" : (
-                      <>
-                        <Sparkle size={16} strokeWidth={1.5} aria-hidden />
-                        <span className="md:hidden">Gerar paciente e iniciar</span>
-                        <span className="hidden md:inline">Gerar ficha oculta e iniciar consulta</span>
-                      </>
-                    )}
-                  </Button>
-                  <Button type="button" variant="ghost" onClick={() => router.back()}>
-                    Cancelar
-                  </Button>
-                </div>
-              </form>
-            )}
-          </section>
-
-          <aside aria-labelledby="como-funciona" className="flex flex-col gap-4 pt-6 border-t border-line md:p-6 md:border md:bg-surface md:rounded-lg lg:py-2 lg:pr-0 lg:pl-6 lg:border-0 lg:border-l lg:bg-transparent lg:rounded-none">
-            <h2 id="como-funciona" className="text-[18px] leading-[26px] lg:text-[15px] lg:leading-6 font-semibold">Como funciona a geração?</h2>
-            <p className="text-fg-muted lg:text-[13px] lg:leading-5">
-              Ao gerar a ficha oculta, a IA estrutura um paciente exclusivo. Você não vê esses dados antes: precisa descobri-los na anamnese, como num consultório de verdade.
-            </p>
-            <ul aria-label="O que a ficha oculta contém" className="flex flex-wrap gap-2">
-              {CONTEUDO_FICHA.map((item) => (
-                <li key={item} className="inline-flex items-center h-6 px-2.5 rounded-full border border-line-strong text-fg-muted text-[12px] font-medium">
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <ol aria-label="Etapas da simulação" className="grid gap-2 pt-4 border-t border-line">
-              {ETAPAS.map((etapa, i) => (
-                <li key={etapa} aria-current={i === 0 ? "step" : undefined} className={`grid grid-cols-[24px_1fr] items-center gap-3 text-[14px] leading-5 ${i === 0 ? "text-fg font-medium" : "text-fg-muted"}`}>
-                  <span className={`grid place-items-center size-6 rounded-full border font-mono text-[12px] font-medium ${i === 0 ? "border-transparent bg-fg text-bg" : "border-line-strong"}`}>
-                    {i + 1}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="basis-full text-[13px] leading-5 font-medium text-fg-muted">A ficha oculta tem</span>
+                {CONTEUDO_FICHA.map((item) => (
+                  <span key={item} className="inline-flex items-center h-6 px-2.5 rounded-full border border-line-strong text-fg-muted text-[12px] font-medium whitespace-nowrap">
+                    {item}
                   </span>
-                  {etapa}
-                </li>
-              ))}
-            </ol>
-          </aside>
-        </div>
+                ))}
+              </div>
+
+              {erroCriar && (
+                <div ref={alertaErro} tabIndex={-1} className="outline-none">
+                  <Alert type="danger" action={<button type="submit" className="text-[13px] font-medium underline cursor-pointer">Tentar de novo</button>}>
+                    A IA não conseguiu criar o paciente agora. Suas escolhas continuam marcadas.
+                  </Alert>
+                </div>
+              )}
+
+              {/* no celular vira a barra fixa no rodape */}
+              <div className="sticky bottom-0 -mx-4 px-4 py-3 border-t border-line bg-bg md:static md:mx-0 md:px-0 md:pb-0 md:pt-6 md:bg-transparent flex flex-wrap items-center gap-3">
+                <Button type="submit" disabled={!perfilId || gerandoCaso} aria-busy={gerandoCaso} className="w-full md:w-auto">
+                  {gerandoCaso ? (
+                    <>
+                      <LoaderCircle size={16} strokeWidth={1.5} aria-hidden className="animate-spin motion-reduce:animate-none" />
+                      Gerando paciente…
+                    </>
+                  ) : (
+                    <>
+                      <Sparkle size={16} strokeWidth={1.5} aria-hidden className="transition-colors group-hover:text-accent-inverse" />
+                      Gerar paciente e iniciar
+                    </>
+                  )}
+                </Button>
+                <span role="status" className="sr-only">{gerandoCaso ? "Gerando paciente, aguarde." : ""}</span>
+                <Link href="/" className={`${estiloBotao("ghost")} hidden! md:inline-flex!`}>Cancelar</Link>
+              </div>
+            </>
+          )}
+        </form>
       </div>
-    </div>
+    </>
   );
 }
