@@ -12,6 +12,7 @@ from loguru import logger
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from app.api.auth import UsuarioAtual
 from app.api.caso import para_api
 from app.api.erros import ApiError
 from app.db import modelos
@@ -86,24 +87,26 @@ def responder(
     ).texto
 
 
-def buscar_sessao(sessao_id: str, db: Banco) -> modelos.Sessao:
+def buscar_sessao(sessao_id: str, db: Banco, usuario: UsuarioAtual) -> modelos.Sessao:
     """roda antes da rota, entao o 404 sai antes do stream abrir.
 
     Args:
         sessao_id: id da sessao na url.
         db: sessao do banco.
+        usuario: estudante autenticado.
 
     Returns:
         sessao encontrada, com a ficha.
 
     Raises:
-        ApiError: sessao inexistente.
+        ApiError: sessao inexistente ou de outro estudante.
     """
     try:
         linha = db.get(modelos.Sessao, UUID(sessao_id))
     except ValueError:
         linha = None  # id que nao e uuid tambem e 404, nao 422
-    if linha is None:
+    # sessao alheia tambem e 404: o 403 confirmaria que o id existe
+    if linha is None or linha.usuario_id != usuario.id:
         raise ApiError(404, "sessao_nao_encontrada", "sessao nao encontrada")
     return linha
 

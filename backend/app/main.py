@@ -1,13 +1,30 @@
 import os
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBearer
 
-from app.api import alimentos, anamnese, caso
+from app.api import alimentos, anamnese, auth, caso
 from app.api.erros import registrar_erros
+from app.schemas.api import RespostaErro
+from app.seguranca import segredo
 
-app = FastAPI(title="NutriSim")
+
+@asynccontextmanager
+async def ciclo_de_vida(_app: FastAPI) -> AsyncGenerator[None, None]:
+    """confere a configuracao antes de aceitar requisicoes.
+
+    Sem isso, a falta do JWT_SECRET so aparecia como 500 no meio do cadastro.
+
+    Yields:
+        controle para a aplicacao rodar.
+    """
+    segredo()  # chave ausente ou curta impede a api de subir
+    yield
+
+
+app = FastAPI(title="NutriSim", lifespan=ciclo_de_vida)
 registrar_erros(app)
 
 # libera so o front configurado (vazio cai no padrao)
@@ -18,10 +35,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# token bearer so declarado; a NS-035 passa a exigir
-bearer = Depends(HTTPBearer(auto_error=False))
+# cadastro e login abertos; toda rota da simulacao exige o token (NS-035)
+app.include_router(auth.router, prefix="/api")
+protegida = Depends(auth.usuario_atual)
 for rotas in (alimentos.router, caso.router, anamnese.router):
-    app.include_router(rotas, prefix="/api", dependencies=[bearer])
+    app.include_router(
+        rotas,
+        prefix="/api",
+        dependencies=[protegida],
+        responses={401: {"model": RespostaErro}},
+    )
 
 
 @app.get("/health")

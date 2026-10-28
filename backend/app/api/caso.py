@@ -8,6 +8,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from app.api.auth import UsuarioAtual
 from app.api.erros import ApiError
 from app.db import modelos
 from app.db.deps import obter_sessao
@@ -154,13 +155,16 @@ def gerar_ficha(db: Session, dados: NovaSessao) -> Ficha:
 # def e nao async: o gerar bloqueia, entao roda no threadpool
 @router.post("/sessoes", status_code=201)
 def criar_sessao(
-    dados: NovaSessao, db: Annotated[Session, Depends(obter_sessao)]
+    dados: NovaSessao,
+    db: Annotated[Session, Depends(obter_sessao)],
+    usuario: UsuarioAtual,
 ) -> Sessao:
     """cria o caso e a sessao; a ficha oculta fica so no backend.
 
     Args:
         dados: perfil e dificuldade escolhidos.
         db: sessao do banco.
+        usuario: estudante autenticado, dono da sessao.
 
     Returns:
         sessao criada, ja na etapa de anamnese.
@@ -179,6 +183,7 @@ def criar_sessao(
         ) from e
     linha = modelos.Sessao(
         id=uuid4(),  # o default do modelo so roda no flush
+        usuario_id=usuario.id,
         perfil_id=dados.perfil_id,
         dificuldade=dados.dificuldade,
         etapa=Etapa.ANAMNESE,
