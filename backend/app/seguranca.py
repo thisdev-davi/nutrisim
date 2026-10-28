@@ -54,16 +54,16 @@ def segredo() -> str:
     """le a chave que assina os tokens.
 
     Returns:
-        valor de JWT_SEGREDO.
+        valor de JWT_SECRET.
 
     Raises:
         RuntimeError: chave ausente ou curta; com ela vazia, qualquer um forjaria
             um token.
     """
-    valor = os.environ.get("JWT_SEGREDO", "")
+    valor = os.environ.get("JWT_SECRET", "")
     if len(valor.encode()) < SEGREDO_MINIMO_BYTES:
         raise RuntimeError(
-            f"JWT_SEGREDO ausente ou com menos de {SEGREDO_MINIMO_BYTES} bytes; "
+            f"JWT_SECRET ausente ou com menos de {SEGREDO_MINIMO_BYTES} bytes; "
             "gere uma com: openssl rand -hex 32"
         )
     return valor
