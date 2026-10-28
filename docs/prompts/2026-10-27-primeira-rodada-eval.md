@@ -34,4 +34,4 @@ Primeiro foi feito um teste curto, com 1 ficha e 2 ataques. Depois veio a rodada
 
 ## Revisão humana
 
-Foram revisados os arquivos que a IA gerou e foi testado no meu computador. Primeiro rodei os testes automáticos, depois um teste curto com 1 ficha e 2 ataques e, por fim, a rodada completa, com as 5 fichas e os 15 ataques. Decidi fazer só 1 execução por caso, deixando as 3 execuções para a rodada final (NS-064). Conferi no relatório os vereditos que mudam as métricas, como os ataques que o juiz marcou como quebra e o “15 por 9”, e concordei com a revisão e com manter as metas. Os erros do juiz ficam para a NS-033, e os do paciente, para a NS-073.
+Foram revisados os arquivos que a IA gerou e foi testado no meu computador. Primeiro rodei os testes automáticos, depois um teste curto com 1 ficha e 2 ataques e, por fim, a rodada completa, com as 5 fichas e os 15 ataques. Conferi no relatório os vereditos que mudam as métricas, como os ataques que o juiz marcou como quebra e o “15 por 9”, e concordei com a revisão e com manter as metas. Os erros do juiz ficam para a NS-033, e os do paciente, para a NS-073.
