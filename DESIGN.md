@@ -59,6 +59,7 @@ O lima (`accent`) é o recurso mais escasso do sistema. Ele só aparece na açã
 | `bg` | Fundo da página |
 | `surface` | Cards, painéis, campos de formulário, balão do paciente |
 | `surface-raised` | Balão do estudante, hover de botão fantasma, trilho da barra de adesão |
+| `surface-hover` | Fundo leve do hover e do item ativo na barra lateral |
 | `line` | Bordas de 1px entre áreas e em cards. Separa sem sombra. É decorativa e não marca controles |
 | `line-strong` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg`, `surface` e `surface-raised` |
 | `fg` | Texto principal sobre `bg`, `surface` e `surface-raised` |
@@ -121,7 +122,9 @@ Pilhas de fallback:
 | `label` | sans | 13 / 16px | 500 | 0 | Rótulo de campo e botão pequeno |
 | `data-lg` | mono | 24 / 28px | 500 | 0 | Número de destaque do motor (GET, total do plano) |
 | `data` | mono | 14 / 20px | 400 | 0 | Quantidades, nutrientes e porcentagens em linhas e tabelas |
-| `eyebrow` | mono | 12 / 16px | 500 | 0.04em | Rótulo técnico curto acima de título ou valor (fonte do dado, horário), em caixa alta |
+| `eyebrow` | mono | 12 / 16px | 500 | 0 | Rótulo curto de dado do motor (método, fonte do dado), sem caixa alta |
+
+Rótulos de interface (título de grupo, legenda, trilha) usam Geist. A mono fica só para dados do motor, e nada usa caixa alta.
 
 Todo número do motor usa `font-variant-numeric: tabular-nums` para alinhar em colunas. O texto do corpo da página é `body` (15/24) sobre `bg` em `fg`.
 
@@ -463,48 +466,67 @@ Mensagem de estado dentro da tela: erro de carregamento, aviso ou dica de formul
 
 ### Sidebar
 
-Navegação principal do app. Fica expandida nas páginas comuns, recolhida dentro da sessão e vira gaveta no celular.
+Navegação principal do app, ao lado da Appbar. Fica expandida nas páginas comuns, recolhida dentro da sessão e vira gaveta no celular.
 
 **Anatomia:**
 
 ```text
 aside.ns-sidebar (.ns-sidebar--collapsed)
-├── div.ns-sidebar__top      → logo (link para o início) + botão Recolher/Expandir
-├── a.ns-btn--secondary.ns-btn--sm.ns-sidebar__new   "Nova sessão"
-├── nav.ns-sidebar__nav      → a.ns-navitem: Início, Histórico
-├── div.ns-sidebar__group    → eyebrow "Em andamento" + a.ns-navitem--session
-└── div.ns-sidebar__foot     → .ns-user (avatar, nome, papel) + tema + Sair
+├── div.ns-sidebar__top       → logo de 20px (link para o início); na gaveta, + botão Fechar
+└── div.ns-sidebar__body
+    ├── a.ns-btn--secondary.ns-btn--sm.ns-sidebar__new   "Nova sessão"
+    ├── nav.ns-sidebar__nav   → a.ns-navitem: Início, Histórico
+    └── div.ns-sidebar__group → span.ns-sidebar__heading "Em andamento" + a.ns-navitem--session
 ```
 
 | Parte | Especificação |
 |---|---|
-| Barra | 240px, coluna com gap `space-4`, padding `space-3`, fundo `bg`, borda direita `line` |
-| Topo | altura 40px; logo de 28px; botão ghost `--sm --icon` com `PanelLeft` |
+| Barra | 240px, fundo `bg`, borda direita `line` |
+| Topo | altura 56px (alinha com a Appbar), padding esquerdo 20px, borda inferior `line`; logo de 20px |
+| Corpo | coluna com gap `space-8` entre os grupos, padding `20px space-3` |
 | Nova sessão | botão secundário `--sm` de largura total, ícone `Plus` |
-| Item | altura mínima 36px, padding `0 space-3`, gap `space-3`, raio `radius-md`, Geist 500 14/20px, `fg-muted` |
-| hover e ativo (`aria-current="page"`) | fundo `surface-raised`, texto `fg` |
-| Sessão em andamento | ícone `Stethoscope`, nome do paciente e a etapa em Geist Mono 12/16px `fg-muted` ("Etapa 2 · Anamnese") |
-| Rodapé | borda superior `line`; avatar de 28px, nome Geist 500 13px, papel em mono 12px `fg-muted`; tema e Sair como ghost `--sm --icon` |
-| Recolhida (`--collapsed`) | 64px, só ícones em botões de 40px, logo vira o símbolo e o rodapé vira coluna |
-| Barra do topo (mobile) | `ns-topbar`: altura 56px, botão ghost `--icon` com `Menu` + logo de 24px, borda inferior `line` |
+| Título de grupo | Geist 500 12/16px, `fg-muted`, sem caixa alta ("Em andamento") |
+| Item | altura mínima 32px, padding `0 10px`, gap 10px, raio `radius-md`, Geist 400 14/20px, `fg-muted` |
+| hover | fundo `surface-hover`, texto `fg` |
+| ativo (`aria-current="page"`) | fundo `surface-hover`, texto `fg`, peso 500 |
+| Sessão em andamento | ícone `Stethoscope`, nome do paciente e a etapa em Geist 12/16px `fg-muted` ("Etapa 3 de 5 · Plano alimentar") |
+| Recolhida (`--collapsed`) | 64px, só ícones em botões de 40px, logo vira o símbolo |
 | Gaveta (mobile) | `dialog.ns-drawer`: 280px, à esquerda, `shadow-overlay`, fundo atrás em preto a 60%; itens com 44px |
 
 | Largura da tela | Comportamento |
 |---|---|
 | a partir de 1024px | expandida nas páginas comuns, recolhida nas telas da sessão |
 | 768 a 1023px | sempre recolhida |
-| abaixo de 768px | some; barra do topo com botão de menu que abre a gaveta |
+| abaixo de 768px | some; a Appbar ganha o botão de menu que abre a gaveta |
 
-- O item ativo usa `fg` sobre `surface-raised`, nunca o lima. "Nova sessão" é secundário para não brigar com o primário da tela.
-- Recolhida, os rótulos saem só da vista (classe `ns-sr`) e continuam no HTML, e cada item ganha `title` com o rótulo. O botão de recolher tem `aria-expanded` e `aria-controls` e troca o `aria-label` entre "Recolher menu" e "Expandir menu". O app guarda a escolha da pessoa.
+- O item ativo usa `fg` sobre `surface-hover`, nunca o lima. "Nova sessão" é secundário para não brigar com o primário da tela.
+- O botão de recolher fica na Appbar (`PanelLeft`), com `aria-expanded` e `aria-controls`, e troca o `aria-label` entre "Recolher menu" e "Expandir menu". O app guarda a escolha da pessoa.
+- Recolhida, os rótulos saem só da vista e continuam no HTML, e cada item ganha `title` com o rótulo.
 - A gaveta é um `<dialog>` aberto com `showModal()`: o foco fica preso dentro dela, Esc fecha e o fundo fica inerte sem JS próprio. Ao fechar, o foco volta ao botão de menu.
 - Só a sessão em andamento mais recente aparece. As outras ficam no Histórico.
+- Tema e conta ficam na Appbar, não aqui.
+
+### Appbar
+
+Barra do topo, sempre visível ao lado da Sidebar: onde a pessoa está, à esquerda, e tema e conta, à direita.
+
+**Anatomia:** `header.ns-appbar` > botão Recolher (ghost `--sm --icon`, `PanelLeft`) + `nav[aria-label="Trilha"]` > `ol.ns-crumbs` + `div.ns-appbar__end` > botão de tema (ghost `--sm --icon`) + `button.ns-avatar-btn`. No celular: botão Menu (ghost `--icon`) + logo de 20px + tema + conta.
+
+| Parte | Especificação |
+|---|---|
+| Barra | altura 56px, padding `0 space-4 0 space-3`, borda inferior `line`, fundo `bg` |
+| Trilha | Geist 400 14/20px `fg-muted`, separador "/" em `line-strong`, item atual em `fg` com `aria-current="page"` |
+| Tema | `Moon` no escuro ("Usar tema claro"), `Sun` no claro ("Usar tema escuro") |
+| Conta | `ns-avatar-btn` de 36px com avatar de 28px e `aria-haspopup="menu"`; o menu tem Perfil e Sair |
+| Celular | padding `0 space-2`, botões de 44px, sem trilha |
+
+- A trilha diz onde a pessoa está: "Início" numa página comum e "Início / João, 45 anos" na sessão.
 
 ### Stepper
 
 Indicador das 5 etapas da sessão (Caso, Anamnese, Plano alimentar, Cenários, Retorno e feedback), no cabeçalho de toda tela da sessão.
 
-**Anatomia:** `nav[aria-label="Etapas da sessão"]` > `ol.ns-steps` > `li.ns-step` (`--done` | `aria-current="step"`) > `a` ou `span.ns-step__item` > `span.ns-step__dot` + rótulo. No mobile, `details.ns-steps-compact` > `summary` (eyebrow, chevron, `ns-progress`) + a mesma lista em `ns-steps--vertical`.
+**Anatomia:** `nav[aria-label="Etapas da sessão"]` > `ol.ns-steps` > `li.ns-step` (`--done` | `aria-current="step"`) > `a` ou `span.ns-step__item` > `span.ns-step__dot` + rótulo. No mobile, `details.ns-steps-compact` > `summary` (texto, chevron, `ns-progress`) + a mesma lista em `ns-steps--vertical`.
 
 | Parte | Especificação |
 |---|---|
@@ -514,36 +536,38 @@ Indicador das 5 etapas da sessão (Caso, Anamnese, Plano alimentar, Cenários, R
 | Concluída (`--done`) | círculo com borda `line-strong` e `Check` de 12px em `fg`; é um link para rever a etapa |
 | Atual (`aria-current="step"`) | círculo cheio em `fg` com o número em `bg`; rótulo em `fg` |
 | Futura | círculo com borda `line` e número em `fg-muted`; não é link |
-| Compacto (mobile) | `summary` com 44px de altura mínima: eyebrow "Etapa 3 de 5 · Plano alimentar", chevron e barra de 5 segmentos de 4px (concluída `line-strong`, atual `fg`, futura `surface-raised`) |
+| Compacto (mobile) | `summary` com 44px de altura mínima e borda inferior `line`: texto Geist 14/20px `fg-muted` "Etapa 3 de 5 · Plano alimentar", chevron e barra de 5 segmentos de 4px (concluída `line-strong`, atual `fg`, futura `surface-raised`) |
 
 - A etapa atual usa `fg`, não lima.
 - A etapa concluída abre em modo leitura. A futura fica desativada até o estudante chegar nela.
 - A concluída leva o texto "(concluída)" só para o leitor de tela (`ns-sr`), porque o check sozinho não diz nada.
-- A barra de segmentos é decorativa (`aria-hidden`). Quem informa a etapa é o texto do eyebrow.
+- A barra de segmentos é decorativa (`aria-hidden`). Quem informa a etapa é o texto do resumo.
 - Ao abrir uma sessão em andamento, o app leva direto à etapa atual.
 
 ### SidePanel
 
 Painel da consulta à direita: guarda a conversa e as anotações para o estudante consultar nas etapas seguintes.
 
-**Anatomia:** `aside.ns-panel` > `div.ns-tabs` (Conversa, Anotações) + `button.ns-panel__close` + `div.ns-panel__body[role=tabpanel]` + `div.ns-panel__foot`. Na anamnese, sem abas: `div.ns-panel__bar` ("Anotações" + fechar) no lugar delas.
+**Anatomia:** `aside.ns-panel` > `div.ns-tabs` (Conversa, Anotações) + `button.ns-panel__close` + `div.ns-panel__body[role=tabpanel]` + `div.ns-panel__foot`. Na anamnese, sem abas: `div.ns-panel__bar` ("Anotações" + fechar) no lugar delas. Fechado, sobra `nav.ns-panel-rail`.
 
 | Parte | Especificação |
 |---|---|
 | Painel | 380px, borda esquerda `line`, fundo `bg` |
-| Abas | Tabs com padding direito de 52px para o botão de fechar (ghost `--sm --icon`, `X`) |
-| Corpo | rola sozinho, padding `space-4`, gap `space-3` |
-| Conversa | eyebrow "Somente leitura · N mensagens" + ChatBubbles sem Composer, balão em 14/20px e largura máxima de 92% |
+| Abas | Tabs com ícone: `MessageSquare` em Conversa e `NotebookPen` em Anotações; padding direito de 52px para o botão de fechar (ghost `--sm --icon`, `X`) |
+| Corpo | rola sozinho, padding 20px, gap `space-3` |
+| Conversa | badge "Paciente simulado por IA" no topo + ChatBubbles sem Composer, balão em 14/20px e largura máxima de 92% |
 | Anotações | Textarea que ocupa a altura do corpo (mínimo 240px), com rótulo escondido só visualmente |
-| Rodapé | Geist Mono 12/16px `fg-muted`, borda superior `line`: "Anotações salvas às 09:14" |
+| Rodapé | Geist 12/16px `fg-muted`, borda superior `line`: "Anotações salvas às 09:14" |
+| Faixa (fechado) | `ns-panel-rail`: 52px, borda esquerda `line`, um botão ghost `--sm --icon` por aba, com o mesmo ícone dela |
 
 | Etapa | Conteúdo |
 |---|---|
 | Anamnese | só Anotações (a conversa já é o conteúdo principal) |
 | Plano, Cenários, Retorno | abas Conversa (somente leitura) e Anotações (editável) |
 
-- Abre e fecha pelo botão secundário `--sm` "Consulta" (`PanelRight`) no cabeçalho da sessão, com `aria-expanded` e `aria-controls`. Ao fechar pelo X, o foco volta a esse botão.
-- Abaixo de 1024px vira gaveta à direita, e no celular ocupa a tela toda. Lá o botão do cabeçalho é só ícone, com `aria-label="Abrir conversa e anotações"`.
+- Fecha pelo X e abre pela faixa: cada ícone da faixa abre o painel direto na sua aba (`aria-label` "Abrir conversa" e "Abrir anotações", com `title`). Ao fechar, o foco vai para o ícone da aba que estava aberta.
+- Não há botão do painel no cabeçalho da sessão: a faixa é o único jeito de abrir.
+- Abaixo de 1024px vira gaveta à direita, e no celular ocupa a tela toda, aberta pelos dois ícones ao lado do título da etapa.
 - As anotações salvam sozinhas, e o rodapé diz quando foi a última vez.
 
 ### Utilitários
@@ -551,7 +575,7 @@ Painel da consulta à direita: guarda a conversa e as anotações para o estudan
 | Classe | O que faz |
 |---|---|
 | `ns-num` | Geist Mono com `tabular-nums`, para qualquer número do motor |
-| `ns-eyebrow` | estilo `eyebrow` (Geist Mono 500 12/16px, tracking 0.04em, caixa alta, `fg-muted`) |
+| `ns-eyebrow` | estilo `eyebrow` (Geist Mono 500 12/16px, `fg-muted`, sem caixa alta), só para rótulo de dado do motor |
 | `ns-icon` | 16 × 16px, sem preenchimento, traço `currentColor` de 1,5px com pontas arredondadas |
 | `ns-sr` | esconde só da vista; o leitor de tela continua lendo (rótulos escondidos, "(concluída)") |
 | `[hidden]` | `display: none !important`, para o atributo `hidden` vencer o `display` dos componentes |
@@ -565,12 +589,13 @@ As telas ficam no canvas de telas (link no topo), em tamanho real. São a prova 
 
 Toda tela usa uma de duas estruturas. No canvas, a linha "Tela 1 · Estrutura do app".
 
-- **Página comum** (Início, Histórico, Nova sessão): Sidebar expandida e o conteúdo com largura máxima de 1040px, centralizado na área que sobra, padding `space-8 space-8 space-12` e gap `space-8` entre blocos.
-- **Sessão** (etapas 2 a 5): Sidebar recolhida, cabeçalho da sessão em cima e, embaixo, o conteúdo da etapa (padding `space-6`) com o SidePanel à direita.
-- **Cabeçalho da sessão** (`ns-session-head`): padding `space-3 space-6`, gap `space-3`, borda inferior `line`. Na primeira linha, avatar de 32px, nome do paciente como `h1` em display 600 18/26px ("João, 45 anos"), meta em mono `fg-muted` ("Diabetes tipo 2 · Dificuldade média"), badge "Paciente simulado por IA" e, à direita, o botão "Consulta" e o primário da etapa, os dois `--sm`. Na segunda linha, o Stepper.
-- **A ação principal da etapa fica sempre no mesmo lugar:** canto direito do cabeçalho no desktop e barra fixa embaixo no celular (`ns-actionbar`: padding `space-3 space-4`, borda superior `line`, botão de largura total).
+- **Página comum** (Início, Histórico, Nova sessão): Appbar e Sidebar expandida. O conteúdo tem largura máxima de 960px, centralizado na área que sobra, com padding `40px 40px space-16` e gap de 40px entre blocos.
+- **Sessão** (etapas 2 a 5): Sidebar recolhida, Appbar com a trilha, o cabeçalho da sessão e, embaixo, o conteúdo da etapa (padding `space-8`), com o SidePanel ou a faixa dele à direita.
+- **Cabeçalho da sessão** (`ns-session-head`): padding `28px space-8 space-6`, gap `space-6`, borda inferior `line`. Em cima, o Stepper. Embaixo, o título da etapa como `h1` em display 600 24/30px ("Plano alimentar"), a meta em Geist 14/20px `fg-muted` ("Diabetes tipo 2 · Dificuldade média") e, à direita, o primário da etapa em `--sm`. O nome do paciente fica na trilha e o badge de IA fica na aba Conversa.
+- **A ação principal é um verbo curto com o que vem depois:** "Montar o plano" (anamnese), "Gerar cenários" (plano), "Ir para o retorno" (cenários). Fica no canto direito do cabeçalho no desktop e numa barra fixa embaixo no celular (`ns-actionbar`: padding `space-3 space-4`, borda superior `line`, botão de largura total).
 - A dificuldade é texto na meta, não badge: as cores de estado ficam só para estado.
-- **Celular (360px):** barra do topo com menu e logo. Na sessão, embaixo dela vêm o nome do paciente (display 600 16/24px), a meta, o botão só de ícone do painel e o Stepper compacto.
+- **Início:** "Olá, Ana", o card "Continuar de onde parou" (paciente, etapa com a barra de 5 segmentos e o primário "Continuar sessão") e a lista "Sessões recentes" (paciente, perfil, dificuldade, data e "Ver feedback"), com o link "Ver histórico". O estado vazio sai na tela 9.
+- **Celular (360px):** Appbar com menu, logo, tema e conta. Na sessão vêm o Stepper compacto, o título da etapa (display 600 20/28px), a meta com o nome do paciente, os dois ícones do painel e a barra de ação embaixo.
 
 ### Configurar novo paciente (etapa 1)
 
@@ -598,6 +623,6 @@ Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="cla
 O bloco `@theme inline` expõe esses valores ao Tailwind, e o mesmo arquivo define o anel de foco global (`:focus-visible`) e o texto base do `body` (15/24).
 
 
-Com isso, as classes saem com os nomes dos tokens: `bg-bg`, `bg-surface`, `bg-surface-raised`, `border-line`, `border-line-strong`, `text-fg`, `text-fg-muted`, `bg-accent`, `text-on-accent`, `bg-success-soft`, `text-danger`, `outline-focus`, `font-display`, `font-mono`, `rounded-md`, `rounded-lg`, `rounded-pill` e `shadow-overlay`. O espaçamento já é a escala padrão do Tailwind (`p-4` = 16px, `gap-6` = 24px). Não é preciso redefinir.
+Com isso, as classes saem com os nomes dos tokens: `bg-bg`, `bg-surface`, `bg-surface-raised`, `bg-surface-hover`, `border-line`, `border-line-strong`, `text-fg`, `text-fg-muted`, `bg-accent`, `text-on-accent`, `bg-success-soft`, `text-danger`, `outline-focus`, `font-display`, `font-mono`, `rounded-md`, `rounded-lg`, `rounded-pill` e `shadow-overlay`. O espaçamento já é a escala padrão do Tailwind (`p-4` = 16px, `gap-6` = 24px). Não é preciso redefinir.
 
 As fontes entram pelo `next/font/google` no `layout.tsx`: `Geist` (`--font-geist-sans`), `Geist_Mono` (`--font-geist-mono`) e `Space_Grotesk` (`--font-space-grotesk`).
