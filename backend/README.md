@@ -20,7 +20,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 |---|---|---|
 | `FRONTEND_URL` | origem do frontend liberada no CORS | `http://localhost:3000` |
 | `DATABASE_URL` | conexão do PostgreSQL (string do Neon, `postgresql://...?sslmode=require`) | – |
-| `JWT_SEGREDO` | chave que assina os tokens de acesso, com 32 bytes ou mais (a API não sobe sem ela); gere com `openssl rand -hex 32` e use valores diferentes em dev e prod | – |
+| `JWT_SECRET` | chave que assina os tokens de acesso, com 32 bytes ou mais (a API não sobe sem ela); gere com `openssl rand -hex 32` e use valores diferentes em dev e prod | – |
 | `GEMINI_API_KEY` | chave da API do Gemini ([Google AI Studio](https://aistudio.google.com/apikey)) | – |
 | `LLM_MODELO` | modelo do Gemini usado pelo produto (por exemplo, `gemini-3.8-flash`); nunca fixado no código | – |
 | `LLM_MODELO_JUIZ` | modelo do Gemini usado só pelo juiz do eval; precisa ser diferente de `LLM_MODELO` (ADR-005); nunca fixado no código | – |

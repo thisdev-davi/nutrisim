@@ -35,7 +35,7 @@ PROTEGIDAS = [
 @pytest.fixture(autouse=True)
 def chave_de_teste(monkeypatch):
     """chave de assinatura dos tokens, lida do ambiente."""
-    monkeypatch.setenv("JWT_SEGREDO", SEGREDO)
+    monkeypatch.setenv("JWT_SECRET", SEGREDO)
 
 
 def cabecalho(token: str) -> dict[str, str]:
@@ -116,24 +116,24 @@ def test_senha_com_espacos_vale_como_foi_digitada():
 def test_segredo_ausente_ou_curto_impede_a_api_de_subir(monkeypatch, valor):
     """com a chave vazia qualquer um forjaria token: a api nem sobe."""
     if valor is None:
-        monkeypatch.delenv("JWT_SEGREDO")
+        monkeypatch.delenv("JWT_SECRET")
     else:
-        monkeypatch.setenv("JWT_SEGREDO", valor)
-    with pytest.raises(RuntimeError, match="JWT_SEGREDO"):
+        monkeypatch.setenv("JWT_SECRET", valor)
+    with pytest.raises(RuntimeError, match="JWT_SECRET"):
         segredo()
     # o with roda o lifespan, como o fastapi dev e o deploy
-    with pytest.raises(RuntimeError, match="JWT_SEGREDO"), TestClient(app):
+    with pytest.raises(RuntimeError, match="JWT_SECRET"), TestClient(app):
         pass
 
 
 def test_cadastro_sem_token_nao_grava_o_usuario(monkeypatch, banco):
     """se o token falha, nada e gravado e a nova tentativa nao da 409."""
-    monkeypatch.delenv("JWT_SEGREDO")
+    monkeypatch.delenv("JWT_SECRET")
     falhou = client.post("/api/auth/cadastro", json=ANA)
     assert falhou.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert banco.commits == 0
 
-    monkeypatch.setenv("JWT_SEGREDO", SEGREDO)
+    monkeypatch.setenv("JWT_SECRET", SEGREDO)
     cadastrar()
 
 

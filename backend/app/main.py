@@ -15,7 +15,7 @@ from app.seguranca import segredo
 async def ciclo_de_vida(_app: FastAPI) -> AsyncGenerator[None, None]:
     """confere a configuracao antes de aceitar requisicoes.
 
-    Sem isso, a falta do JWT_SEGREDO so aparecia como 500 no meio do cadastro.
+    Sem isso, a falta do JWT_SECRET so aparecia como 500 no meio do cadastro.
 
     Yields:
         controle para a aplicacao rodar.
