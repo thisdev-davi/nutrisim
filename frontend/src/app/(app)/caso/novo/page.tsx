@@ -175,7 +175,7 @@ export default function NovoCasoPage() {
                     </>
                   ) : (
                     <>
-                      <Sparkle size={16} strokeWidth={1.5} aria-hidden className="transition-colors group-hover:text-accent-inverse" />
+                      <Sparkle size={16} strokeWidth={1.5} aria-hidden className="transition-colors group-hover:group-enabled:text-accent-inverse" />
                       Gerar paciente e iniciar
                     </>
                   )}

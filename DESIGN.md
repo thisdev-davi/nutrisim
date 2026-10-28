@@ -23,7 +23,7 @@ Identidade visual e componentes da interface do NutriSim. Este arquivo é a font
 
 ## Princípios
 
-A interface tem que passar rigor clínico com cara de ferramenta moderna: escura, precisa e sem enfeite. A referência de linguagem é o site do Neon, com fundo preto puro, cinzas frios, bordas finas, títulos leves com tracking bem negativo, ação sempre em pílula, rótulos de seção em mono caixa-alta e um único acento usado como assinatura. O grid decorativo e as animações de vitrine ficaram de fora porque não cabem num app clínico.
+A interface tem que passar rigor clínico com cara de ferramenta moderna: escura, precisa e sem enfeite. A referência de linguagem é o console do Neon (o app, não o site de marketing): conteúdo em preto puro dentro de uma moldura um tom acima, bordas finas, cantos quase retos, controles compactos, títulos pequenos com peso, três tons de texto, rótulos de seção em mono caixa-alta e um único acento usado como assinatura. O refinamento vem da densidade e da hierarquia por peso e tom, não de enfeite. O grid decorativo e as animações de vitrine do site ficaram de fora porque não cabem num app clínico.
 
 ### A regra que define o sistema
 
@@ -50,7 +50,7 @@ Nunca coloque um número calculado dentro do balão do paciente.
 
 O tema **escuro é a base** e vem primeiro. O claro usa os mesmos nomes de token. O app segue o tema do sistema operacional. No escuro, os neutros são cinzas frios sobre preto puro; no claro, zinc.
 
-O lima (`accent`) é o recurso mais escasso do sistema e funciona como assinatura. Ele só aparece no badge de IA, no anel de foco, no segmento atual da barra de progresso e na etapa atual. Nunca vai em botão: o primário é uma pílula em `fg`. Navegação ativa e aba ativa usam `fg`, nunca o lima. Os estados têm paleta própria e nunca usam o lima. Todo estado vem com ícone e texto, nunca só com cor.
+O lima (`accent`) é o recurso mais escasso do sistema e funciona como assinatura. Ele só aparece no badge de IA, no anel de foco, no segmento atual da barra de progresso, na etapa atual, no hover de dois ícones (o de IA dentro de um botão e o do item da barra lateral) e no pontilhado das telas de passagem. Nunca vai no fundo de botão: o primário é preenchido em `fg`. Navegação ativa e aba ativa usam `fg`, nunca o lima. Os estados têm paleta própria e nunca usam o lima. Todo estado vem com ícone e texto, nunca só com cor.
 
 ### Neutros
 
@@ -59,11 +59,16 @@ O lima (`accent`) é o recurso mais escasso do sistema e funciona como assinatur
 | `bg` | Fundo da página |
 | `surface` | Cards, painéis, campos de formulário, balão do paciente |
 | `surface-raised` | Balão do estudante, hover de botão fantasma, trilho da barra de adesão |
-| `surface-hover` | Fundo leve do hover e do item ativo na barra lateral |
+| `surface-hover` | Hover e item ativo da barra lateral. Visível sobre `chrome` e `bg` |
+| `chrome` | Moldura do app: fundo da Sidebar, da Appbar e do cabeçalho de tabela |
 | `line` | Bordas de 1px entre áreas e em cards. Separa sem sombra. É decorativa e não marca controles |
 | `line-strong` | Borda de controles (input, select, botão secundário). Contraste de 3:1 sobre `bg`, `surface` e `surface-raised` |
-| `fg` | Texto principal sobre `bg`, `surface` e `surface-raised`, e preenchimento do botão primário |
-| `fg-muted` | Texto secundário, metadados, placeholders. 4.5:1 sobre `bg`, `surface` e `surface-raised` |
+| `fg` | Texto principal: títulos, item ativo, dado em destaque. Também o preenchimento do botão primário |
+| `fg-secondary` | Texto de apoio: itens da lateral, descrições, valores da PropertyList |
+| `fg-muted` | Rótulos, metadados, trilha, placeholders. 4.5:1 sobre `bg`, `surface`, `surface-raised` e `chrome` |
+| `glow` | Brilho do acento a 3% no canto do conteúdo, só no escuro. Quase invisível de propósito |
+
+São três tons de texto. A hierarquia vem do tom e do peso, não do tamanho: uma lista com tudo em `fg-muted` achata, e uma com tudo em `fg` grita.
 
 ### Acento (lima)
 
@@ -72,6 +77,7 @@ O lima (`accent`) é o recurso mais escasso do sistema e funciona como assinatur
 | `accent` | Badge de IA, foco, segmento atual do progresso e etapa atual. Nunca em botão. Como texto, só sobre `bg`, `surface` ou `accent-soft` |
 | `accent-hover` | Hover de um elemento lima interativo. O botão primário não usa |
 | `accent-soft` | Fundo tingido atrás de texto `accent` |
+| `accent-inverse` | O lima do tema oposto, para o ícone de IA sobre o primário (fundo `fg`): escuro no tema escuro, claro no claro |
 | `on-accent` | Texto e ícone sobre preenchimento `accent` (número da etapa atual) |
 | `focus` | Anel de foco do teclado |
 
@@ -96,7 +102,7 @@ O sistema usa duas famílias, ambas do Google Fonts (no Next, via `next/font/goo
 
 | Família | Token | Papel | Pesos |
 |---|---|---|---|
-| **Geist** | `sans` e `display` | Toda a interface e o texto corrido; em peso 400 e tracking bem negativo, os títulos (`display-xl`, `h1`, `h2`) | 400, 500, 600 |
+| **Geist** | `sans` e `display` | Toda a interface, os títulos e o texto corrido. Só o `display-xl` da landing usa peso 400 com tracking bem negativo | 400, 500, 600 |
 | **Geist Mono** | `mono` | Dados do motor, horários, metadados e os rótulos de seção (`eyebrow`) | 400, 500 |
 
 Pilhas de fallback:
@@ -112,8 +118,8 @@ Pilhas de fallback:
 | Estilo | Família | Tamanho / altura de linha | Peso | Tracking | Uso |
 |---|---|---|---|---|---|
 | `display-xl` | display | 56 / 63px | 400 | -0.04em | Título da landing, uma vez por página |
-| `h1` | display | 40 / 45px | 400 | -0.04em | Título da página. Pode ter dois tons: a segunda frase em `fg-muted` |
-| `h2` | display | 28 / 34px | 400 | -0.03em | Título da etapa e de seção grande |
+| `h1` | display | 28 / 34px | 500 | -0.02em | Título da página. Pode ter dois tons: a segunda frase em `fg-muted` |
+| `h2` | display | 22 / 28px | 500 | -0.015em | Título da etapa e de seção grande |
 | `h3` | sans | 18 / 26px | 600 | 0 | Título de card e de grupo |
 | `body` | sans | 15 / 24px | 400 | 0 | Texto corrido e mensagens do chat |
 | `body-sm` | sans | 13 / 20px | 400 | 0 | Ajuda de campo, legenda |
@@ -125,7 +131,7 @@ Pilhas de fallback:
 
 Os títulos de seção e de grupo ("Sessões recentes", "Em andamento", "Queixa principal") são `eyebrow`: Geist Mono em caixa alta e `fg-muted`. Legenda, trilha e rótulo de campo continuam em Geist. Só o `eyebrow` usa caixa alta.
 
-O texto da interface tem tracking de -0.01em, definido no `body`; o `eyebrow` abre para 0.04em. No celular, o `h1` cai para 28/32px com -0.03em.
+O texto da interface tem tracking de -0.01em, definido no `body`; o `eyebrow` abre para 0.04em. No celular, o `h1` cai para 24/30px. Num app, título pequeno com peso passa mais precisão que título grande e leve, que é linguagem de landing.
 
 Todo número do motor usa `font-variant-numeric: tabular-nums` para alinhar em colunas. O texto do corpo da página é `body` (15/24) sobre `bg` em `fg`.
 
@@ -152,12 +158,12 @@ O card padrão tem `space-6` de padding, `space-4` entre elementos e `space-8` e
 
 | Token | Uso |
 |---|---|
-| `radius-md` (8px) | Inputs, selects, itens de menu e alertas |
-| `radius-lg` (8px) | Cards, painéis, listas e cartões de opção |
+| `radius-md` (6px) | Botões, inputs, selects, itens de menu e alertas |
+| `radius-lg` (8px) | Cards, painéis, listas, cartões de opção e o canto da moldura do conteúdo |
 | `radius-xl` (20px) | Composer do chat, que cresce com o texto |
-| `radius-pill` | Botões, badges, chips e avatares |
+| `radius-pill` | Badges, chips e avatares |
 
-A ação é sempre pílula e o container é quase reto. O balão do chat é a exceção, com 14px e o canto do rabicho em 4px.
+Controle e container são quase retos; a pílula fica só no que é rótulo (badge) ou pessoa (avatar). O balão do chat é a exceção, com 14px e o canto do rabicho em 4px.
 
 ### Borda, não sombra
 
@@ -166,6 +172,17 @@ As áreas se separam pela borda `line` (1px) e pelo contraste de `surface` sobre
 | Token | Uso |
 |---|---|
 | `shadow-overlay` | Menus, popovers e diálogos. Nunca em cards |
+
+### Pontilhado
+
+Malha de pontos lima que some a partir de dois cantos opostos. É a marca nas telas **de passagem**, com pouco conteúdo e sem dado clínico: login, estado vazio, espera da IA ("Gerando paciente…") e erro/404. Nunca em tela de trabalho (anamnese, plano, cenários, feedback, tabelas); lá o `glow` faz esse papel.
+
+| Parte | Especificação |
+|---|---|
+| Pontos | `radial-gradient(circle, var(--accent) 1.2px, transparent 1.8px)` em grade de 7 × 7px |
+| Máscara | `radial-gradient(120% 70% at 0 0, #000, transparent 60%)` + `radial-gradient(110% 60% at 100% 100%, #000, transparent 60%)` |
+| Opacidade | .5 no escuro, .28 no claro (o lima escurece e pesaria no branco) |
+| Camada | `position: absolute; inset: 0; z-index: -1; pointer-events: none`, com `aria-hidden`; o container tem `overflow: hidden` e `isolation: isolate` |
 
 ## Movimento
 
@@ -188,6 +205,10 @@ O movimento se limita ao necessário: transições de 150ms em hover (cor de fun
 | Lápis | `Pencil` | Editar refeição |
 | Mais | `Plus` | Adicionar refeição, Nova sessão |
 | Info | `Info` | Dica em formulário |
+| Info pequeno | `Info` (14px) | InfoHint, ao lado de um termo técnico |
+| Copiar | `Copy` | Copiar ID ou código num campo só de leitura |
+| Reticências | `EllipsisVertical` | Ações secundárias da linha de tabela |
+| Lupa | `Search` | Busca da tabela |
 | Check, triângulo, círculo | `Check`, `TriangleAlert`, `CircleAlert` | Badges de sucesso, atenção e erro; etapa concluída |
 | Casa, relógio | `House`, `History` | Início e Histórico na barra lateral |
 | Estetoscópio | `Stethoscope` | Sessão em andamento na barra lateral |
@@ -218,7 +239,7 @@ Os SVGs estão na vitrine, no grupo Logos.
 ## Acessibilidade
 
 - O texto tem contraste de 4.5:1 sobre o fundo em que é usado, nos dois temas. Bordas de controle, foco e ícones têm 3:1.
-- Alvo de toque mínimo de 44px (botão padrão, aba, campo).
+- Alvo de toque de 44px no celular (botão, aba, campo). No desktop, botão e campo têm 36px e o `--sm` 32px, acima dos 24px do AA da WCAG 2.2.
 - Foco visível em tudo: anel de 2px em `focus`, afastado 2px do elemento. Nos campos o afastamento é 0 e a borda some.
 - Chat como `role="log"`, abas no padrão tablist e barra de adesão como `role="meter"`.
 - Estado nunca é só cor: sempre ícone e texto.
@@ -230,7 +251,7 @@ Todos os componentes são HTML e CSS com classes `ns-*`, sem JS próprio. Os val
 
 ### Button
 
-Botão de ação, sempre em pílula. `primary` é para a única ação principal da tela, `secondary` para as demais e `ghost` para ações de baixo peso.
+Botão de ação, retangular com `radius-md`. `primary` é para a única ação principal da tela, `secondary` para as demais e `ghost` para ações de baixo peso.
 
 **Anatomia:** `button.ns-btn` (ou `a.ns-btn`) com ícone opcional e rótulo.
 
@@ -242,12 +263,13 @@ Botão de ação, sempre em pílula. `primary` é para a única ação principal
 
 | Tamanho | Altura | Padding horizontal | Fonte |
 |---|---|---|---|
-| padrão | 44px | `space-4` (16px) | Geist 500, 14px |
-| `--sm` | 36px | 14px | Geist 500, 13px |
-| `--icon` | 44px (36px com `--sm`) | 0, botão redondo | só ícone |
+| padrão | 36px (44px abaixo de 768px) | `space-4` (16px) | Geist 500, 14px |
+| `--sm` | 32px | `space-3` (12px) | Geist 500, 13px |
+| `--icon` | quadrado da altura do tamanho | 0 | só ícone |
 
-- **Geral:** raio `radius-pill`, gap de `space-2` entre ícone (16px) e rótulo, `white-space: nowrap` e transição de 150ms.
+- **Geral:** raio `radius-md`, gap de `space-2` entre ícone (16px) e rótulo, `white-space: nowrap` e transição de 150ms.
 - **Disabled:** opacidade .45 e `cursor: not-allowed`.
+- **Ícone de IA (`Sparkle`) no botão:** fica lima no hover do botão (`accent`; no primário, `accent-inverse`). Os outros ícones de botão seguem a cor do texto.
 - **Um primário por tela.** Se dois botões pedem destaque, um deles é secundário.
 - **A lima não vai em botão.** Ela é a assinatura (IA, foco, progresso), e o primário se destaca pelo contraste do `fg`.
 - `--sm` só em barras densas no desktop.
@@ -264,7 +286,7 @@ Campo de texto com rótulo visível, ajuda opcional e mensagem de erro. A varian
 |---|---|
 | Campo | `ns-field`: coluna com gap de 6px |
 | Rótulo | `label` (Geist 500, 13/16px), cor `fg` |
-| Caixa | altura 44px, padding horizontal `space-3`, borda 1px `line-strong`, raio `radius-md`, fundo `surface`, texto `fg` em `body` (15/24px) |
+| Caixa | altura 36px (44px abaixo de 768px), padding horizontal `space-3`, borda 1px `line-strong`, raio `radius-md`, fundo `surface`, texto `fg` em `body` (15/24px) |
 | Placeholder | `fg-muted` |
 | Ajuda | `body-sm` (13/20px), `fg-muted` |
 | Erro | `body-sm`, `danger`, ícone de 16px com gap `space-1` |
@@ -277,6 +299,7 @@ Campo de texto com rótulo visível, ajuda opcional e mensagem de erro. A varian
 | erro | `ns-field--error`: borda `danger` no input, select ou textarea |
 
 - Sempre `<label for>` visível. O placeholder é exemplo, nunca o rótulo.
+- **Só leitura** (`readonly`, dado gerado pela IA ou ID): fundo `surface-raised`, borda `line`, texto `fg-secondary`. O fundo cheio diz "não editável" antes de a pessoa tentar. ID e código vão em Geist Mono com botão de copiar (ghost `--sm --icon`, `Copy`) dentro da caixa, à direita.
 - Valores numéricos (peso, gramas, kcal) usam `ns-num` (Geist Mono, tabular) e o `inputmode` adequado.
 - No erro, coloque `aria-invalid="true"` e um `aria-describedby` que aponte para o `ns-error`. A mensagem diz como corrigir.
 
@@ -287,7 +310,7 @@ Lista de opções sobre o `<select>` nativo, com a mesma caixa do Input e um che
 **Anatomia:** `div.ns-select-wrap` (relativo) > `select.ns-select` + `svg.ns-icon` (chevron).
 
 - **Caixa:** igual ao Input, com `appearance: none`, `padding-right: 40px` e `cursor: pointer`.
-- **Chevron:** 16px, cor `fg-muted`, posição absoluta (`right: space-3`, `top: 14px`) e `pointer-events: none`.
+- **Chevron:** 16px, cor `fg-muted`, posição absoluta (`right: space-3`, centralizado na vertical) e `pointer-events: none`.
 - **Hover e foco:** iguais ao Input.
 - É nativo de propósito: teclado, leitor de tela e o seletor do celular vêm de graça. Só troque por um menu próprio se precisar de busca (ex.: alimentos da TACO).
 - Os filtros do histórico (Patologia, Dificuldade, Data) usam este mesmo componente.
@@ -527,13 +550,13 @@ aside.ns-sidebar (.ns-sidebar--collapsed)
 
 | Parte | Especificação |
 |---|---|
-| Barra | 240px, fundo `bg`, borda direita `line` |
-| Topo | altura 56px (alinha com a Appbar), padding esquerdo 20px, borda inferior `line`; logo de 20px |
+| Barra | 240px, fundo `chrome`, sem borda: a separação vem da moldura do conteúdo |
+| Topo | altura 56px (alinha com a Appbar), padding esquerdo 20px; logo de 20px |
 | Corpo | coluna com gap `space-8` entre os grupos, padding `20px space-3` |
 | Nova sessão | botão secundário `--sm` de largura total, ícone `Plus`; na tela de nova sessão, `aria-current="page"` e fundo `surface-raised` |
 | Título de grupo | `eyebrow` em 11/16px: Geist Mono 500, caixa alta, `fg-muted` ("EM ANDAMENTO") |
-| Item | altura mínima 32px, padding `0 10px`, gap 10px, raio `radius-md`, Geist 400 14/20px, `fg-muted` |
-| hover | fundo `surface-hover`, texto `fg` |
+| Item | altura mínima 32px, padding `0 10px`, gap 10px, raio `radius-md`, Geist 400 14/20px, `fg-secondary` |
+| hover | fundo `surface-hover`, texto `fg` e ícone `accent` |
 | ativo (`aria-current="page"`) | fundo `surface-hover`, texto `fg`, peso 500 |
 | Sessão em andamento | ícone `Stethoscope`, nome do paciente e a etapa em Geist 12/16px `fg-muted` ("Etapa 3 de 5 · Plano alimentar") |
 | Recolhida (`--collapsed`) | 64px, só ícones em botões de 40px, logo vira o símbolo |
@@ -560,10 +583,10 @@ Barra do topo, sempre visível ao lado da Sidebar: onde a pessoa está, à esque
 
 | Parte | Especificação |
 |---|---|
-| Barra | altura 56px, padding `0 space-4 0 space-3`, borda inferior `line`, fundo `bg` |
+| Barra | altura 56px, padding `0 space-4 0 space-3`, fundo `chrome`, sem borda |
 | Trilha | Geist 400 14/20px `fg-muted`, separador "/" em `line-strong`, item atual em `fg` com `aria-current="page"` |
 | Tema | `Moon` no escuro ("Usar tema claro"), `Sun` no claro ("Usar tema escuro") |
-| Conta | `ns-avatar-btn` de 36px com avatar de 28px e `aria-haspopup="menu"`; o menu tem Perfil e Sair |
+| Conta | `ns-avatar-btn` de 32px com avatar de 28px e `aria-haspopup="menu"`; o menu tem Perfil e Sair |
 | Celular | padding `0 space-2`, botões de 44px, sem trilha |
 
 - A trilha diz onde a pessoa está: "Início / Nova sessão" numa página comum e "Início / João, 45 anos" na sessão. No Início ela some, porque o título já diz onde a pessoa está.
@@ -617,12 +640,99 @@ Painel da consulta à direita: guarda a conversa e as anotações para o estudan
 - Abaixo de 1024px vira gaveta à direita, e no celular ocupa a tela toda, aberta pelos dois ícones ao lado do título da etapa.
 - As anotações salvam sozinhas, e o rodapé diz quando foi a última vez.
 
+### PropertyList
+
+Pares de rótulo e valor, em grupos que recolhem. É a ficha do paciente: idade, sexo, peso, altura, IMC, diagnóstico, atividade.
+
+**Anatomia:** `section.ns-props` > `details.ns-props__group[open]` > `summary` (título + `ChevronDown`) + `dl` > (`dt` + `dd`)…
+
+| Parte | Especificação |
+|---|---|
+| Grupo | padding `space-4 0`, borda inferior `line`; o último sem borda |
+| Título do grupo | Geist 500 15/24px, `fg`, chevron de 16px em `fg-muted` que gira 180° fechado |
+| Linha | grade `112px 1fr`, gap `space-3`, altura mínima 26px, Geist 13/20px |
+| Rótulo (`dt`) | `fg-muted` |
+| Valor (`dd`) | `fg-secondary`; número do motor em `ns-num`; link no estilo `ns-link` |
+
+- Sem card: os grupos se separam só pela divisória.
+- `details`/`summary` nativos: abrir e fechar funciona no teclado e no leitor de tela sem JS.
+- O valor que a IA gerou não leva badge por linha. O badge de IA vai uma vez, no título do bloco.
+
+### Table
+
+Lista de registros com colunas: o Histórico e a busca na TACO.
+
+**Anatomia:** `div.ns-table-head` (`h2` com a contagem + busca) + `table.ns-table` > `thead` + `tbody` > `tr` > `td`…
+
+| Parte | Especificação |
+|---|---|
+| Título | `h3` com a contagem no texto: "12 sessões" |
+| Busca | Input de largura total com `Search` de 16px à esquerda, logo abaixo do título, gap `space-3` |
+| Cabeçalho (`th`) | fundo `chrome`, Geist 600 13/20px, `fg`, padding `space-3 space-4`, alinhado à esquerda (número à direita) |
+| Linha | altura 46px, borda inferior `line`, Geist 14/20px; a primeira coluna em 500 `fg`, as demais em `fg-secondary` |
+| Número | `ns-num`, alinhado à direita |
+| Ação da linha | ghost `--sm --icon` com `EllipsisVertical` na última coluna, `aria-label` com o nome da linha |
+| hover (linha que é link) | fundo `surface-hover` |
+
+- O `thead` aparece sempre, inclusive carregando: a página não pula quando os dados chegam.
+- Sem resultado na busca: uma linha só, centralizada em `fg-muted`, dizendo o que buscar ("Nenhuma sessão com \"Maria\". Busque pelo nome do paciente.").
+- Abaixo de 768px a tabela vira lista: cada linha é um bloco com a primeira coluna em cima e as outras em `body-sm`.
+
+### StatStrip
+
+Faixa de números do motor lado a lado. É o resumo do plano: kcal, proteína, carboidrato e gordura contra a meta.
+
+**Anatomia:** `div.ns-stats` > `dl.ns-stats__grid` > `div` > (`dt` + `dd`)… + `p.ns-stats__note`.
+
+| Parte | Especificação |
+|---|---|
+| Caixa | Card com padding `space-6` |
+| Grade | colunas iguais (até 4) com gap `space-6`; 2 colunas abaixo de 768px |
+| Rótulo (`dt`) | Geist 600 13/20px, `fg`, com InfoHint quando o termo precisa de explicação |
+| Valor (`dd`) | número em Geist Mono 500 24/28px `fg` e a unidade em Geist 400 15px `fg-muted`, separados por espaço: **1 850** kcal |
+| Meta | Geist Mono 13/20px `fg-muted` embaixo do valor: "meta 2 157" |
+| Nota | `body-sm` `fg-muted` embaixo da grade, com a fonte do dado: "Valores da TACO, 4ª edição." |
+
+- O peso diferente entre número e unidade é o detalhe: o olho lê o número primeiro.
+- O estado (acima ou abaixo da meta) vem em Badge ao lado da meta, nunca só pela cor do número.
+
+### InfoHint
+
+Explicação curta de um termo técnico (GET, fator atividade, % de adequação), ao lado do rótulo.
+
+**Anatomia:** `button.ns-hint[aria-describedby]` com `Info` de 14px + `div.ns-hint__pop[role=tooltip]`.
+
+| Parte | Especificação |
+|---|---|
+| Botão | 14px de ícone em `fg-muted`, área clicável de 24px, hover `fg` |
+| Balão | largura máxima 240px, padding `space-2 space-3`, `body-sm` `fg`, fundo `surface-raised`, borda `line`, raio `radius-md`, `shadow-overlay` |
+
+- Abre no hover e no foco, fecha no Esc. No toque, abre e fecha no clique.
+- Uma ou duas frases. Se precisar de mais, é texto da página, não dica.
+
+### PageToc
+
+Índice das seções de uma página longa, à direita. É o feedback da sessão (avaliação do plano, adesão, pontos a melhorar).
+
+**Anatomia:** `nav.ns-toc[aria-label="Nesta página"]` > `ol` > `li` > `a`.
+
+| Parte | Especificação |
+|---|---|
+| Coluna | 200px, `position: sticky` no topo, a partir de 1280px; abaixo disso some |
+| Trilho | borda esquerda 1px `line` |
+| Item | padding `space-1 space-3`, Geist 500 13/20px, `fg-muted`, hover `fg` |
+| Atual (`aria-current="true"`) | texto `fg` e barra de 2px em `fg` sobre o trilho (`margin-left: -1px`) |
+
+- A barra do atual usa `fg`, não o lima: na sessão o Stepper já marca a etapa atual em lima, e dois sinais de "você está aqui" em lima competem.
+- O item atual acompanha a rolagem com `IntersectionObserver`; sem JS, os links continuam levando à seção.
+
 ### Utilitários
 
 | Classe | O que faz |
 |---|---|
 | `ns-num` | Geist Mono com `tabular-nums`, para qualquer número do motor |
 | `ns-eyebrow` | estilo `eyebrow` (Geist Mono 500 12/16px, 0.04em, caixa alta, `fg-muted`), para título de seção e rótulo de dado |
+| `ns-link` | link no texto: `fg`, Geist 500, sublinhado de 1px com `text-underline-offset: 3px`; hover tira o sublinhado. Sem cor de acento |
 | `ns-icon` | 16 × 16px, sem preenchimento, traço `currentColor` de 1,5px com pontas arredondadas |
 | `ns-sr` | esconde só da vista; o leitor de tela continua lendo (rótulos escondidos, "(concluída)") |
 | `[hidden]` | `display: none !important`, para o atributo `hidden` vencer o `display` dos componentes |
@@ -636,14 +746,15 @@ As telas ficam no canvas de telas (link no topo), em tamanho real. São a prova 
 
 Toda tela usa uma de duas estruturas. No canvas, a linha "Tela 1 · Estrutura do app".
 
+- **Moldura:** a Sidebar e a Appbar formam um L em `chrome`. O conteúdo (`main.ns-main`) fica dentro dele em `bg`, com borda `line` em cima e à esquerda, raio `radius-lg` no canto superior esquerdo e o `glow` no fundo (`radial-gradient(600px circle at 0 0, var(--glow), transparent)`, sobre `bg`). No celular não há moldura: a Appbar fica em `chrome` com borda inferior `line` e o conteúdo ocupa a largura toda.
 - **Página comum** (Início, Histórico, Nova sessão): Appbar e Sidebar expandida. O conteúdo tem largura máxima de 960px, centralizado na área que sobra, com padding `40px 40px space-16` e gap de 40px entre blocos.
 - **Sessão** (etapas 2 a 5): Sidebar recolhida, Appbar com a trilha, o cabeçalho da sessão e, embaixo, o conteúdo da etapa (padding `space-8`), com o SidePanel ou a faixa dele à direita.
-- **Cabeçalho da sessão** (`ns-session-head`): padding `28px space-8 space-6`, gap `space-6`, borda inferior `line`. Em cima, o Stepper. Embaixo, o título da etapa como `h2` (display 400 28/34px, "Plano alimentar"), a meta em Geist 14/20px `fg-muted` ("Diabetes tipo 2 · Dificuldade média") e, na ponta direita e centralizado com o título, o primário da etapa em `--sm`. O nome do paciente fica na trilha e o badge de IA fica na aba Conversa.
+- **Cabeçalho da sessão** (`ns-session-head`): padding `28px space-8 space-6`, gap `space-6`, borda inferior `line`. Em cima, o Stepper. Embaixo, o título da etapa como `h2` (display 500 22/28px, "Plano alimentar"), a meta em Geist 14/20px `fg-muted` ("Diabetes tipo 2 · Dificuldade média") e, na ponta direita e centralizado com o título, o primário da etapa em `--sm`. O nome do paciente fica na trilha e o badge de IA fica na aba Conversa.
 - **Etapa sem título (anamnese):** o cabeçalho é só o Stepper (`ns-session-head--steps`, padding `space-4 space-8`), e o primário fica na ponta direita da mesma linha. Se não couber, ele desce para a linha de baixo e continua à direita.
 - **A ação principal é um verbo curto com o que vem depois, seguido de `ArrowRight`:** "Montar o plano" (anamnese), "Gerar cenários" (plano), "Ir para o retorno" (cenários). No desktop fica no cabeçalho da sessão, nunca na Appbar. No celular vai numa barra fixa embaixo (`ns-actionbar`: padding `space-3 space-4`, borda superior `line`, botão de largura total), exceto na anamnese, em que o composer ocupa o rodapé e a ação fica na faixa logo abaixo do Stepper.
 - A dificuldade é texto na meta, não badge: as cores de estado ficam só para estado.
 - **Início:** sem trilha. Título em dois tons ("Olá, Ana. Retome o João ou comece um paciente novo.") com o secundário "Nova sessão" ao lado, o card "Continuar de onde parou" (paciente, etapa com a barra de 5 segmentos e o primário "Continuar sessão") e a lista "Sessões recentes", em que a linha inteira é o link para o feedback (paciente, perfil, dificuldade, data em mono e "Ver feedback"), com o link "Ver histórico". Os títulos das seções são `eyebrow`. O estado vazio sai na tela 9.
-- **Celular (360px):** Appbar com menu, logo, tema e conta. Na sessão vêm o Stepper compacto, o título da etapa (display 400 20/28px), a meta com o nome do paciente, os dois ícones do painel e a barra de ação embaixo.
+- **Celular (360px):** Appbar com menu, logo, tema e conta. Na sessão vêm o Stepper compacto, o título da etapa (display 500 20/28px), a meta com o nome do paciente, os dois ícones do painel e a barra de ação embaixo.
 
 ### Configurar novo paciente (etapa 1)
 
@@ -680,6 +791,6 @@ Para o `frontend/src/app/globals.css`. O `next-themes` está com `attribute="cla
 O bloco `@theme inline` expõe esses valores ao Tailwind, e o mesmo arquivo define o anel de foco global (`:focus-visible`) e o texto base do `body` (15/24).
 
 
-Com isso, as classes saem com os nomes dos tokens: `bg-bg`, `bg-surface`, `bg-surface-raised`, `bg-surface-hover`, `border-line`, `border-line-strong`, `text-fg`, `text-fg-muted`, `bg-accent`, `text-on-accent`, `bg-success-soft`, `text-danger`, `outline-focus`, `font-display`, `font-mono`, `rounded-md`, `rounded-lg`, `rounded-xl`, `rounded-pill` e `shadow-overlay`. O espaçamento já é a escala padrão do Tailwind (`p-4` = 16px, `gap-6` = 24px). Não é preciso redefinir.
+Com isso, as classes saem com os nomes dos tokens: `bg-bg`, `bg-surface`, `bg-surface-raised`, `bg-surface-hover`, `bg-chrome`, `border-line`, `border-line-strong`, `text-fg`, `text-fg-secondary`, `text-fg-muted`, `bg-accent`, `text-on-accent`, `bg-success-soft`, `text-danger`, `outline-focus`, `font-display`, `font-mono`, `rounded-md`, `rounded-lg`, `rounded-xl`, `rounded-pill` e `shadow-overlay`. O espaçamento já é a escala padrão do Tailwind (`p-4` = 16px, `gap-6` = 24px). Não é preciso redefinir.
 
 As fontes entram pelo `next/font/google` no `layout.tsx`: `Geist` (`--font-geist-sans`, que também é o `display`) e `Geist_Mono` (`--font-geist-mono`).
