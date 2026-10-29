@@ -14,8 +14,9 @@ interface Usuario {
 interface AuthContextType {
   usuario: Usuario | null;
   carregando: boolean;
-  login: (dados: { email: string; senha: string }, redirectTo?: string) => Promise<void>;
-  cadastro: (dados: { nome: string; email: string; senha: string }, redirectTo?: string) => Promise<void>;
+  // so guardam a sessao: quem chama mostra o sucesso e navega
+  login: (dados: { email: string; senha: string }) => Promise<void>;
+  cadastro: (dados: { nome: string; email: string; senha: string }) => Promise<void>;
   logout: () => void;
 }
 
@@ -34,31 +35,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           setUsuario(await api<Usuario>("/auth/eu"));
         } catch {
-          logout();
+          // o 401 o api.ts ja trata, guardando o ?redirect=; falha de rede nao desloga
+          setUsuario(null);
         }
       }
       setCarregando(false);
     }
 
     carregarUsuario();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function login(credenciais: { email: string; senha: string }, redirectTo = "/caso/novo") {
+  async function login(credenciais: { email: string; senha: string }) {
     const data = await api<{ token: string; usuario: Usuario }>("/auth/login", { method: "POST", body: JSON.stringify(credenciais) });
     
-    // Guarda o token nos cookies por 7 dias
-    setCookie(COOKIE_TOKEN, data.token, { maxAge: 60 * 60 * 24 * 7, path: "/" });
+    // o cookie dura o mesmo que o token do backend (8 h)
+    setCookie(COOKIE_TOKEN, data.token, { maxAge: 60 * 60 * 8, path: "/" });
     setUsuario(data.usuario);
-    router.push(redirectTo);
   }
 
-  async function cadastro(dados: { nome: string; email: string; senha: string }, redirectTo = "/caso/novo") {
+  async function cadastro(dados: { nome: string; email: string; senha: string }) {
     const data = await api<{ token: string; usuario: Usuario }>("/auth/cadastro", { method: "POST", body: JSON.stringify(dados) });
     
-    setCookie(COOKIE_TOKEN, data.token, { maxAge: 60 * 60 * 24 * 7, path: "/" });
+    setCookie(COOKIE_TOKEN, data.token, { maxAge: 60 * 60 * 8, path: "/" });
     setUsuario(data.usuario);
-    router.push(redirectTo);
   }
 
   function logout() {
