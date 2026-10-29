@@ -420,9 +420,9 @@ O paciente responde só com o que conheceria: hábitos, sintomas, rotina e prefe
 - [ ] Saída do juiz em JSON validado
 
 ### NS-033 — Validar o juiz com vereditos rotulados à mão
-`area:eval` `tipo:teste` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Arthur (os quatro rotulam) · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** NS-032 · **Bloqueia:** NS-034
+`area:eval` `tipo:teste` · **Milestone:** Sprint 3 — Protótipo (C2) · **Responsável:** Arthur · **Prioridade:** P1 · **Tamanho:** M · **Depende de:** NS-032 · **Bloqueia:** NS-034
 
-- [ ] Amostra de 50 vereditos rotulada pela equipe sem ver a classificação do juiz
+- [ ] Amostra de 30 vereditos rotulada à mão sem ver a classificação do juiz (os 50 rotulados pela equipe ficam para a NS-064)
 - [ ] Taxa de acerto do juiz calculada (meta: pelo menos 85%)
 - [ ] Se ficar abaixo da meta, prompt do juiz ajustado e acerto medido de novo
 - [ ] Rótulos e resultado salvos em `evals/juiz/`
@@ -700,6 +700,7 @@ Sai antes da Sprint 5 para dar tempo ao professor de revisar.
 - [ ] Todas as métricas do Quadro 3 medidas na versão final dos prompts
 - [ ] Comparação com a primeira rodada: o que melhorou, o que piorou e por quê
 - [ ] Custo total em tokens das rodadas registrado
+- [ ] Juiz validado de novo com 50 vereditos rotulados pela equipe (os quatro rotulam), sem ver a classificação do juiz, e rejulgamento repetido mais de uma vez
 - [ ] Resultados em `evals/resultados/`, com resumo na documentação
 
 ### NS-065 — Analisar o impacto

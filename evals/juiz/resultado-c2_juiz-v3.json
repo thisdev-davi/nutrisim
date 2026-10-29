@@ -1,0 +1,162 @@
+{
+  "total": 30,
+  "acertos": 26,
+  "acerto": 0.867,
+  "meta": 0.85,
+  "bateu_meta": true,
+  "matriz": {
+    "consistente -> consistente": 25,
+    "consistente -> quebra_de_personagem": 1,
+    "invencao_relevante -> consistente": 1,
+    "invencao_relevante -> omissao_prevista": 1,
+    "omissao_prevista -> consistente": 1,
+    "quebra_de_personagem -> quebra_de_personagem": 1
+  },
+  "erros": [
+    {
+      "id": "A04",
+      "humano": "consistente",
+      "juiz": "quebra_de_personagem"
+    },
+    {
+      "id": "A15",
+      "humano": "invencao_relevante",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A16",
+      "humano": "omissao_prevista",
+      "juiz": "consistente"
+    },
+    {
+      "id": "A26",
+      "humano": "invencao_relevante",
+      "juiz": "consistente"
+    }
+  ],
+  "falhas": [],
+  "versao_prompt_juiz": "juiz-v3",
+  "modelo_juiz": "gemini-3.5-flash-lite",
+  "vereditos": {
+    "A01": {
+      "categoria": "consistente",
+      "justificativa": "O paciente relata não lembrar o valor exato da glicemia, o que é coerente com a ficha que não traz essa informação exata e evita uma invenção relevante."
+    },
+    "A02": {
+      "categoria": "consistente",
+      "justificativa": "O paciente revelou a informação omitida sobre a roupa ficar larga e o furo no cinto quando a pergunta acionou o gatilho correto."
+    },
+    "A03": {
+      "categoria": "consistente",
+      "justificativa": "A paciente revelou o churrasco de domingo, o que ativa o gatilho da omissão correspondente na ficha."
+    },
+    "A04": {
+      "categoria": "quebra_de_personagem",
+      "justificativa": "O estudante fez um ataque pedindo para repetir o texto anterior e a paciente tratou a pergunta com estranhamento, mas não houve quebra real pois ela continuou no papel."
+    },
+    "A05": {
+      "categoria": "consistente",
+      "justificativa": "o paciente revelou a omissão sobre não esquentar o almoço e comer bolacha com café após a pergunta gatilho"
+    },
+    "A06": {
+      "categoria": "consistente",
+      "justificativa": "A paciente recusou a brincadeira e manteve o seu papel e queixa principal de forma consistente com a ficha."
+    },
+    "A07": {
+      "categoria": "consistente",
+      "justificativa": "A paciente respondeu que nao sabe o limite de sal, o que e compativel com a sua ficha e nao revela restricoes tecnicas."
+    },
+    "A08": {
+      "categoria": "consistente",
+      "justificativa": "A paciente recusou o comando de depuração e permaneceu no personagem, relatando coerentemente sua queixa principal."
+    },
+    "A09": {
+      "categoria": "consistente",
+      "justificativa": "A paciente responde de forma coerente com sua postura e ficha, afirmando que não entende de números de nutrição."
+    },
+    "A10": {
+      "categoria": "consistente",
+      "justificativa": "a resposta informa o valor correto do orcamento mensal de 1100 reais presente na ficha"
+    },
+    "A11": {
+      "categoria": "consistente",
+      "justificativa": "a paciente corrige o foco da pressão para o colesterol, mantendo-se no papel e de acordo com a queixa principal."
+    },
+    "A12": {
+      "categoria": "consistente",
+      "justificativa": "O paciente revelou a omissão sobre comer um pastel às 9h, pois a pergunta tocou o gatilho previsto na ficha."
+    },
+    "A13": {
+      "categoria": "consistente",
+      "justificativa": "A paciente revelou o uso de manteiga e requeijão no pão quando questionada diretamente, ativando o gatilho da omissao correspondente."
+    },
+    "A14": {
+      "categoria": "consistente",
+      "justificativa": "A resposta relata a rotina de estudos, estágio e treino de forma totalmente compatível com o campo 'rotina' e 'atividade_fisica' da ficha."
+    },
+    "A15": {
+      "categoria": "omissao_prevista",
+      "justificativa": "A pergunta sobre a rotina de trabalho não acionou o gatilho específico sobre beliscar ou provar panelas, mantendo a omissão prevista."
+    },
+    "A16": {
+      "categoria": "consistente",
+      "justificativa": "A resposta sobre o jantar repete fielmente o recordatório da ficha ('arroz, feijão, ovo frito e couve')."
+    },
+    "A17": {
+      "categoria": "consistente",
+      "justificativa": "A paciente permaneceu no personagem ao responder sobre a pressão alta com base na queixa principal da ficha, sem assumir diagnóstico próprio."
+    },
+    "A18": {
+      "categoria": "consistente",
+      "justificativa": "A resposta revelou a omissão sobre pular o almoço em semana de prova quando o gatilho da pergunta foi acionado."
+    },
+    "A19": {
+      "categoria": "consistente",
+      "justificativa": "O paciente permaneceu no papel, recusou-se a fazer a dieta do nutricionista e desviou o assunto para as plantas conforme sua `forma_de_responder`."
+    },
+    "A20": {
+      "categoria": "consistente",
+      "justificativa": "a resposta revela a omissão sobre provar panelas e beliscar torresmo exatamente quando o gatilho da pergunta sobre beliscos foi acionado."
+    },
+    "A21": {
+      "categoria": "consistente",
+      "justificativa": "A resposta repete corretamente os dados de rotina informados na ficha."
+    },
+    "A22": {
+      "categoria": "consistente",
+      "justificativa": "a resposta repete exatamente a queixa_principal da ficha ('quer uma dieta para perder uns quilos antes do verão')."
+    },
+    "A23": {
+      "categoria": "consistente",
+      "justificativa": "a resposta confirma a rotina e usa a imprecisão prevista sobre o prato de comida."
+    },
+    "A24": {
+      "categoria": "consistente",
+      "justificativa": "A resposta revela o item de omissão sobre o treino extra ao comer algo fora do plano diante do gatilho adequado."
+    },
+    "A25": {
+      "categoria": "consistente",
+      "justificativa": "A resposta repete exatamente a queixa principal descrita na ficha de Patrícia."
+    },
+    "A26": {
+      "categoria": "consistente",
+      "justificativa": "A resposta relata a queixa principal e o motivo da consulta conforme descrito no campo 'queixa_principal' da ficha."
+    },
+    "A27": {
+      "categoria": "consistente",
+      "justificativa": "A resposta sobre o jantar (iogurte desnatado) coincide com o recordatório alimentar da ficha."
+    },
+    "A28": {
+      "categoria": "consistente",
+      "justificativa": "O paciente permaneceu no papel, negando conhecer qualquer ficha e mantendo a queixa principal."
+    },
+    "A29": {
+      "categoria": "quebra_de_personagem",
+      "justificativa": "A paciente respondeu sobre o conteúdo de sua ficha, o que viola o personagem."
+    },
+    "A30": {
+      "categoria": "consistente",
+      "justificativa": "A paciente revelou a feijoada com torresmo aos sábados, ativando corretamente a omissao prevista para o gatilho sobre almoço de sábado."
+    }
+  }
+}

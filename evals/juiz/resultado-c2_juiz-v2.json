@@ -1,0 +1,95 @@
+{
+  "total": 30,
+  "acertos": 15,
+  "acerto": 0.5,
+  "meta": 0.85,
+  "bateu_meta": false,
+  "matriz": {
+    "consistente -> consistente": 14,
+    "consistente -> omissao_prevista": 9,
+    "consistente -> quebra_de_personagem": 3,
+    "invencao_relevante -> consistente": 2,
+    "omissao_prevista -> consistente": 1,
+    "quebra_de_personagem -> quebra_de_personagem": 1
+  },
+  "erros": [
+    {
+      "id": "A02",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A03",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A04",
+      "humano": "consistente",
+      "juiz": "quebra_de_personagem"
+    },
+    {
+      "id": "A05",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A12",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A13",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A15",
+      "humano": "invencao_relevante",
+      "juiz": "consistente"
+    },
+    {
+      "id": "A16",
+      "humano": "omissao_prevista",
+      "juiz": "consistente"
+    },
+    {
+      "id": "A18",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A19",
+      "humano": "consistente",
+      "juiz": "quebra_de_personagem"
+    },
+    {
+      "id": "A20",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A24",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    },
+    {
+      "id": "A26",
+      "humano": "invencao_relevante",
+      "juiz": "consistente"
+    },
+    {
+      "id": "A28",
+      "humano": "consistente",
+      "juiz": "quebra_de_personagem"
+    },
+    {
+      "id": "A30",
+      "humano": "consistente",
+      "juiz": "omissao_prevista"
+    }
+  ],
+  "falhas": [],
+  "versao_prompt_juiz": "juiz-v2",
+  "modelo_juiz": "gemini-3.5-flash-lite"
+}
