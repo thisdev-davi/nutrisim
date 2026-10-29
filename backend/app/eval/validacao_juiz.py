@@ -5,7 +5,7 @@ import csv
 import json
 import random
 from collections import Counter
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Any
 
@@ -79,6 +79,18 @@ def _cotas(tamanhos: dict[Any, int], alvo: int) -> dict[Any, int]:
     return cotas
 
 
+def _categorias_por_turno(linha: dict[str, Any]) -> dict[int, str]:
+    """categoria do juiz por numero de turno de um caso.
+
+    O veredito e lido pelo campo `turno`, e nao pela posicao na lista, para
+    casar com o `vereditos_do_juiz`, que tambem le por turno.
+
+    Returns:
+        categoria do juiz por turno.
+    """
+    return {v["turno"]: v["categoria"] for v in linha["vereditos"]}
+
+
 def _itens(resultado: dict[str, Any]) -> list[tuple[ItemAmostra, str, str]]:
     """todas as respostas julgadas da rodada.
 
@@ -87,6 +99,7 @@ def _itens(resultado: dict[str, Any]) -> list[tuple[ItemAmostra, str, str]]:
     """
     itens = []
     for linha in resultado["fichas"]:
+        categorias = _categorias_por_turno(linha)
         for i, passo in enumerate(linha["conversa"]):
             item = ItemAmostra(
                 id="",
@@ -100,8 +113,9 @@ def _itens(resultado: dict[str, Any]) -> list[tuple[ItemAmostra, str, str]]:
                 roteiro_item=passo["item"],
             )
             grupo = f"ficha:{passo['esperado']}"
-            itens.append((item, grupo, linha["vereditos"][i]["categoria"]))
+            itens.append((item, grupo, categorias[i + 1]))
     for linha in resultado["ataques"]:
+        categorias = _categorias_por_turno(linha)
         for i, passo in enumerate(linha["conversa"]):
             item = ItemAmostra(
                 id="",
@@ -112,7 +126,7 @@ def _itens(resultado: dict[str, Any]) -> list[tuple[ItemAmostra, str, str]]:
                 pergunta=passo["pergunta"],
                 resposta=passo["resposta"],
             )
-            itens.append((item, "ataque", linha["vereditos"][i]["categoria"]))
+            itens.append((item, "ataque", categorias[i + 1]))
     return itens
 
 
@@ -123,7 +137,9 @@ def montar_amostra(
 
     Fichas e ataques entram na proporcao do total, e as fichas na proporcao de
     cada `esperado` do roteiro. Nos ataques entram primeiro todos os que o juiz
-    nao marcou como consistentes, que sao os candidatos a erro da rodada 1.
+    nao marcou como consistentes, que sao os candidatos a erro da rodada 1. Se
+    eles passarem das vagas do grupo, entram os primeiros na ordem do arquivo de
+    resultado, e nao os sorteados; o resto das vagas e sorteado.
 
     Args:
         resultado: arquivo de resultado do runner, ja lido.
@@ -141,8 +157,10 @@ def montar_amostra(
     for grupo, n in _cotas({g: len(v) for g, v in grupos.items()}, tamanho).items():
         candidatos = grupos[grupo]
         if grupo == "ataque":
-            fixos = [c for c in candidatos if c[1] != "consistente"][:n]
-            resto = [c for c in candidatos if c not in fixos]
+            marcados = [k for k, c in enumerate(candidatos) if c[1] != "consistente"]
+            vagas = set(marcados[:n])
+            fixos = [candidatos[k] for k in marcados[:n]]
+            resto = [c for k, c in enumerate(candidatos) if k not in vagas]
             escolhidos += fixos + sorteio.sample(resto, n - len(fixos))
         else:
             escolhidos += sorteio.sample(candidatos, n)
@@ -200,7 +218,7 @@ def ler_rotulos(arquivo: Path) -> dict[str, str]:
         categoria humana por id.
 
     Raises:
-        ValueError: rotulo vazio ou fora das cinco categorias.
+        ValueError: rotulo vazio, fora das cinco categorias, ou id repetido.
     """
     with arquivo.open(encoding="utf-8-sig", newline="") as f:
         linhas = list(csv.DictReader(f, delimiter=";"))
@@ -209,8 +227,32 @@ def ler_rotulos(arquivo: Path) -> dict[str, str]:
         rotulo = linha["rotulo"].strip()
         if rotulo not in CATEGORIAS:
             raise ValueError(f"{linha['id']}: rotulo invalido {rotulo!r}")
+        if linha["id"] in rotulos:
+            raise ValueError(f"{linha['id']}: id repetido na planilha")
         rotulos[linha["id"]] = rotulo
     return rotulos
+
+
+def conferir_cobertura(rotulos: dict[str, str], ids_amostra: Iterable[str]) -> None:
+    """confere que a planilha rotulou exatamente os itens da amostra.
+
+    Sem isso, uma planilha com linha faltando encolhe o denominador em silencio
+    e a meta sai medida em cima de uma amostra parcial.
+
+    Args:
+        rotulos: categoria humana por id.
+        ids_amostra: ids que a amostra espera ver rotulados.
+
+    Raises:
+        ValueError: falta rotulo de um item ou sobra id que nao e da amostra.
+    """
+    faltam = sorted(set(ids_amostra) - set(rotulos))
+    sobram = sorted(set(rotulos) - set(ids_amostra))
+    if faltam or sobram:
+        raise ValueError(
+            f"a planilha nao bate com a amostra: sem rotulo {faltam}, "
+            f"fora da amostra {sobram}"
+        )
 
 
 def comparar(rotulos: dict[str, str], juiz: dict[str, str | None]) -> dict[str, Any]:
@@ -226,7 +268,11 @@ def comparar(rotulos: dict[str, str], juiz: dict[str, str | None]) -> dict[str, 
 
     Returns:
         acerto, se bateu a meta, matriz (humano -> juiz), erros e falhas.
+
+    Raises:
+        ValueError: os rotulos e a amostra nao cobrem os mesmos ids.
     """
+    conferir_cobertura(rotulos, juiz)
     ids = sorted(rotulos)
     falhas = [i for i in ids if juiz[i] is None]
     acertos = sum(rotulos[i] == juiz[i] for i in ids)
@@ -333,6 +379,7 @@ def main(argv: list[str] | None = None) -> int:
         for i in json.loads(arquivo_amostra.read_text(encoding="utf-8"))
     ]
     rotulos = ler_rotulos(planilha)
+    conferir_cobertura(rotulos, [i.id for i in amostra])
     if args.passo == "comparar":
         versao, modelo = resultado["versao_prompt_juiz"], resultado["modelo_juiz"]
         juiz = vereditos_do_juiz(resultado, amostra)

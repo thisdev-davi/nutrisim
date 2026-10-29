@@ -34,6 +34,7 @@
       "juiz": "consistente"
     }
   ],
+  "falhas": [],
   "versao_prompt_juiz": "juiz-v3",
   "modelo_juiz": "gemini-3.5-flash-lite",
   "vereditos": {

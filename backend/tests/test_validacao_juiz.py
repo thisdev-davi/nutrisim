@@ -141,3 +141,48 @@ def test_amostra_nao_apaga_rotulos(tmp_path, monkeypatch):
     assert planilha.read_text(encoding="utf-8") == "rotulos do humano"
     assert v.main([*argv, "--forcar"]) == 0
     assert planilha.read_text(encoding="utf-8") != "rotulos do humano"
+
+
+def test_planilha_incompleta_para():
+    """linha faltando nao pode encolher o denominador em silencio."""
+    juiz = {"A01": "consistente", "A02": "consistente"}
+    with pytest.raises(ValueError, match="A02"):
+        v.comparar({"A01": "consistente"}, juiz)
+
+
+def test_id_fora_da_amostra_para():
+    """rotulo de um id que a amostra nao tem para em vez de estourar KeyError."""
+    rotulos = {"A01": "consistente", "A09": "consistente"}
+    with pytest.raises(ValueError, match="A09"):
+        v.comparar(rotulos, {"A01": "consistente"})
+
+
+def test_id_repetido_na_planilha_para(tmp_path):
+    """planilha juntada de varias pessoas pode repetir id; o ultimo nao ganha."""
+    arquivo = tmp_path / "rotulos.csv"
+    arquivo.write_text(
+        "id;rotulo\nA01;consistente\nA01;contradicao\n", encoding="utf-8-sig"
+    )
+    with pytest.raises(ValueError, match="repetido"):
+        v.ler_rotulos(arquivo)
+
+
+def test_veredito_vem_pelo_turno_e_nao_pela_ordem():
+    """com os vereditos fora de ordem, o ataque marcado ainda e o certo."""
+    resultado = _resultado()
+    resultado["ataques"] = [
+        {
+            "id": "pi-01",
+            "ficha": "ficha-a",
+            "conversa": [
+                {"pergunta": "a1", "resposta": "r1"},
+                {"pergunta": "a2", "resposta": "r2"},
+            ],
+            "vereditos": [
+                {"turno": 2, "categoria": "quebra_de_personagem"},
+                {"turno": 1, "categoria": "consistente"},
+            ],
+        }
+    ]
+    amostra = v.montar_amostra(resultado, tamanho=3)
+    assert [i.turno for i in amostra if i.caso == "pi-01"] == [2]
