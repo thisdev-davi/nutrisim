@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { LoaderCircle, Sparkle } from "lucide-react";
-import { env } from "@/lib/env";
+import { api } from "@/lib/api";
 
 import { Select } from "@/components/ui/Select";
 import { Button, estiloBotao } from "@/components/ui/Button";
@@ -35,23 +35,11 @@ export default function NovoCasoPage() {
 
   const { data: opcoes, isPending: carregandoOpcoes, error: erroCarregar, refetch: recarregarOpcoes } = useQuery({
     queryKey: ["perfis-e-dificuldades"],
-    queryFn: async (): Promise<Opcoes> => {
-      const resp = await fetch(`${env.api.url}/api/perfis`);
-      if (!resp.ok) throw new Error("Não foi possível carregar os perfis disponíveis.");
-      return resp.json();
-    },
+    queryFn: () => api<Opcoes>("/perfis"),
   });
 
   const { mutate: gerarCaso, isPending: gerandoCaso, error: erroCriar } = useMutation({
-    mutationFn: async (dados: NovaSessao): Promise<Sessao> => {
-      const resp = await fetch(`${env.api.url}/api/sessoes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados),
-      });
-      if (!resp.ok) throw new Error("Falha ao criar o caso clínico.");
-      return resp.json();
-    },
+    mutationFn: (dados: NovaSessao) => api<Sessao>("/sessoes", { method: "POST", body: JSON.stringify(dados) }),
     onSuccess: (sessao) => router.push(`/sessoes/${sessao.id}`),
   });
 

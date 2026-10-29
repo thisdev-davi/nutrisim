@@ -38,6 +38,7 @@ As rotas são uma proposta e podem mudar com os wireframes (NS-010) e o contrato
 ## Como rodar?
 
 - Copie o `.env.example` para `.env.local` e aponte `NEXT_PUBLIC_BACK_END_API` para o backend (sem ela, usa `http://localhost:8000`).
+- Até a tela de login (NS-036), preencha `NEXT_PUBLIC_DEV_EMAIL` e `NEXT_PUBLIC_DEV_SENHA` no `.env.local`. No `npm run dev`, o front entra com esse usuário (e o cadastra na primeira vez) e guarda o token. No build de produção essas variáveis são ignoradas. A senha segue as regras do cadastro do backend.
 
 - Para inciar o servidor:
 >> npm run dev

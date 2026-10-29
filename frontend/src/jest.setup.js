@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
 
 // Simula o window.matchMedia para bibliotecas que dependem de media queries
-Object.defineProperty(window, 'matchMedia', {
+// (testes com @jest-environment node nao tem window)
+if (typeof window !== 'undefined') Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation(query => ({
     matches: false,
