@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ThemeSwitch from "../ThemeSwitcher";
+import ThemeSwitch from "../ThemeSwitch";
 
 // 1. "Finge" a importação do next-themes
 jest.mock("next-themes", () => ({

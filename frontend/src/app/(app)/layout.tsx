@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 import { Menu, PanelLeft, User } from "lucide-react";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { Logo } from "@/components/ui/Logo";
-import ThemeSwitch from "@/components/ui/ThemeSwitcher";
+import ThemeSwitch from "@/components/ui/ThemeSwitch";
+import { LogoutButton } from "@/components/ui/LogoutButton";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 const CHAVE_RECOLHIDA = "nutrisim:lateral-recolhida";
 const ICONE = "grid place-items-center size-11 md:size-8 rounded-md text-fg-muted transition-colors hover:bg-surface-raised hover:text-fg cursor-pointer";
@@ -23,6 +25,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const trilha = trilhaDe(pathname);
   const gaveta = useRef<HTMLDialogElement>(null);
   const [recolhida, setRecolhida] = useState(false);
+
+  const { usuario } = useAuth();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -68,10 +72,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <ThemeSwitch className={ICONE} />
-            {/* ponytail: avatar generico ate a NS-036 trazer o usuario logado */}
-            <span aria-hidden className="grid place-items-center size-7 rounded-full border border-line bg-surface text-fg-muted">
-              <User size={14} strokeWidth={1.5} />
-            </span>
+            {usuario ? (
+              <div className="flex items-center gap-3">
+                <span className="hidden md:block text-[13px] font-medium text-fg-muted">
+                  {usuario.nome.split(" ")[0]}
+                </span>
+                <span aria-hidden className="grid place-items-center size-7 rounded-full border border-line bg-surface text-fg-muted">
+                  <User size={14} strokeWidth={1.5} />
+                </span>
+                <LogoutButton variant="ghost" exibirIcone={true} />
+              </div>
+            ) : (
+              <span aria-hidden className="grid place-items-center size-7 rounded-full border border-line bg-surface text-fg-muted">
+                <User size={14} strokeWidth={1.5} />
+              </span>
+            )}
           </div>
         </header>
 
