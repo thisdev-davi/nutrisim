@@ -31,8 +31,7 @@ export default function InicioPage() {
   const nome = usuario?.nome.split(" ")[0];
 
   return (
-    // my-auto: tela curta centraliza na vertical; se nao couber, comeca no topo
-    <div className="w-full max-w-[960px] mx-auto md:my-auto px-4 pt-6 pb-8 md:px-10 md:pt-10 md:pb-16 flex flex-col gap-8 md:gap-10">
+    <div className="w-full max-w-[960px] mx-auto px-4 pt-6 pb-8 md:px-10 md:pt-10 md:pb-16 flex flex-col gap-8 md:gap-10">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
         <h1 className="flex-[1_1_420px] m-0 font-display font-medium text-[24px] leading-[30px] md:text-[28px] md:leading-[34px] tracking-[-0.02em] text-balance">
           Olá{nome && `, ${nome}`}.{" "}
