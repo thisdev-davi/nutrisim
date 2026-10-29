@@ -12,11 +12,11 @@ function responder(pedacos: string[], init: ResponseInit = {}) {
   global.fetch = jest.fn().mockResolvedValue(new Response(corpo, init));
 }
 
+// token do cookie do login; location para o redirect do 401
+jest.mock("cookies-next", () => ({ getCookie: () => "t", deleteCookie: jest.fn() }));
+
 beforeAll(() => {
-  const dados: Record<string, string> = { "nutrisim:token": "t" };
-  Object.defineProperty(globalThis, "localStorage", {
-    value: { getItem: (k: string) => dados[k] ?? null, setItem: () => {}, removeItem: () => {} },
-  });
+  Object.defineProperty(globalThis, "location", { value: { pathname: "/sessoes/s1", href: "" } });
 });
 
 describe("enviarMensagem", () => {
