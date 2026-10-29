@@ -128,6 +128,12 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
     }
   }
 
+  function fecharPainel() {
+    setPainel(false);
+    // o foco volta ao botao visivel que abre o painel (o do topo no celular, o da lateral no desktop)
+    requestAnimationFrame(() => [...document.querySelectorAll<HTMLElement>('[aria-controls="anotacoes"]')].find((b) => b.offsetParent)?.focus());
+  }
+
   function submeter() {
     const texto = textoInput.trim();
     if (!texto || streaming !== null) return;
@@ -240,7 +246,7 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
         <div className="px-3 pb-3 md:px-6 md:pb-6">
           <div className="w-full max-w-[720px] mx-auto flex flex-col gap-2">
             {falhou && (
-              <Alert type="danger" action={<button type="button" onClick={submeter} className="text-[13px] font-medium underline cursor-pointer">Tentar de novo</button>}>
+              <Alert type="danger" action={<button type="button" onClick={submeter} disabled={!textoInput.trim()} className="text-[13px] font-medium underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-45">Tentar de novo</button>}>
                 O paciente não conseguiu responder agora. Sua pergunta continua no campo.
               </Alert>
             )}
@@ -292,7 +298,7 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
         </div>
       </div>
 
-      <Anotacoes sessaoId={sessaoId} aberto={painel} onAbrir={() => setPainel(true)} onFechar={() => setPainel(false)} />
+      <Anotacoes sessaoId={sessaoId} aberto={painel} onAbrir={() => setPainel(true)} onFechar={fecharPainel} />
     </div>
   );
 }

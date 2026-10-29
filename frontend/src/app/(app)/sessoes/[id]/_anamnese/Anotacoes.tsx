@@ -22,18 +22,29 @@ export function Anotacoes({ sessaoId, aberto, onAbrir, onFechar }: { sessaoId: s
 }
 
 // so monta no cliente (o painel comeca fechado), entao pode ler o localStorage direto
+// sem storage (aba anonima, cota cheia) as notas so vivem enquanto o painel esta aberto
 function Painel({ chave, onFechar }: { chave: string; onFechar: () => void }) {
-  const [texto, setTexto] = useState(() => localStorage.getItem(chave) ?? "");
+  const [texto, setTexto] = useState(() => {
+    try {
+      return localStorage.getItem(chave) ?? "";
+    } catch {
+      return "";
+    }
+  });
   const [salvasEm, setSalvasEm] = useState<Date | null>(null);
 
   function mudar(valor: string) {
     setTexto(valor);
-    localStorage.setItem(chave, valor);
-    setSalvasEm(new Date());
+    try {
+      localStorage.setItem(chave, valor);
+      setSalvasEm(new Date());
+    } catch {
+      setSalvasEm(null);
+    }
   }
 
   return (
-    <aside id="anotacoes" aria-label="Anotações" className="fixed inset-0 z-40 flex flex-col bg-bg md:static md:z-auto md:w-[380px] md:flex-none md:border-l md:border-line">
+    <aside id="anotacoes" aria-label="Anotações" onKeyDown={(e) => e.key === "Escape" && onFechar()} className="fixed inset-0 z-40 flex flex-col bg-bg md:static md:z-auto md:w-[380px] md:flex-none md:border-l md:border-line">
       <div className="flex items-center justify-between h-14 md:h-[45px] shrink-0 pl-4 pr-2 border-b border-line text-[14px] leading-5 font-semibold">
         <span className="inline-flex items-center gap-2">
           <NotebookPen size={16} strokeWidth={1.5} aria-hidden />
