@@ -1,18 +1,10 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, type Erro } from "@/lib/api";
-import { Button } from "@/components/ui/Button";
-import { Alert } from "@/components/ui/Alert";
-import { chaveSessao, useSessao, type Sessao } from "./AnamneseChat";
+import { useSessao } from "./AnamneseChat";
+import { EncerrarAnamnese } from "./EncerrarAnamnese";
 
 export function AnamneseInstructions({ sessaoId }: { sessaoId: string }) {
-  const queryClient = useQueryClient();
   const etapa = useSessao(sessaoId).data?.etapa;
-  const { mutate: encerrar, isPending, error } = useMutation({
-    mutationFn: () => api<{ etapa: string }>(`/sessoes/${sessaoId}/anamnese/encerrar`, { method: "POST" }),
-    onSuccess: ({ etapa }) => queryClient.setQueryData<Sessao>(chaveSessao(sessaoId), (s) => s && { ...s, etapa }),
-  });
 
   return (
     <aside className="w-full bg-surface border border-line rounded-lg p-6 flex flex-col gap-6 lg:sticky lg:top-8">
@@ -31,18 +23,8 @@ export function AnamneseInstructions({ sessaoId }: { sessaoId: string }) {
         </p>
       </div>
 
-      {error && <Alert type="danger">{(error as unknown as Erro).mensagem}</Alert>}
-
       <div className="pt-6 border-t border-line">
-        {/* ponytail: confirm nativo ate existir o Dialog do design system */}
-        <Button
-          type="button"
-          className="w-full"
-          disabled={isPending || etapa !== "anamnese"}
-          onClick={() => confirm("Encerrar a anamnese? Você não poderá mais fazer perguntas ao paciente.") && encerrar()}
-        >
-          Encerrar anamnese e criar plano
-        </Button>
+        <EncerrarAnamnese sessaoId={sessaoId} disabled={etapa !== "anamnese"} />
       </div>
     </aside>
   );

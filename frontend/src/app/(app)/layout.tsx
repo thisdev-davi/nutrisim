@@ -4,18 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, PanelLeft, User } from "lucide-react";
+import { Avatar } from "@/components/ui/Avatar";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { Logo } from "@/components/ui/Logo";
 import ThemeSwitch from "@/components/ui/ThemeSwitch";
 import { LogoutButton } from "@/components/ui/LogoutButton";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { useSessao } from "./sessoes/[id]/_anamnese/AnamneseChat";
 
 const CHAVE_RECOLHIDA = "nutrisim:lateral-recolhida";
 const ICONE = "grid place-items-center size-11 md:size-8 rounded-md text-fg-muted transition-colors hover:bg-surface-raised hover:text-fg cursor-pointer";
 
+// na sessao a trilha mostra o paciente, lido do mesmo cache da tela
+function TrilhaSessao({ id }: { id: string }) {
+  const paciente = useSessao(id).data?.paciente;
+  return <>{paciente ? `${paciente.nome}, ${paciente.idade} anos` : "Sessão"}</>;
+}
+
 function trilhaDe(pathname: string) {
   if (pathname === "/caso/novo") return "Nova sessão";
-  if (pathname.startsWith("/sessoes/")) return "Sessão";
+  if (pathname.startsWith("/sessoes/")) return <TrilhaSessao id={pathname.split("/")[2]} />;
   return null;
 }
 
@@ -73,12 +81,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="ml-auto flex items-center gap-2">
             <ThemeSwitch className={ICONE} />
             {usuario ? (
-              <div className="flex items-center gap-3">
-                <span className="hidden md:block text-[13px] font-medium text-fg-muted">
-                  {usuario.nome.split(" ")[0]}
-                </span>
-                <span aria-hidden className="grid place-items-center size-7 rounded-full border border-line bg-surface text-fg-muted">
-                  <User size={14} strokeWidth={1.5} />
+              <div className="flex items-center gap-2">
+                <span title={usuario.nome} className="grid place-items-center size-11 md:size-8">
+                  <span className="sr-only">Conta de {usuario.nome}</span>
+                  <Avatar nome={usuario.nome} pequeno />
                 </span>
                 <LogoutButton variant="ghost" exibirIcone={true} />
               </div>

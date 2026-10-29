@@ -21,7 +21,8 @@ export function LogoutButton({
     <Button 
       type="button" 
       variant={variant} 
-      className={className} 
+      // "!" vence o hover neutro da variante
+      className={`hover:text-danger! hover:bg-danger-soft! ${className}`}
       onClick={logout}
       title="Sair da conta"
     >

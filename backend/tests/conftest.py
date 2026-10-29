@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
@@ -21,11 +22,12 @@ class BancoFalso:
         self.objetos.append(objeto)
 
     def commit(self):
-        """conta o commit e numera as mensagens, como faria o insert."""
+        """conta o commit, numera e data as mensagens, como faria o insert."""
         self.commits += 1
         for objeto in self.objetos:
             for i, mensagem in enumerate(getattr(objeto, "mensagens", []), 1):
                 mensagem.id = mensagem.id or i
+                mensagem.criada_em = mensagem.criada_em or datetime.now(UTC)
 
     def rollback(self):
         """nada a desfazer: o falso nao tem transacao."""
