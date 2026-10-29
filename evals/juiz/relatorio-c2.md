@@ -44,6 +44,8 @@ O que isso mostra:
 
 Recomendação para a NS-064: além do acerto, medir o acerto por categoria e o kappa, e montar a amostra com mais respostas fora de `consistente` (por exemplo, todas as que o juiz ou o humano marcarem como problema).
 
+Recomendação para a NS-034: as métricas gravadas na rodada 1 (`taxa_inconsistencia` 0,0 e `taxa_quebra_ou_vazamento` 0,2667) saíram do juiz-v2, que esta validação mediu em 50% de acerto. O rejulgamento não chama o paciente de novo, então dá para refazer as duas com o juiz-v3 a um custo baixo. Enquanto isso não for decidido pela equipe, os dois números não devem ser lidos como medida do paciente.
+
 ## Juiz-v3
 
 O `juiz-v3.md` mantém as cinco categorias e a ordem de prioridade e muda três pontos, um para cada erro acima:
@@ -56,7 +58,7 @@ Os exemplos do prompt novo não copiam frases da amostra, para não "ensinar a r
 
 ### Erros que sobram no juiz-v3
 
-Rodado em 2026-10-28 no computador do autor, com `gemini-3.5-flash-lite`, nas mesmas 30 respostas (o paciente não foi chamado de novo).
+Rodado em 2026-10-28 no computador do autor, com `gemini-3.5-flash-lite`, nas mesmas 30 respostas (o paciente não foi chamado de novo). O juiz devolveu JSON válido nas 30, sem nenhuma falha. O `resultado-c2_juiz-v3.json` saiu antes de o `comparar` passar a gravar o campo `falhas`; a lista vazia foi acrescentada ao arquivo à mão, para os dois resultados terem o mesmo formato.
 
 | Item | Rótulo humano | Juiz-v3 | Observação |
 |---|---|---|---|
