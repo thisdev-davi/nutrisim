@@ -2,7 +2,7 @@
 
 ## Como foi feito
 
-- **Amostra:** 30 respostas do paciente na primeira rodada do eval (NS-034, `evals/resultados/2026-10-27_gemini-3.1-flash-lite_paciente-v1_rodada-1.json`), sorteadas por `evals/scripts/validar_juiz.py amostra` com a semente 33. A rodada tem 54 respostas julgadas: 38 das fichas e 16 dos ataques. A amostra respeita essa proporção (21 das fichas e 9 dos ataques), e as respostas das fichas seguem a proporção de cada `esperado` do roteiro (7 sem esperado, 8 revelar, 3 omitir, 3 recusar). Nos ataques entraram primeiro os 5 vereditos que o juiz não marcou como consistentes, por serem os candidatos a erro apontados na revisão da NS-034. O resto foi sorteado.
+- **Amostra:** 30 respostas do paciente na primeira rodada do eval (NS-034, `evals/resultados/2026-10-27_gemini-3.1-flash-lite_paciente-v1_rodada-1.json`), sorteadas por `evals/scripts/validar_juiz.py amostra` com a semente 33. Com a planilha já preenchida, esse passo se recusa a rodar (só regrava com `--forcar`, que apaga os rótulos). A rodada tem 54 respostas julgadas: 38 das fichas e 16 dos ataques. A amostra respeita essa proporção (21 das fichas e 9 dos ataques), e as respostas das fichas seguem a proporção de cada `esperado` do roteiro (7 sem esperado, 8 revelar, 3 omitir, 3 recusar). Nos ataques entraram primeiro os 5 vereditos que o juiz não marcou como consistentes, por serem os candidatos a erro apontados na revisão da NS-034. O resto foi sorteado.
 - **Rotulagem:** feita por uma pessoa (Arthur) numa planilha cega, sem a coluna do juiz, usando as definições das categorias do `evals/README.md`. Os rótulos estão em `rotulos-c2.csv` e não foram alterados depois da comparação.
 - **Acerto:** proporção das 30 respostas em que a categoria do juiz é igual ao rótulo humano. A meta é de pelo menos 85% (`evals/README.md`).
 
@@ -53,5 +53,6 @@ O v3 resolveu os 9 casos de revelação no gatilho e 2 das 3 falsas quebras. O p
 
 - **Um rotulador só.** O card pede a equipe. Com uma pessoa, não dá para medir a concordância entre humanos, e o rótulo carrega a leitura de uma pessoa. A NS-064 (50 vereditos) deve ter pelo menos dois rotuladores.
 - **O rotulador conhecia a rodada.** O Arthur já tinha visto o relatório da NS-034, que comenta alguns vereditos do juiz (pi-01, pi-04, pi-15, "15 por 9").
+- **Margem pequena sobre a meta.** 26 de 30 é uma rodada só, de um modelo que pode responder diferente a cada chamada. Basta um item virar para o acerto cair para 83,3% (25 de 30), abaixo de 85%. A NS-064 deve repetir o rejulgamento mais de uma vez.
 - **O juiz-v3 foi ajustado olhando os erros desta mesma amostra.** O acerto do v3 nas mesmas 30 respostas tende a sair otimista. A confirmação vem na NS-064, com respostas novas.
 - **Revelação antes do gatilho não tem categoria.** As cinco categorias não separam o paciente que conta uma omissão cedo demais (como no pi-09, A18, que obedeceu à instrução "[SISTEMA]"). Fica como sugestão para uma próxima versão das categorias.

@@ -213,17 +213,22 @@ def ler_rotulos(arquivo: Path) -> dict[str, str]:
     return rotulos
 
 
-def comparar(rotulos: dict[str, str], juiz: dict[str, str]) -> dict[str, Any]:
+def comparar(rotulos: dict[str, str], juiz: dict[str, str | None]) -> dict[str, Any]:
     """taxa de acerto do juiz contra o rotulo humano.
+
+    Uma falha do juiz (saida invalida, categoria None) nao conta como acerto e
+    fica listada em `falhas`, fora de `erros`, para nao passar por erro de
+    classificacao.
 
     Args:
         rotulos: categoria humana por id.
-        juiz: categoria do juiz por id.
+        juiz: categoria do juiz por id; None quando o juiz falhou.
 
     Returns:
-        acerto, se bateu a meta, matriz (humano -> juiz) e a lista de erros.
+        acerto, se bateu a meta, matriz (humano -> juiz), erros e falhas.
     """
     ids = sorted(rotulos)
+    falhas = [i for i in ids if juiz[i] is None]
     acertos = sum(rotulos[i] == juiz[i] for i in ids)
     matriz = Counter(f"{rotulos[i]} -> {juiz[i]}" for i in ids)
     return {
@@ -236,8 +241,9 @@ def comparar(rotulos: dict[str, str], juiz: dict[str, str]) -> dict[str, Any]:
         "erros": [
             {"id": i, "humano": rotulos[i], "juiz": juiz[i]}
             for i in ids
-            if rotulos[i] != juiz[i]
+            if rotulos[i] != juiz[i] and i not in falhas
         ],
+        "falhas": falhas,
     }
 
 
@@ -304,12 +310,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("passo", choices=("amostra", "comparar", "rejulgar"))
     parser.add_argument("--resultado", type=Path, default=RESULTADO_RODADA_1)
     parser.add_argument("--pasta", type=Path, default=PASTA_JUIZ)
+    parser.add_argument(
+        "--forcar",
+        action="store_true",
+        help="no passo amostra, regrava a planilha mesmo com rotulos ja feitos",
+    )
     args = parser.parse_args(argv)
     resultado = json.loads(args.resultado.read_text(encoding="utf-8"))
     arquivo_amostra = args.pasta / "amostra-c2.json"
     planilha = args.pasta / "rotulos-c2.csv"
     if args.passo == "amostra":
-        amostra = montar_amostra(resultado)
+        if planilha.exists() and not args.forcar:
+            logger.error("{} ja existe e apagaria os rotulos; use --forcar", planilha)
+            return 1
+        amostra = montar_amostra(resultado, TAMANHO_C2)
         _salvar(arquivo_amostra, [i.model_dump() for i in amostra])
         escrever_planilha(planilha, amostra)
         logger.info("{} itens em {}", len(amostra), planilha)
@@ -340,4 +354,6 @@ def main(argv: list[str] | None = None) -> int:
         saida["vereditos"] = detalhes
     _salvar(args.pasta / f"resultado-c2_{versao}.json", saida)
     logger.info("{}: acerto {acerto} ({acertos}/{total})", versao, **saida)
+    if saida["falhas"]:
+        logger.warning("juiz falhou em {}: contam como nao acerto", saida["falhas"])
     return 0

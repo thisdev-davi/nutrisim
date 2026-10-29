@@ -120,3 +120,24 @@ def test_rejulgar_usa_a_mesma_resposta():
     saida = v.rejulgar(amostra, julgar)
     assert vistos == [i.resposta for i in amostra]
     assert saida["A01"] == {"categoria": "consistente", "justificativa": "ok"}
+
+
+def test_falha_do_juiz_fica_a_parte():
+    """saida invalida do juiz nao vira acerto nem entra em erros."""
+    rotulos = {"A01": "consistente", "A02": "consistente"}
+    saida = v.comparar(rotulos, {"A01": "consistente", "A02": None})
+    assert (saida["acertos"], saida["falhas"], saida["erros"]) == (1, ["A02"], [])
+
+
+def test_amostra_nao_apaga_rotulos(tmp_path, monkeypatch):
+    """com a planilha ja feita, o passo amostra para; --forcar regrava."""
+    monkeypatch.setattr(v, "TAMANHO_C2", AMOSTRA)
+    resultado = tmp_path / "rodada.json"
+    resultado.write_text(json.dumps(_resultado()), encoding="utf-8")
+    planilha = tmp_path / "rotulos-c2.csv"
+    planilha.write_text("rotulos do humano", encoding="utf-8")
+    argv = ["amostra", "--resultado", str(resultado), "--pasta", str(tmp_path)]
+    assert v.main(argv) == 1
+    assert planilha.read_text(encoding="utf-8") == "rotulos do humano"
+    assert v.main([*argv, "--forcar"]) == 0
+    assert planilha.read_text(encoding="utf-8") != "rotulos do humano"
