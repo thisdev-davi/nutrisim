@@ -45,7 +45,7 @@ Cada pasta tem um README que descreve a estrutura interna prevista.
 | IA | Gemini Flash via Google AI Studio (paciente) e Gemini (juiz do eval, em modelo diferente) |
 | Testes | pytest e Playwright |
 | Integração contínua | GitHub Actions |
-| Deploy | Render |
+| Deploy | Render, disparado pelo GitHub Actions a cada push na `desenvolvimento` que passa no lint e nos testes (só a parte que mudou) |
 
 As justificativas estão em [`docs/decisoes.md`](docs/decisoes.md).
 

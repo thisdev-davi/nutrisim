@@ -5,6 +5,9 @@ on: # Condicao para executar
     branches:
       - main
       - desenvolvimento
+    paths: # so roda (e publica) quando o backend muda
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
   pull_request:
     branches:
       - main
@@ -40,4 +43,16 @@ jobs:
       
       - name: Rodar testes com Pytest
         run: uv run pytest
-        
+
+  deploy: # publica no render so depois do lint e dos testes passarem
+    name: Deploy no Render
+    needs: brackend-lint-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/desenvolvimento'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar deploy do commit testado
+        run: |
+          curl -fsS -X POST https://api.render.com/v1/services/srv-dbfo436i0phs73d83j1g/deploys \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"commitId": "${{ github.sha }}"}'
