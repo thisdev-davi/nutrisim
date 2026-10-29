@@ -258,9 +258,10 @@ def conferir_cobertura(rotulos: dict[str, str], ids_amostra: Iterable[str]) -> N
 def comparar(rotulos: dict[str, str], juiz: dict[str, str | None]) -> dict[str, Any]:
     """taxa de acerto do juiz contra o rotulo humano.
 
-    Uma falha do juiz (saida invalida, categoria None) nao conta como acerto e
-    fica listada em `falhas`, fora de `erros`, para nao passar por erro de
-    classificacao.
+    Passa antes pelo `conferir_cobertura`, entao para se a planilha nao rotulou
+    exatamente os itens da amostra. Uma falha do juiz (saida invalida, categoria
+    None) nao conta como acerto e fica listada em `falhas`, fora de `erros`,
+    para nao passar por erro de classificacao.
 
     Args:
         rotulos: categoria humana por id.
@@ -268,9 +269,6 @@ def comparar(rotulos: dict[str, str], juiz: dict[str, str | None]) -> dict[str, 
 
     Returns:
         acerto, se bateu a meta, matriz (humano -> juiz), erros e falhas.
-
-    Raises:
-        ValueError: os rotulos e a amostra nao cobrem os mesmos ids.
     """
     conferir_cobertura(rotulos, juiz)
     ids = sorted(rotulos)
