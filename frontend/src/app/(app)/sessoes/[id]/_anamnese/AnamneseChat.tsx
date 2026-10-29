@@ -1,28 +1,39 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Send, Sparkles } from "lucide-react";
+import { NotebookPen, Search, Send, Sparkle } from "lucide-react";
 import { api, type Erro } from "@/lib/api";
 import { enviarMensagem } from "@/lib/sse";
-import { Button } from "@/components/ui/Button";
+import { estiloBotao } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { Avatar } from "@/components/ui/Avatar";
+import { Etapas } from "@/components/ui/Etapas";
+import { Anotacoes, ICONE } from "./Anotacoes";
+import { EncerrarAnamnese } from "./EncerrarAnamnese";
 
 export interface Mensagem {
   id: string;
   autor: "estudante" | "paciente";
   texto: string;
+  criada_em: string;
 }
 
 export interface Sessao {
   id: string;
   etapa: string;
+  perfil_id: string;
+  dificuldade: "facil" | "medio" | "dificil";
   paciente: { nome: string; idade: number; queixa_principal: string };
   mensagens: Mensagem[];
 }
 
 const LIMITE = 2000; // o mesmo do backend (dados_invalidos acima disso)
+
+const DIFICULDADE = { facil: "fácil", medio: "média", dificil: "difícil" };
+
+const hora = (iso: string) => new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
 export const chaveSessao = (id: string) => ["sessao", id];
 
@@ -32,23 +43,49 @@ export function useSessao(id: string) {
   return useQuery({ ...consultaSessao(id), retry: false });
 }
 
+function Fala({ nome, meta, ocupado, children }: { nome?: string; meta: string; ocupado?: boolean; children: ReactNode }) {
+  const paciente = Boolean(nome);
+  return (
+    <div className={`flex items-end gap-3 max-w-[80%] ${paciente ? "self-start" : "self-end flex-row-reverse"}`}>
+      {nome && <Avatar nome={nome} />}
+      <div className={`flex flex-col gap-2 min-w-0 ${paciente ? "" : "items-end"}`}>
+        <div
+          aria-busy={ocupado || undefined}
+          className={`px-[14px] py-[10px] border rounded-[14px] text-[15px] leading-6 [overflow-wrap:anywhere] whitespace-pre-wrap ${paciente ? "border-line bg-surface rounded-bl-[4px]" : "border-transparent bg-surface-raised rounded-br-[4px]"}`}
+        >
+          {children}
+        </div>
+        <span className="font-mono text-[12px] leading-4 text-fg-muted">{meta}</span>
+      </div>
+    </div>
+  );
+}
+
 export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
   const queryClient = useQueryClient();
   const [textoInput, setTextoInput] = useState("");
   // null fora do stream; "" enquanto o paciente ainda nao mandou trecho
   const [streaming, setStreaming] = useState<string | null>(null);
-  const [falha, setFalha] = useState<{ erro: Erro; texto: string } | null>(null);
+  const [falhou, setFalhou] = useState(false);
+  const [painel, setPainel] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const { data: sessao, isPending, error, refetch } = useSessao(sessaoId);
+  const { data: sessao, error, refetch } = useSessao(sessaoId);
+  const { data: opcoes } = useQuery({ queryKey: ["perfis-e-dificuldades"], queryFn: () => api<{ perfis?: { id: string; nome: string }[] }>("/perfis") });
   const mensagens = sessao?.mensagens ?? [];
   const aberta = sessao?.etapa === "anamnese";
 
   // sair da tela cancela o stream em andamento
   useEffect(() => () => abortRef.current?.abort(), []);
+
+  // anotacoes abertas no desktop; no celular cobririam o chat
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (matchMedia("(min-width: 768px)").matches) setPainel(true);
+  }, []);
 
   useEffect(() => {
     const area = scrollAreaRef.current;
@@ -59,21 +96,22 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
     if (streaming === null && sessao) inputRef.current?.focus();
   }, [streaming, sessao]);
 
-  function acrescentar(mensagem: Mensagem) {
-    queryClient.setQueryData<Sessao>(chaveSessao(sessaoId), (s) => s && { ...s, mensagens: [...s.mensagens, mensagem] });
+  function acrescentar(mensagem: Omit<Mensagem, "criada_em">) {
+    const nova = { ...mensagem, criada_em: new Date().toISOString() };
+    queryClient.setQueryData<Sessao>(chaveSessao(sessaoId), (s) => s && { ...s, mensagens: [...s.mensagens, nova] });
   }
 
   async function enviar(texto: string) {
     const controle = new AbortController();
     abortRef.current = controle;
-    setFalha(null);
+    setFalhou(false);
     setStreaming("");
     acrescentar({ id: `temp-${Date.now()}`, autor: "estudante", texto });
     let parcial = "";
     try {
       const id = await enviarMensagem(sessaoId, texto, (trecho) => setStreaming((parcial += trecho)), controle.signal);
       acrescentar({ id, autor: "paciente", texto: parcial });
-    } catch (e) {
+    } catch {
       if (controle.signal.aborted) return;
       // o backend e a fonte da verdade: a pergunta e a fala podem ter sido salvas antes da queda
       const atual = await queryClient.fetchQuery({ ...consultaSessao(sessaoId), staleTime: 0 }).catch(() => null);
@@ -82,148 +120,185 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
       if (!atual) {
         queryClient.setQueryData<Sessao>(chaveSessao(sessaoId), (s) => s && { ...s, mensagens: s.mensagens.filter((m) => !m.id.startsWith("temp-")) });
       }
-      setFalha({ erro: e as Erro, texto });
+      // a pergunta volta para o campo, pronta para reenviar
+      setTextoInput(texto);
+      setFalhou(true);
     } finally {
       if (!controle.signal.aborted) setStreaming(null);
     }
   }
 
-  function handleEnviar(e: React.FormEvent) {
-    e.preventDefault();
+  function fecharPainel() {
+    setPainel(false);
+    // o foco volta ao botao visivel que abre o painel (o do topo no celular, o da lateral no desktop)
+    requestAnimationFrame(() => [...document.querySelectorAll<HTMLElement>('[aria-controls="anotacoes"]')].find((b) => b.offsetParent)?.focus());
+  }
+
+  function submeter() {
     const texto = textoInput.trim();
     if (!texto || streaming !== null) return;
     setTextoInput("");
     enviar(texto);
   }
 
-  if (isPending) {
+  if (error) {
+    const erro = error as unknown as Erro;
+    if (erro.codigo === "sessao_nao_encontrada") {
+      return (
+        <div className="relative isolate overflow-hidden flex-1 grid place-items-center px-4 py-12">
+          <span className="pontos -z-10" aria-hidden />
+          <div className="flex flex-col items-center gap-3 text-center">
+            <Search size={24} strokeWidth={1.5} aria-hidden className="text-fg-muted" />
+            <h1 className="m-0 text-[18px] leading-[26px] font-semibold">Sessão não encontrada</h1>
+            <p className="m-0 max-w-[40ch] text-fg-muted">O link pode estar errado ou a sessão é de outra conta.</p>
+            <Link href="/caso/novo" className={estiloBotao("primary", true)}>Começar novo caso</Link>
+          </div>
+        </div>
+      );
+    }
     return (
-      <div className="flex items-center justify-center h-[70dvh] md:h-[600px] w-full border border-line rounded-lg bg-surface text-fg-muted">
-        Buscando dados do paciente e histórico...
+      <div className="w-full max-w-[720px] mx-auto px-4 py-8">
+        <Alert
+          type="danger"
+          action={<button type="button" onClick={() => refetch()} className="text-[13px] font-medium underline cursor-pointer">Tentar de novo</button>}
+        >
+          {erro.mensagem ?? "Não foi possível carregar a conversa."}
+        </Alert>
       </div>
     );
   }
 
-  if (error || !sessao) {
-    const erro = error as unknown as Erro;
-    return (
-      <Alert
-        type="danger"
-        action={
-          erro.codigo === "sessao_nao_encontrada" ? (
-            <Link href="/caso/novo" className="text-[13px] font-medium underline">Começar um novo caso</Link>
-          ) : (
-            <button type="button" onClick={() => refetch()} className="text-[13px] font-medium underline cursor-pointer">Tentar de novo</button>
-          )
-        }
-      >
-        {erro.mensagem ?? "Não foi possível carregar o chat da consulta."}
-      </Alert>
-    );
-  }
-
-  const nomePaciente = sessao.paciente.nome;
-  const inicialPaciente = nomePaciente.charAt(0).toUpperCase();
+  const nome = sessao?.paciente.nome ?? "";
+  const perfil = opcoes?.perfis?.find((p) => p.id === sessao?.perfil_id)?.nome;
 
   return (
-    <div className="flex flex-col h-[70dvh] md:h-[600px] w-full border border-line rounded-lg overflow-hidden bg-surface">
-      <div className="bg-surface border-b border-line p-4 shrink-0 flex flex-col gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <h2 className="m-0 font-semibold text-fg text-[18px] leading-[26px]">
-            {nomePaciente}, {sessao.paciente.idade} anos
-          </h2>
-          <span className="shrink-0 whitespace-nowrap inline-flex items-center h-6 px-[10px] gap-[6px] rounded-full bg-accent-soft text-accent text-[12px] font-medium leading-none">
-            <Sparkles size={12} strokeWidth={1.5} aria-hidden />
-            Paciente simulado por IA
-          </span>
-        </div>
-        <p className="m-0 font-mono text-[12px] leading-[16px] text-fg-muted uppercase tracking-[0.04em]">
-          <span className="font-semibold text-fg">Queixa:</span> {sessao.paciente.queixa_principal}
-        </p>
-      </div>
-
-      <div ref={scrollAreaRef} role="log" aria-live="polite" className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-bg/50 scroll-smooth motion-reduce:scroll-auto">
-        {mensagens.map((msg) => {
-          const isPatient = msg.autor === "paciente";
-          return (
-            <div key={msg.id} className={`max-w-[85%] md:max-w-[80%] flex ${isPatient ? "self-start gap-3" : "self-end flex-col items-end gap-1"}`}>
-              {isPatient && (
-                <div className="w-8 h-8 rounded-full border border-line-strong bg-surface flex items-center justify-center font-mono text-[12px] font-medium text-fg-muted shrink-0" aria-hidden="true">
-                  {inicialPaciente}
-                </div>
-              )}
-              <div className="flex flex-col gap-1 w-full">
-                <div className={`px-[14px] py-[10px] text-[15px] leading-[24px] break-words ${isPatient ? "bg-surface border border-line rounded-lg rounded-bl-[4px] text-fg" : "bg-surface-raised rounded-lg rounded-br-[4px] text-fg"}`}>
-                  {msg.texto}
-                </div>
-                <span className="font-mono text-[12px] leading-[16px] text-fg-muted uppercase tracking-[0.04em]">
-                  {isPatient ? nomePaciente : "Você"}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-
-        {streaming !== null && (
-          <div className="self-start max-w-[85%] md:max-w-[80%] flex gap-3" aria-busy="true">
-            <div className="w-8 h-8 rounded-full border border-line-strong bg-surface flex items-center justify-center font-mono text-[12px] font-medium text-fg-muted shrink-0" aria-hidden="true">
-              {inicialPaciente}
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <div className="bg-surface border border-line px-[14px] py-[10px] rounded-lg rounded-bl-[4px] text-[15px] leading-[24px] text-fg break-words">
-                <span className="sr-only">O paciente está respondendo...</span>
-                <span aria-hidden="true">{streaming}</span>
-                <span aria-hidden="true" className="inline-block w-2 h-[18px] ml-1 bg-fg align-middle animate-[pulse_1s_steps(1)_infinite] motion-reduce:animate-none" />
-              </div>
-              <span className="font-mono text-[12px] leading-[16px] text-fg-muted uppercase tracking-[0.04em]">
-                {nomePaciente} respondendo...
-              </span>
-            </div>
+    <div className="flex-1 min-h-0 flex">
+      <div className="flex-1 min-w-0 flex flex-col">
+        <Etapas atual={2} compacta />
+        <div className="flex items-center gap-3 px-4 py-2 md:px-8 md:py-4 border-b border-line">
+          <Etapas atual={2} />
+          <div className="ml-auto flex items-center gap-1">
+            <button type="button" className={`${ICONE} md:hidden`} aria-controls="anotacoes" aria-expanded={painel} aria-label="Abrir anotações" onClick={() => setPainel(true)}>
+              <NotebookPen size={16} strokeWidth={1.5} aria-hidden />
+            </button>
+            <EncerrarAnamnese sessaoId={sessaoId} disabled={streaming !== null || !aberta} />
           </div>
-        )}
+        </div>
+
+        {/* relative: o sr-only (absolute) do "digitando" fica preso aqui e nao estica a pagina */}
+        <div ref={scrollAreaRef} className="relative flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-4 md:px-6 md:pt-8 scroll-smooth motion-reduce:scroll-auto">
+          <div className="w-full max-w-[720px] mx-auto flex flex-col gap-6">
+            {/* carregando: a moldura e a mesma, so a conversa vira bloco */}
+            {!sessao ? (
+              <div aria-busy="true" aria-label="Carregando a conversa" className="flex flex-col gap-4">
+                <div className="h-11 w-[60%] self-end rounded-lg bg-surface-raised" />
+                <div className="h-[68px] w-[75%] rounded-lg bg-surface-raised" />
+                <div className="h-11 w-[45%] self-end rounded-lg bg-surface-raised" />
+              </div>
+            ) : (
+            <>
+            <div className="flex flex-col items-start gap-2 p-5 border border-line rounded-lg">
+              <div className="flex items-center gap-3">
+                <Avatar nome={nome} />
+                <div className="flex flex-col">
+                  <span className="text-[15px] leading-[22px] font-semibold">{nome}, {sessao.paciente.idade} anos</span>
+                  <span className="text-[13px] leading-5 text-fg-muted">
+                    {perfil && `${perfil} · `}Dificuldade {DIFICULDADE[sessao.dificuldade]}
+                  </span>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-[6px] h-6 px-[10px] rounded-full bg-accent-soft text-accent text-[12px] font-medium leading-none whitespace-nowrap">
+                <Sparkle size={12} strokeWidth={1.5} aria-hidden />
+                Paciente simulado por IA
+              </span>
+              <span className="text-[13px] leading-5 font-medium text-fg-muted">Queixa principal</span>
+              <p className="m-0">{sessao.paciente.queixa_principal}</p>
+              {mensagens.length === 0 && <p className="m-0 text-[13px] leading-5 text-fg-muted">Apresente-se e pergunte o motivo da consulta.</p>}
+            </div>
+
+            <div role="log" aria-live="polite" aria-label={`Conversa com ${nome}`} className="flex flex-col gap-4">
+              {mensagens.map((msg) =>
+                msg.autor === "paciente" ? (
+                  <Fala key={msg.id} nome={nome} meta={`${nome} · ${hora(msg.criada_em)}`}>{msg.texto}</Fala>
+                ) : (
+                  <Fala key={msg.id} meta={hora(msg.criada_em)}>{msg.texto}</Fala>
+                ),
+              )}
+
+              {streaming === "" && (
+                <Fala nome={nome} meta={`${nome} está digitando…`} ocupado>
+                  <span className="digitando" aria-hidden><span /><span /><span /></span>
+                  <span className="sr-only">{nome} está digitando</span>
+                </Fala>
+              )}
+              {streaming && (
+                <Fala nome={nome} meta={`${nome} está respondendo…`} ocupado>
+                  {streaming}
+                  <span aria-hidden className="inline-block w-2 h-[18px] ml-0.5 align-[-3px] bg-fg animate-[pulse_1s_steps(1)_infinite] motion-reduce:animate-none" />
+                </Fala>
+              )}
+            </div>
+            </>
+            )}
+          </div>
+        </div>
+
+        <div className="px-3 pb-3 md:px-6 md:pb-6">
+          <div className="w-full max-w-[720px] mx-auto flex flex-col gap-2">
+            {falhou && (
+              <Alert type="danger" action={<button type="button" onClick={submeter} disabled={!textoInput.trim()} className="text-[13px] font-medium underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-45">Tentar de novo</button>}>
+                O paciente não conseguiu responder agora. Sua pergunta continua no campo.
+              </Alert>
+            )}
+
+            {!sessao || aberta ? (
+              <>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    submeter();
+                  }}
+                  className="flex items-end gap-2 py-[6px] pr-[6px] pl-[18px] border border-line-strong rounded-xl bg-surface focus-within:border-transparent focus-within:outline-2 focus-within:outline-focus"
+                >
+                  <label htmlFor="pergunta" className="sr-only">Pergunta para o paciente</label>
+                  <textarea
+                    id="pergunta"
+                    ref={inputRef}
+                    rows={1}
+                    value={textoInput}
+                    onChange={(e) => setTextoInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      // enter envia; shift+enter e a composicao do teclado (acentos) quebram a linha
+                      if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                        e.preventDefault();
+                        submeter();
+                      }
+                    }}
+                    disabled={!sessao || streaming !== null}
+                    maxLength={LIMITE}
+                    placeholder="Escreva sua pergunta…"
+                    className="flex-1 min-w-0 min-h-6 max-h-36 py-[6px] border-0 bg-transparent text-fg text-[16px] md:text-[15px] leading-6 resize-none [field-sizing:content] outline-none placeholder:text-fg-muted disabled:cursor-not-allowed"
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Enviar pergunta"
+                    disabled={!textoInput.trim() || streaming !== null}
+                    // a bolinha so aparece com texto; vazio fica so o icone
+                    className={`grid place-items-center shrink-0 size-10 md:size-9 rounded-full transition-colors disabled:cursor-not-allowed ${textoInput.trim() ? "bg-fg text-bg cursor-pointer hover:bg-fg/85" : "text-fg-muted"}`}
+                  >
+                    <Send size={16} strokeWidth={1.5} aria-hidden />
+                  </button>
+                </form>
+                <p className="hidden md:block m-0 text-[12px] leading-4 text-fg-muted">Enter envia · Shift+Enter quebra a linha</p>
+              </>
+            ) : (
+              <Alert type="info">A anamnese foi encerrada. O plano alimentar chega na próxima etapa.</Alert>
+            )}
+          </div>
+        </div>
       </div>
 
-      {falha && (
-        <div className="px-2 pt-2 md:px-3">
-          <Alert
-            type="danger"
-            action={
-              <button type="button" onClick={() => enviar(falha.texto)} className="text-[13px] font-medium underline cursor-pointer">
-                Tentar de novo
-              </button>
-            }
-          >
-            {falha.erro.mensagem}
-          </Alert>
-        </div>
-      )}
-
-      {!aberta && (
-        <div className="px-2 pt-2 md:px-3">
-          <Alert type="info">A anamnese foi encerrada. O plano alimentar chega na próxima etapa.</Alert>
-        </div>
-      )}
-
-      <form onSubmit={handleEnviar} className="flex gap-2 p-2 md:p-3 bg-surface border-t border-line shrink-0 w-full overflow-hidden">
-        <label htmlFor="composer-input" className="sr-only">
-          Mensagem para o paciente
-        </label>
-        <input
-          id="composer-input"
-          ref={inputRef}
-          type="text"
-          value={textoInput}
-          onChange={(e) => setTextoInput(e.target.value)}
-          disabled={streaming !== null || !aberta}
-          maxLength={LIMITE}
-          placeholder="Escreva sua mensagem..."
-          className="flex-1 min-w-0 h-11 px-3 border border-line-strong rounded-md bg-bg text-fg text-[16px] md:text-[15px] leading-6 placeholder:text-fg-muted focus:outline-focus focus:outline-2 disabled:opacity-45 disabled:cursor-not-allowed transition-colors hover:border-fg-muted"
-          autoComplete="off"
-        />
-        <Button type="submit" variant="secondary" disabled={!textoInput.trim() || streaming !== null || !aberta} aria-label="Enviar mensagem" className="w-11 px-0 shrink-0">
-          <Send size={16} strokeWidth={1.5} aria-hidden />
-        </Button>
-      </form>
+      <Anotacoes sessaoId={sessaoId} aberto={painel} onAbrir={() => setPainel(true)} onFechar={fecharPainel} />
     </div>
   );
 }
