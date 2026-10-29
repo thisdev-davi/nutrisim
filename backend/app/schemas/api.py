@@ -72,6 +72,17 @@ class Sessao(BaseModel):
     mensagens: list[Mensagem]
 
 
+class ResumoSessao(BaseModel):
+    """o que o inicio mostra de cada sessao, sem as falas."""
+
+    id: str
+    etapa: Etapa
+    perfil: str
+    dificuldade: Dificuldade
+    paciente: Paciente
+    criada_em: datetime
+
+
 class NovaMensagem(BaseModel):
     """pergunta do estudante ao paciente."""
 

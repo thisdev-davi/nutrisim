@@ -2,15 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { History, House, Plus, X } from "lucide-react";
+import { House, Plus, X } from "lucide-react";
 import { estiloBotao } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 
-// ponytail: historico aponta para # ate a rota existir
-const ITENS = [
-  { href: "/", rotulo: "Início", Icone: House },
-  { href: "#", rotulo: "Histórico", Icone: History },
-];
+// historico (icone History) volta com a tela da NS-054
+const ITENS = [{ href: "/", rotulo: "Início", Icone: House }];
 
 interface SidebarProps {
   id?: string;

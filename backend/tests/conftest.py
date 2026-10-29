@@ -5,7 +5,7 @@ import pytest
 
 from app.api.auth import usuario_atual
 from app.db.deps import obter_sessao
-from app.db.modelos import ChamadaLLM, Usuario
+from app.db.modelos import ChamadaLLM, Sessao, Usuario
 from app.eval import juiz, runner
 from app.main import app
 
@@ -25,6 +25,8 @@ class BancoFalso:
         """conta o commit, numera e data as mensagens, como faria o insert."""
         self.commits += 1
         for objeto in self.objetos:
+            if isinstance(objeto, Sessao):
+                objeto.criada_em = objeto.criada_em or datetime.now(UTC)
             for i, mensagem in enumerate(getattr(objeto, "mensagens", []), 1):
                 mensagem.id = mensagem.id or i
                 mensagem.criada_em = mensagem.criada_em or datetime.now(UTC)
@@ -35,23 +37,31 @@ class BancoFalso:
     def refresh(self, objeto, **kwargs):
         """nada a recarregar: tudo ja esta em memoria."""
 
+    def scalars(self, consulta):
+        """objetos que casam com um where de igualdade (coluna == valor).
+
+        Ignora order_by e limit: devolve do ultimo gravado para o primeiro,
+        como o order_by criada_em desc das rotas.
+
+        Returns:
+            objetos encontrados.
+        """
+        modelo = consulta.column_descriptions[0]["entity"]
+        filtro = consulta.whereclause
+        return [
+            o
+            for o in reversed(self.objetos)
+            if isinstance(o, modelo)
+            and getattr(o, filtro.left.key) == filtro.right.value
+        ]
+
     def scalar(self, consulta):
-        """primeiro objeto que casa com um where de igualdade (coluna == valor).
+        """primeiro objeto que casa com um where de igualdade.
 
         Returns:
             objeto encontrado ou None.
         """
-        modelo = consulta.column_descriptions[0]["entity"]
-        filtro = consulta.whereclause
-        return next(
-            (
-                o
-                for o in self.objetos
-                if isinstance(o, modelo)
-                and getattr(o, filtro.left.key) == filtro.right.value
-            ),
-            None,
-        )
+        return next(iter(self.scalars(consulta)), None)
 
     def get(self, modelo, id_):
         """busca pela chave primaria.

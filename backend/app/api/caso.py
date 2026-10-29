@@ -6,6 +6,7 @@ from typing import Annotated, get_args
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.auth import UsuarioAtual
@@ -23,6 +24,7 @@ from app.schemas.api import (
     Paciente,
     Perfil,
     RespostaErro,
+    ResumoSessao,
     Sessao,
 )
 from app.schemas.ficha import Ficha, Restricoes
@@ -121,6 +123,41 @@ async def listar_opcoes() -> Opcoes:
         perfis e niveis disponiveis.
     """
     return Opcoes(perfis=PERFIS, dificuldades=list(Dificuldade))
+
+
+@router.get("/sessoes")
+def listar_sessoes(
+    db: Annotated[Session, Depends(obter_sessao)], usuario: UsuarioAtual
+) -> list[ResumoSessao]:
+    """ultimas sessoes do estudante, da mais nova para a mais antiga.
+
+    Args:
+        db: sessao do banco.
+        usuario: estudante autenticado.
+
+    Returns:
+        ate 6 sessoes, so o resumo de cada uma.
+    """
+    # ponytail: ordena pela criacao; trocar pela ultima fala se o inicio
+    # precisar mostrar a ultima sessao mexida
+    linhas = db.scalars(
+        select(modelos.Sessao)
+        .where(modelos.Sessao.usuario_id == usuario.id)
+        .order_by(modelos.Sessao.criada_em.desc())
+        .limit(6)
+    )
+    nomes = {p.id: p.nome for p in PERFIS}
+    return [
+        ResumoSessao(
+            id=str(linha.id),
+            etapa=linha.etapa,
+            perfil=nomes[linha.perfil_id],
+            dificuldade=linha.dificuldade,
+            paciente=Paciente.model_validate(linha.ficha["paciente"]),
+            criada_em=linha.criada_em,
+        )
+        for linha in linhas
+    ]
 
 
 def gerar_ficha(db: Session, dados: NovaSessao) -> Ficha:

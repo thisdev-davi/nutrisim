@@ -56,6 +56,6 @@ describe("FormularioAuth", () => {
     await user.type(screen.getByLabelText("Senha"), "12345678");
     await user.click(screen.getByRole("button", { name: "Entrar" }));
 
-    expect(await screen.findByRole("link", { name: "abra o NutriSim" })).toHaveAttribute("href", "/caso/novo");
+    expect(await screen.findByRole("link", { name: "abra o NutriSim" })).toHaveAttribute("href", "/");
   });
 });
