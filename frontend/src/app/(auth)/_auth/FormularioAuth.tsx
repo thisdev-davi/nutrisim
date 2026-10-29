@@ -54,8 +54,8 @@ export function FormularioAuth({ modo, email = "", redirect }: { modo: Modo; ema
   const criar = modo === "criar";
   const t = TEXTOS[modo];
   const schema = criar ? cadastroSchema : loginSchema;
-  // so caminho interno, para o ?redirect= nao mandar para outro site
-  const destino = redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/caso/novo";
+  // so caminho interno: barra seguida de "/" ou "\" o navegador le como outro site
+  const destino = redirect && /^\/(?![/\\])/.test(redirect) ? redirect : "/caso/novo";
   const sufixo = redirect ? `?redirect=${encodeURIComponent(redirect)}` : "";
 
   const [dados, setDados] = useState({ nome: "", email, senha: "" });

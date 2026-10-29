@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 const authRoutes = ["/login", "/cadastro"];
 
 export function proxy(request: NextRequest) {
+  // mesmo nome do COOKIE_TOKEN do lib/api, que nao entra aqui por puxar codigo do navegador
   const token = request.cookies.get("nutrisim_token")?.value;
   const { pathname } = request.nextUrl;
 

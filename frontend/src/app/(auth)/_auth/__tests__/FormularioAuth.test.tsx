@@ -47,4 +47,15 @@ describe("FormularioAuth", () => {
     expect(screen.getByLabelText("Senha")).toHaveValue("");
     expect(screen.getByLabelText("E-mail")).toHaveValue("ana@exemplo.com");
   });
+
+  it("redirect com barra invertida nao sai do site", async () => {
+    login.mockResolvedValueOnce(undefined);
+    const user = userEvent.setup();
+    render(<FormularioAuth modo="entrar" email="ana@exemplo.com" redirect={"/\\evil.com"} />);
+
+    await user.type(screen.getByLabelText("Senha"), "12345678");
+    await user.click(screen.getByRole("button", { name: "Entrar" }));
+
+    expect(await screen.findByRole("link", { name: "abra o NutriSim" })).toHaveAttribute("href", "/caso/novo");
+  });
 });
