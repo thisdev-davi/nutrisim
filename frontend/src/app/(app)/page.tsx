@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight, MessagesSquare, Plus } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Alert } from "@/components/ui/Alert";
@@ -31,7 +31,7 @@ export default function InicioPage() {
   const nome = usuario?.nome.split(" ")[0];
 
   return (
-    <div className="w-full max-w-[960px] mx-auto px-4 pt-6 pb-8 md:px-10 md:pt-10 md:pb-16 flex flex-col gap-8 md:gap-10">
+    <div className="w-full max-w-[960px] mx-auto px-4 pt-6 pb-8 md:px-10 md:pt-10 md:pb-16 flex-1 flex flex-col gap-8 md:gap-10">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
         <h1 className="flex-[1_1_420px] m-0 font-display font-medium text-[24px] leading-[30px] md:text-[28px] md:leading-[34px] tracking-[-0.02em] text-balance">
           Olá{nome && `, ${nome}`}.{" "}
@@ -49,26 +49,33 @@ export default function InicioPage() {
         <Alert type="danger" action={<button type="button" onClick={() => refetch()} className="text-[13px] font-medium underline cursor-pointer">Tentar de novo</button>}>
           Não foi possível carregar suas sessões. Verifique a conexão.
         </Alert>
+      ) : !atual ? (
+        <div className="relative isolate overflow-hidden flex-1 min-h-[280px] grid place-items-center px-4 py-12 border border-line rounded-lg">
+          <span className="pontos -z-10" aria-hidden />
+          <div className="flex flex-col items-center gap-3 text-center">
+            <MessagesSquare size={24} strokeWidth={1.5} aria-hidden className="text-fg-muted" />
+            <h2 className="m-0 text-[18px] leading-[26px] font-semibold">Nenhuma conversa registrada</h2>
+            <p className="m-0 max-w-[40ch] text-fg-muted">Suas sessões aparecem aqui assim que você atender o primeiro paciente.</p>
+          </div>
+        </div>
       ) : (
-        atual && (
-          <section aria-labelledby="continuar" className="flex flex-col gap-4">
-            <h2 id="continuar" className={TITULO_SECAO}>Continuar de onde parou</h2>
-            <div className="flex flex-col md:flex-row md:flex-wrap md:items-center gap-6 p-6 border border-line rounded-lg bg-surface">
-              <div className="flex flex-[1_1_200px] items-center gap-3 min-w-0">
-                <Avatar nome={atual.paciente.nome} grande />
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <h3 className="m-0 text-[16px] leading-6 font-semibold">{atual.paciente.nome}, {atual.paciente.idade} anos</h3>
-                  <span className="text-fg-muted text-[14px] leading-5">{atual.perfil} · Dificuldade {DIFICULDADE[atual.dificuldade]}</span>
-                </div>
+        <section aria-labelledby="continuar" className="flex flex-col gap-4">
+          <h2 id="continuar" className={TITULO_SECAO}>Continuar de onde parou</h2>
+          <div className="flex flex-col md:flex-row md:flex-wrap md:items-center gap-6 p-6 border border-line rounded-lg bg-surface">
+            <div className="flex flex-[1_1_200px] items-center gap-3 min-w-0">
+              <Avatar nome={atual.paciente.nome} grande />
+              <div className="flex flex-col gap-0.5 min-w-0">
+                <h3 className="m-0 text-[16px] leading-6 font-semibold">{atual.paciente.nome}, {atual.paciente.idade} anos</h3>
+                <span className="text-fg-muted text-[14px] leading-5">{atual.perfil} · Dificuldade {DIFICULDADE[atual.dificuldade]}</span>
               </div>
-              <div className="flex flex-[0_1_200px] flex-col gap-2">
-                <span className="text-fg-muted text-[14px] leading-5">Etapa {etapa} de {ETAPAS.length} · {ETAPAS[etapa - 1]}</span>
-                <Progresso atual={etapa} />
-              </div>
-              <Link href={`/sessoes/${atual.id}`} className={estiloBotao("primary")}>Continuar sessão</Link>
             </div>
-          </section>
-        )
+            <div className="flex flex-[0_1_200px] flex-col gap-2">
+              <span className="text-fg-muted text-[14px] leading-5">Etapa {etapa} de {ETAPAS.length} · {ETAPAS[etapa - 1]}</span>
+              <Progresso atual={etapa} />
+            </div>
+            <Link href={`/sessoes/${atual.id}`} className={estiloBotao("primary")}>Continuar sessão</Link>
+          </div>
+        </section>
       )}
 
       {recentes.length > 0 && (

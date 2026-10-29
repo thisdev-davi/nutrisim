@@ -36,6 +36,7 @@ describe("InicioPage", () => {
     renderizar([]);
 
     expect(await screen.findByText("Comece seu primeiro paciente.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Nenhuma conversa registrada" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Continuar sessão" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Nova sessão/ })).toHaveAttribute("href", "/caso/novo");
   });
