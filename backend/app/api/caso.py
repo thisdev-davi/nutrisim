@@ -107,7 +107,7 @@ def para_api(linha: modelos.Sessao) -> Sessao:
         # extra e ignorado: so passam nome, idade e queixa
         paciente=Paciente.model_validate(linha.ficha["paciente"]),
         mensagens=[
-            Mensagem(id=str(m.id), autor=m.autor, texto=m.texto)
+            Mensagem(id=str(m.id), autor=m.autor, texto=m.texto, criada_em=m.criada_em)
             for m in linha.mensagens
         ],
     )

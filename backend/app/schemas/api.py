@@ -1,5 +1,6 @@
 # contrato da api com o front (etapas 1 e 2)
 # nenhum modelo aqui carrega a ficha oculta: ela nunca sai do backend
+from datetime import datetime
 from enum import StrEnum
 from typing import Literal
 
@@ -57,6 +58,7 @@ class Mensagem(BaseModel):
     id: str
     autor: Literal["estudante", "paciente"]
     texto: str
+    criada_em: datetime
 
 
 class Sessao(BaseModel):

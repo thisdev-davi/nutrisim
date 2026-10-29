@@ -64,6 +64,7 @@ def test_conversa_grava_o_historico_e_reenvia(monkeypatch):
 
     obtida = client.get(f"/api/sessoes/{sessao['id']}").json()
     falas = [(m["autor"], m["texto"]) for m in obtida["mensagens"]]
+    assert all(m["criada_em"] for m in obtida["mensagens"])  # o front mostra a hora
     assert falas == [
         ("estudante", "Bom dia, tudo bem?"),
         ("paciente", "Bom dia.</resposta>"),
