@@ -1,6 +1,12 @@
 name: Frontend Pipeline
 
 on:
+  push:
+    branches:
+      - desenvolvimento
+    paths: # so roda (e publica) quando o frontend muda
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
   pull_request:
     branches:
       - main
@@ -33,5 +39,16 @@ jobs:
         
         - name: Rodar Testes
           run: npm run test
-          
 
+    deploy: # publica no render so depois do lint e dos testes passarem
+      name: Deploy no Render
+      needs: frontend-lint-test
+      if: github.event_name == 'push'
+      runs-on: ubuntu-latest
+      steps:
+        - name: Disparar deploy do commit testado
+          run: |
+            curl -fsS -X POST https://api.render.com/v1/services/srv-dbfo93l9el5s73fvk6t0/deploys \
+              -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+              -H "Content-Type: application/json" \
+              -d '{"commitId": "${{ github.sha }}"}'
