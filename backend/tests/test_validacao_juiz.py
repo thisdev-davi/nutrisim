@@ -186,3 +186,46 @@ def test_veredito_vem_pelo_turno_e_nao_pela_ordem():
     ]
     amostra = v.montar_amostra(resultado, tamanho=3)
     assert [i.turno for i in amostra if i.caso == "pi-01"] == [2]
+
+
+def test_caso_repetido_na_rodada_para():
+    """com duas execucoes do mesmo caso, a chave caso+turno ficaria ambigua."""
+    resultado = _resultado()
+    resultado["fichas"] = [*resultado["fichas"], dict(resultado["fichas"][0])]
+    with pytest.raises(ValueError, match="ficha-a"):
+        v.montar_amostra(resultado, tamanho=2)
+
+
+def test_planilha_sem_coluna_rotulo_para(tmp_path):
+    """coluna renomeada pelo Excel para com o nome da coluna, nao com KeyError."""
+    arquivo = tmp_path / "rotulos.csv"
+    arquivo.write_text("id;rotulos\nA01;consistente\n", encoding="utf-8-sig")
+    with pytest.raises(ValueError, match="rotulo"):
+        v.ler_rotulos(arquivo)
+
+
+def _preparar_pasta(tmp_path):
+    """gera a amostra e uma planilha toda rotulada como consistente.
+
+    Returns:
+        argumentos de pasta e resultado para o `main`.
+    """
+    resultado = tmp_path / "rodada.json"
+    resultado.write_text(json.dumps(_resultado()), encoding="utf-8")
+    argv = ["amostra", "--resultado", str(resultado), "--pasta", str(tmp_path)]
+    assert v.main(argv) == 0
+    planilha = tmp_path / "rotulos-c2.csv"
+    texto = planilha.read_text(encoding="utf-8-sig")
+    planilha.write_text(texto.replace(";;\n", ";consistente;\n"), encoding="utf-8-sig")
+    return ["--resultado", str(resultado), "--pasta", str(tmp_path)]
+
+
+def test_rejulgar_nao_apaga_o_resultado_gravado(tmp_path, monkeypatch):
+    """rejulgar para antes de chamar o juiz se ja existe resultado da versao."""
+    monkeypatch.setattr(v, "TAMANHO_C2", AMOSTRA)
+    monkeypatch.setattr(v.modulo_juiz, "modelo_do_juiz", lambda: "modelo-de-teste")
+    comuns = _preparar_pasta(tmp_path)
+    gravado = tmp_path / f"resultado-c2_{v.modulo_juiz.VERSAO_PROMPT}.json"
+    gravado.write_text('{"vereditos": "os do PR"}', encoding="utf-8")
+    assert v.main(["rejulgar", *comuns]) == 1
+    assert gravado.read_text(encoding="utf-8") == '{"vereditos": "os do PR"}'

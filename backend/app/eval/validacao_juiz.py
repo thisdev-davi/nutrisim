@@ -16,6 +16,7 @@ from app.eval import juiz as modulo_juiz
 from app.eval.juiz import Categoria, Turno, Veredito
 from app.eval.runner import (
     ESPERAS_COTA_S,
+    PASTA_EVALS,
     PAUSA_JUIZ_S,
     BancoMemoria,
     Ritmo,
@@ -23,7 +24,6 @@ from app.eval.runner import (
     ler_fichas,
 )
 
-PASTA_EVALS = Path(__file__).parents[3] / "evals"
 PASTA_JUIZ = PASTA_EVALS / "juiz"
 RESULTADO_RODADA_1 = (
     PASTA_EVALS
@@ -98,36 +98,50 @@ def _itens(resultado: dict[str, Any]) -> list[tuple[ItemAmostra, str, str]]:
         (item, grupo do sorteio, categoria do juiz) de cada resposta.
     """
     itens = []
-    for linha in resultado["fichas"]:
-        categorias = _categorias_por_turno(linha)
-        for i, passo in enumerate(linha["conversa"]):
-            item = ItemAmostra(
-                id="",
-                caso=linha["id"],
-                ficha=linha["id"],
-                turno=i + 1,
-                conversa_anterior=linha["conversa"][:i],
-                pergunta=passo["pergunta"],
-                resposta=passo["resposta"],
-                roteiro_esperado=passo["esperado"],
-                roteiro_item=passo["item"],
-            )
-            grupo = f"ficha:{passo['esperado']}"
-            itens.append((item, grupo, categorias[i + 1]))
-    for linha in resultado["ataques"]:
-        categorias = _categorias_por_turno(linha)
-        for i, passo in enumerate(linha["conversa"]):
-            item = ItemAmostra(
-                id="",
-                caso=linha["id"],
-                ficha=linha["ficha"],
-                turno=i + 1,
-                conversa_anterior=linha["conversa"][:i],
-                pergunta=passo["pergunta"],
-                resposta=passo["resposta"],
-            )
-            itens.append((item, "ataque", categorias[i + 1]))
+    for chave in ("fichas", "ataques"):
+        ataque = chave == "ataques"
+        for linha in resultado[chave]:
+            categorias = _categorias_por_turno(linha)
+            for i, passo in enumerate(linha["conversa"]):
+                item = ItemAmostra(
+                    id="",
+                    caso=linha["id"],
+                    ficha=linha["ficha"] if ataque else linha["id"],
+                    turno=i + 1,
+                    conversa_anterior=linha["conversa"][:i],
+                    pergunta=passo["pergunta"],
+                    resposta=passo["resposta"],
+                    roteiro_esperado=None if ataque else passo["esperado"],
+                    roteiro_item=None if ataque else passo["item"],
+                )
+                grupo = "ataque" if ataque else f"ficha:{passo['esperado']}"
+                itens.append((item, grupo, categorias[i + 1]))
     return itens
+
+
+def conferir_execucao_unica(resultado: dict[str, Any]) -> None:
+    """para se a rodada repete algum caso em mais de uma execucao.
+
+    A amostra e a comparacao casam resposta e veredito por caso e turno, sem o
+    numero da execucao. Com duas execucoes do mesmo caso, o rotulo sairia
+    comparado com o veredito de outra resposta, calado. Levar a execucao na
+    chave fica para a NS-064, que sorteia uma amostra nova.
+
+    Args:
+        resultado: arquivo de resultado do runner, ja lido.
+
+    Raises:
+        ValueError: algum caso aparece mais de uma vez na rodada.
+    """
+    casos = Counter(
+        linha["id"] for chave in ("fichas", "ataques") for linha in resultado[chave]
+    )
+    repetidos = sorted(caso for caso, n in casos.items() if n > 1)
+    if repetidos:
+        raise ValueError(
+            f"a rodada tem mais de uma execucao dos casos {repetidos}; "
+            "esta validacao so trata uma execucao por caso"
+        )
 
 
 def montar_amostra(
@@ -149,6 +163,7 @@ def montar_amostra(
     Returns:
         itens em ordem embaralhada, com ids A01, A02...
     """
+    conferir_execucao_unica(resultado)
     sorteio = random.Random(semente)  # noqa: S311 (sorteio de amostra, nao senha)
     grupos: dict[str, list[tuple[ItemAmostra, str]]] = {}
     for item, grupo, categoria in _itens(resultado):
@@ -179,11 +194,12 @@ def vereditos_do_juiz(
     Returns:
         categoria do juiz por id da amostra.
     """
+    conferir_execucao_unica(resultado)
     por_chave = {}
     for chave in ("fichas", "ataques"):
         for linha in resultado[chave]:
-            for v in linha["vereditos"]:
-                por_chave[(linha["id"], v["turno"])] = v["categoria"]
+            for turno, categoria in _categorias_por_turno(linha).items():
+                por_chave[(linha["id"], turno)] = categoria
     return {item.id: por_chave[(item.caso, item.turno)] for item in amostra}
 
 
@@ -218,13 +234,21 @@ def ler_rotulos(arquivo: Path) -> dict[str, str]:
         categoria humana por id.
 
     Raises:
-        ValueError: rotulo vazio, fora das cinco categorias, ou id repetido.
+        ValueError: falta coluna, rotulo vazio, fora das cinco categorias, ou
+            id repetido.
     """
     with arquivo.open(encoding="utf-8-sig", newline="") as f:
-        linhas = list(csv.DictReader(f, delimiter=";"))
+        leitor = csv.DictReader(f, delimiter=";")
+        colunas = leitor.fieldnames or []
+        linhas = list(leitor)
+    if faltando := [c for c in ("id", "rotulo") if c not in colunas]:
+        raise ValueError(
+            f"a planilha nao tem as colunas {faltando}; o Excel pode ter "
+            f"renomeado ou trocado o separador. Colunas lidas: {colunas}"
+        )
     rotulos = {}
     for linha in linhas:
-        rotulo = linha["rotulo"].strip()
+        rotulo = (linha["rotulo"] or "").strip()
         if rotulo not in CATEGORIAS:
             raise ValueError(f"{linha['id']}: rotulo invalido {rotulo!r}")
         if linha["id"] in rotulos:
@@ -357,7 +381,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--forcar",
         action="store_true",
-        help="no passo amostra, regrava a planilha mesmo com rotulos ja feitos",
+        help="regrava a planilha ja rotulada, ou o resultado de um rejulgamento",
     )
     args = parser.parse_args(argv)
     resultado = json.loads(args.resultado.read_text(encoding="utf-8"))
@@ -377,13 +401,18 @@ def main(argv: list[str] | None = None) -> int:
         for i in json.loads(arquivo_amostra.read_text(encoding="utf-8"))
     ]
     rotulos = ler_rotulos(planilha)
-    conferir_cobertura(rotulos, [i.id for i in amostra])
     if args.passo == "comparar":
         versao, modelo = resultado["versao_prompt_juiz"], resultado["modelo_juiz"]
         juiz = vereditos_do_juiz(resultado, amostra)
         detalhes = None
     else:
         versao, modelo = modulo_juiz.VERSAO_PROMPT, modulo_juiz.modelo_do_juiz()
+        gravado = args.pasta / f"resultado-c2_{versao}.json"
+        if gravado.exists() and not args.forcar:
+            logger.error("{} ja existe e apagaria os vereditos; use --forcar", gravado)
+            return 1
+        # antes de gastar as chamadas do juiz, nao depois
+        conferir_cobertura(rotulos, [i.id for i in amostra])
         fichas = {f.id: f.ficha for f in ler_fichas(None, PASTA_EVALS / "fichas")}
         ritmo = Ritmo(PAUSA_JUIZ_S)
         detalhes = rejulgar(
