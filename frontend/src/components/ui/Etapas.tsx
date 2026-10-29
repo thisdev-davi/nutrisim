@@ -1,6 +1,17 @@
 import { ChevronDown } from "lucide-react";
 
-const ETAPAS = ["Caso", "Anamnese", "Plano alimentar", "Cenários", "Retorno e feedback"];
+export const ETAPAS = ["Caso", "Anamnese", "Plano alimentar", "Cenários", "Retorno e feedback"];
+
+// barra de 5 segmentos: feitas em cinza forte, a atual em lima
+export function Progresso({ atual, className = "" }: { atual: number; className?: string }) {
+  return (
+    <span aria-hidden className={`grid grid-cols-5 gap-1 ${className}`}>
+      {ETAPAS.map((etapa, i) => (
+        <span key={etapa} className={`h-1 rounded-full ${i + 1 === atual ? "bg-accent" : i + 1 < atual ? "bg-line-strong" : "bg-surface-raised"}`} />
+      ))}
+    </span>
+  );
+}
 
 function Ponto({ n, atual }: { n: number; atual: number }) {
   const cor = n === atual ? "border-transparent bg-accent text-on-accent" : n < atual ? "border-line-strong text-fg" : "border-line";
@@ -30,11 +41,7 @@ export function Etapas({ atual, compacta = false }: { atual: number; compacta?: 
       <summary className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 min-h-11 px-4 py-3 list-none cursor-pointer text-fg-muted text-[14px] leading-5 [&::-webkit-details-marker]:hidden">
         <span>Etapa {atual} de {ETAPAS.length} · {ETAPAS[atual - 1]}</span>
         <ChevronDown size={16} strokeWidth={1.5} aria-hidden className="group-open:rotate-180" />
-        <span aria-hidden className="col-span-full grid grid-cols-5 gap-1">
-          {ETAPAS.map((etapa, i) => (
-            <span key={etapa} className={`h-1 rounded-full ${i + 1 === atual ? "bg-accent" : i + 1 < atual ? "bg-line-strong" : "bg-surface-raised"}`} />
-          ))}
-        </span>
+        <Progresso atual={atual} className="col-span-full" />
       </summary>
       <nav aria-label="Etapas da sessão">{lista(true)}</nav>
     </details>

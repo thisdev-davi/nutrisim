@@ -10,10 +10,9 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-  const isPublicRoute = pathname === "/";
 
-  // Sem token, não é rota de autenticar e não é rota pública
-  if (!token && !isAuthRoute && !isPublicRoute) {
+  // Sem token e não é rota de autenticar
+  if (!token && !isAuthRoute) {
     const urlLogin = new URL("/login", request.url);
     urlLogin.searchParams.set("redirect", pathname);
     return NextResponse.redirect(urlLogin);
@@ -21,7 +20,7 @@ export function proxy(request: NextRequest) {
 
   // Já tem token e tentou acessar rota de login/cadastro
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/caso/novo", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Libera o acesso

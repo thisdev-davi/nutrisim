@@ -21,6 +21,8 @@ Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As eta
 
 O histórico fica no backend. O front não precisa reenviá-lo a cada turno: ele manda só a pergunta nova.
 
+A tela de Início (NS-037) usa `GET /api/sessoes`, que devolve as 6 últimas sessões do estudante, da mais nova para a mais antiga. Cada item traz `id`, `etapa`, `perfil` (o nome legível, por exemplo "Adulto com hipertensão"), `dificuldade`, `paciente` e `criada_em`, mas não traz as falas.
+
 ## Como consumir o stream do paciente
 
 A rota de mensagens é `POST` com resposta em Server-Sent Events. O `EventSource` do navegador só faz `GET`, então a leitura é feita com `fetch` e `ReadableStream`, sem biblioteca:

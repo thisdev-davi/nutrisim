@@ -31,7 +31,7 @@ export interface Sessao {
 
 const LIMITE = 2000; // o mesmo do backend (dados_invalidos acima disso)
 
-const DIFICULDADE = { facil: "fácil", medio: "média", dificil: "difícil" };
+export const DIFICULDADE = { facil: "fácil", medio: "média", dificil: "difícil" };
 
 const hora = (iso: string) => new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 

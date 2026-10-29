@@ -1,5 +1,6 @@
 import json
 from types import SimpleNamespace
+from uuid import uuid4
 
 import httpx
 import pytest
@@ -68,6 +69,22 @@ def test_cria_o_caso_sem_vazar_a_ficha(monkeypatch, banco):
     for oculto in textos_ocultos(json.loads(EXEMPLO)):
         assert oculto not in criada.text
         assert oculto not in obtida.text
+
+
+def test_lista_so_as_sessoes_do_estudante(monkeypatch, banco):
+    """a mais nova vem primeiro, com o nome do perfil e sem a ficha."""
+    provedor_falso(monkeypatch, [EXEMPLO, EXEMPLO])
+    primeira = client.post("/api/sessoes", json=NOVA).json()
+    segunda = client.post("/api/sessoes", json=NOVA | {"dificuldade": "facil"}).json()
+    alheia = Sessao(id=uuid4(), usuario_id=uuid4(), **NOVA, etapa="anamnese")
+    banco.add(alheia)
+
+    lista = client.get("/api/sessoes")
+    assert [s["id"] for s in lista.json()] == [segunda["id"], primeira["id"]]
+    assert lista.json()[0]["perfil"] == "Adulto com colesterol alto"
+    assert lista.json()[0]["criada_em"]
+    for oculto in textos_ocultos(json.loads(EXEMPLO)):
+        assert oculto not in lista.text
 
 
 def test_perfil_de_encaminhamento_impoe_a_conduta(monkeypatch, banco):

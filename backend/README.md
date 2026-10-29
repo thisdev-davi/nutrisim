@@ -37,6 +37,7 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 | `GET /api/auth/eu` | NS-035 | usuário dono do token |
 | `GET /api/perfis` | 1 | perfis e níveis de dificuldade |
 | `POST /api/sessoes` | 1 | cria o caso e a sessão |
+| `GET /api/sessoes` | NS-037 | últimas sessões do estudante, para o Início |
 | `GET /api/sessoes/{id}` | 2 | estado e histórico, para retomar |
 | `POST /api/sessoes/{id}/mensagens` | 2 | fala do paciente em SSE |
 | `POST /api/sessoes/{id}/anamnese/encerrar` | 2 | encerra a anamnese e vai para o plano |
