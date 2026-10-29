@@ -11,7 +11,7 @@ evals/
 ├── fichas/       10 a 15 fichas ocultas com roteiro de perguntas e resultado esperado  NS-027
 ├── ataques/      cerca de 30 tentativas de prompt injection                             NS-028
 ├── estudante/    prompt do estudante simulado (estudante-v1.md)                         NS-031
-├── juiz/         prompt do juiz (juiz-v2.md) e os 50 vereditos rotulados à mão          NS-032/033
+├── juiz/         prompt do juiz (juiz-v3.md), rótulos e validação (relatorio-c2.md)       NS-032/033
 ├── scripts/      runner, estudante simulado, juiz e cálculo das métricas                NS-026/031
 └── resultados/   uma execução por arquivo, versionada no repositório                    NS-034+
 ```
