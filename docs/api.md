@@ -35,10 +35,10 @@ export async function enviarMensagem(
 ): Promise<string> {
   const resp = await fetch(`${API_URL}/api/sessoes/${sessaoId}/mensagens`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ texto }),
   });
-  // 404 e 422 chegam antes de o stream abrir, como JSON comum
+  // 401, 404 e 422 chegam antes de o stream abrir, como JSON comum
   if (!resp.ok) throw ((await resp.json()) as { erro: Erro }).erro;
 
   const leitor = resp.body!.pipeThrough(new TextDecoderStream()).getReader();

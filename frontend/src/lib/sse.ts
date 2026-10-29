@@ -1,71 +1,33 @@
-export interface SSEMessage {
-  event: string;
-  data: string;
-}
+import { requisitar, type Erro } from "@/lib/api";
 
-interface FetchSSEOptions extends RequestInit {
-  onMessage: (msg: SSEMessage) => void;
-  onError?: (err: unknown) => void;
-}
-
-export async function fetchSSE(url: string, options: FetchSSEOptions) {
-  const { onMessage, onError, ...fetchOptions } = options;
-
-  try {
-    const response = await fetch(url, {
-      ...fetchOptions,
-      headers: {
-        ...fetchOptions.headers,
-        Accept: "text/event-stream",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Falha na requisição: ${response.status} ${response.statusText}`);
+// le o stream do paciente (docs/api.md); resolve com o id da fala ou lanca o Erro do contrato
+export async function enviarMensagem(
+  sessaoId: string,
+  texto: string,
+  aoTrecho: (texto: string) => void,
+  signal?: AbortSignal,
+): Promise<string> {
+  const resp = await requisitar(`/sessoes/${sessaoId}/mensagens`, {
+    method: "POST",
+    headers: { Accept: "text/event-stream" },
+    body: JSON.stringify({ texto }),
+    signal,
+  });
+  const leitor = resp.body!.pipeThrough(new TextDecoderStream()).getReader();
+  let buffer = "";
+  for (;;) {
+    const { value, done } = await leitor.read();
+    if (done) throw { codigo: "stream_interrompido", mensagem: "A conexão caiu. Tente de novo." } satisfies Erro;
+    buffer += value.replace(/\r/g, "");
+    const blocos = buffer.split("\n\n");
+    buffer = blocos.pop()!; // bloco incompleto fica para a proxima leitura
+    for (const bloco of blocos) {
+      const evento = bloco.match(/^event: ?(.*)$/m)?.[1];
+      const dados = bloco.match(/^data: ?(.*)$/m)?.[1];
+      if (!dados) continue; // ": ping" de keep-alive
+      if (evento === "trecho") aoTrecho(JSON.parse(dados).texto);
+      if (evento === "fim") return JSON.parse(dados).mensagem_id;
+      if (evento === "erro") throw JSON.parse(dados) as Erro;
     }
-    if (!response.body) {
-      throw new Error("O corpo da resposta está vazio.");
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      // Decodifica os bytes recebidos e junta ao buffer
-      buffer += decoder.decode(value, { stream: true });
-
-      // O protocolo SSE separa as mensagens por "\n\n"
-      let limite = buffer.indexOf("\n\n");
-      while (limite !== -1) {
-        const bloco = buffer.slice(0, limite);
-        buffer = buffer.slice(limite + 2);
-
-        let eventType = "message";
-        let eventData = "";
-
-        // Lê as linhas do bloco para extrair 'event:' e 'data:'
-        const linhas = bloco.split("\n");
-        for (const linha of linhas) {
-          if (linha.startsWith("event:")) {
-            eventType = linha.replace("event:", "").trim();
-          } else if (linha.startsWith("data:")) {
-            eventData = linha.replace("data:", "").trim();
-          }
-        }
-
-        if (eventData) {
-          onMessage({ event: eventType, data: eventData });
-        }
-
-        limite = buffer.indexOf("\n\n");
-      }
-    }
-  } catch (error) {
-    if (onError) onError(error);
-    else throw error;
   }
 }
