@@ -9,7 +9,7 @@ export default function NaoEncontrada() {
       <span className="pontos -z-10" aria-hidden />
       <div className="flex flex-col items-center gap-3 text-center">
         <Logo />
-        <span className="mt-4 font-mono text-[12px] leading-4 font-medium tracking-[0.04em] uppercase text-fg-muted">Erro 404</span>
+        <span className="mt-4 text-[13px] leading-5 font-medium text-fg-muted">Erro 404</span>
         <h1 className="m-0 text-[18px] leading-[26px] font-semibold">Página não encontrada</h1>
         <p className="m-0 max-w-[40ch] text-fg-muted">O endereço pode estar errado ou a página ainda não existe.</p>
         <Link href="/" className={estiloBotao("primary", true)}>Voltar ao início</Link>
