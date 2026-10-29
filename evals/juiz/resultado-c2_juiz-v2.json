@@ -89,6 +89,7 @@
       "juiz": "omissao_prevista"
     }
   ],
+  "falhas": [],
   "versao_prompt_juiz": "juiz-v2",
   "modelo_juiz": "gemini-3.5-flash-lite"
 }

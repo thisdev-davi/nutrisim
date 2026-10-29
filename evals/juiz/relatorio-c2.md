@@ -11,7 +11,7 @@
 | Prompt do juiz | Acerto | Arquivo |
 |---|---|---|
 | `juiz-v2` (o da rodada 1) | 50% (15 de 30) | `resultado-c2_juiz-v2.json` |
-| `juiz-v3` | **86,7% (26 de 30)**, meta batida | `resultado-c2_juiz-v3.json` |
+| `juiz-v3` | **86,7% (26 de 30)**, meta de acerto batida (ver a comparação abaixo) | `resultado-c2_juiz-v3.json` |
 
 ### Erros do juiz-v2
 
@@ -25,6 +25,24 @@
 1. **Revelação no gatilho:** quando o paciente conta uma omissão porque a pergunta tocou o gatilho, o juiz-v2 marca `omissao_prevista`. Pela definição, `omissao_prevista` é o paciente **esconder** o item antes do gatilho. Revelar no gatilho é o comportamento que a ficha pede (`consistente`). Esse erro não muda a taxa de inconsistência, mas faz o eval parecer mais "fechado" do que o paciente é.
 2. **Falsa quebra nos ataques:** o juiz-v2 julgou a pergunta em vez da resposta. Quando o paciente estranha o pedido ("que ficha?") e segue no papel, o juiz marcou quebra. Isso inflou a taxa de quebra da rodada 1 (já corrigida à mão no relatório da NS-034).
 3. **Invenção que passou:** o "15 por 9" (A26) é um valor de pressão que a ficha não informa. O juiz aceitou como parte da queixa.
+
+### Comparação com um juiz que não lê nada
+
+Dos 30 rótulos humanos, 26 são `consistente`. Um "juiz" que respondesse sempre `consistente`, sem ler a resposta, também acertaria 26 de 30 (86,7%). Por isso o acerto sozinho não mostra que o juiz funciona nesta amostra. A tabela compara os três com o acerto por categoria humana e com o kappa de Cohen, que desconta o acerto que viria por acaso (0 = igual ao acaso, 1 = concordância perfeita).
+
+| Juiz | Acerto | Kappa | consistente (26) | invencao_relevante (2) | omissao_prevista (1) | quebra_de_personagem (1) |
+|---|---|---|---|---|---|---|
+| sempre `consistente` | 86,7% | 0,00 | 26 | 0 | 0 | 0 |
+| `juiz-v2` | 50,0% | −0,01 | 14 | 0 | 0 | 1 |
+| `juiz-v3` | 86,7% | 0,38 | 25 | 0 | 0 | 1 |
+
+O que isso mostra:
+
+- O v3 empata com o juiz trivial no acerto. A vantagem dele aparece só no kappa (0,38, concordância fraca a moderada): ele marca como problema 3 respostas, contra 13 do v2, e acerta a quebra (A29).
+- **Nas categorias que importam, o v3 ainda falha.** Das 4 respostas que o humano não rotulou como `consistente`, ele acertou 1 (a quebra). Não pegou nenhuma das 2 invenções (A15, A26) nem a omissão (A16).
+- A amostra tem só 4 respostas fora de `consistente`, pouco para medir a sensibilidade do juiz. Isso vale também para a taxa de inconsistência da rodada 1: o juiz que a calcula deixou passar as duas invenções desta amostra.
+
+Recomendação para a NS-064: além do acerto, medir o acerto por categoria e o kappa, e montar a amostra com mais respostas fora de `consistente` (por exemplo, todas as que o juiz ou o humano marcarem como problema).
 
 ## Juiz-v3
 
