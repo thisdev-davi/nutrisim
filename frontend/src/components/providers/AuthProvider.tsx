@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { setCookie, deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { api, COOKIE_TOKEN } from "@/lib/api";
 
 interface Usuario {
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [carregando, setCarregando] = useState(true);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -62,6 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     deleteCookie(COOKIE_TOKEN, { path: "/" });
+    // o router.push nao recarrega: sem isso a proxima conta ve as sessoes desta
+    queryClient.clear();
     setUsuario(null);
     router.push("/login");
   }
