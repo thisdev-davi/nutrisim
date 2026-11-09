@@ -39,6 +39,7 @@ TROCA = {
     "substituto_id": 3,
     "motivo": "prefere macarrao",
 }
+FORA_DA_REFEICAO = TROCA | {"refeicao": "Jantar", "original_id": 2}  # sem feijao
 ESTIMATIVA = {"adesao": ADESAO, "trocas": [TROCA]}
 # ideal: 200 + 80 + 100; realista: almoco pela metade com macarrao no lugar do
 # arroz (100 g x 1,5 + 50 g x 0,8) e jantar inteiro (100)
@@ -94,7 +95,8 @@ def kcal(monkeypatch):
     """
     recebidas = []
 
-    def projetar(sexo, idade, peso_kg, altura_cm, atividade, kcal_dia, semanas=8):
+    def projetar(*args, semanas=8):
+        _, _, peso_kg, _, _, kcal_dia = args
         recebidas.append(round(kcal_dia, 6))
         return [peso_kg - i for i in range(semanas + 1)]
 
@@ -184,7 +186,7 @@ def test_saida_incoerente_tenta_de_novo(monkeypatch, banco, usuario, kcal):
     [
         "nao e json",
         {"adesao": ADESAO[:1], "trocas": []},  # falta o jantar
-        {"adesao": ADESAO, "trocas": [TROCA | {"refeicao": "Jantar", "original_id": 2}]},
+        {"adesao": ADESAO, "trocas": [FORA_DA_REFEICAO]},
         {"adesao": ADESAO, "trocas": [TROCA | {"refeicao": "Ceia"}]},
     ],
 )
