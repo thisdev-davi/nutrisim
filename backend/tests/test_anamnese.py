@@ -133,3 +133,20 @@ def test_erro_inesperado_manda_erro_interno_no_stream(monkeypatch, banco):
     ((evento, dados),) = eventos(resposta)
     assert (evento, dados["codigo"]) == ("erro", "erro_interno")
     assert client.get(f"/api/sessoes/{sessao['id']}").json()["mensagens"] == []
+
+
+@pytest.mark.usefixtures("banco")
+def test_reenvio_da_mesma_pergunta_devolve_a_fala_salva(monkeypatch):
+    """reenvio apos a conexao cair: um turno so e o llm nao e chamado de novo."""
+    chamadas = provedor_falso(monkeypatch, [EXEMPLO, fala("Uso tempero pronto.")])
+    sessao = client.post("/api/sessoes", json=NOVA).json()
+    url = f"/api/sessoes/{sessao['id']}/mensagens"
+
+    primeira = eventos(client.post(url, json={"texto": "Como tempera a comida?"}))
+    reenvio = eventos(client.post(url, json={"texto": " Como tempera a comida? "}))
+
+    assert reenvio == primeira
+    assert len(chamadas[1:]) == 1  # a primeira e a do caso
+    obtida = client.get(f"/api/sessoes/{sessao['id']}").json()
+    autores = [m["autor"] for m in obtida["mensagens"]]
+    assert autores == ["estudante", "paciente"]
