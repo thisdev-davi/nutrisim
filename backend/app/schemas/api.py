@@ -2,9 +2,9 @@
 # nenhum modelo aqui carrega a ficha oculta: ela nunca sai do backend
 from datetime import datetime
 from enum import StrEnum
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class Dificuldade(StrEnum):
@@ -146,6 +146,21 @@ class NovoPlano(BaseModel):
     """corpo do PUT: o plano inteiro, a cada mudanca."""
 
     refeicoes: list[RefeicaoPlano] = Field(min_length=1, max_length=8)
+
+    @model_validator(mode="after")
+    def nomes_unicos(self) -> Self:
+        """o nome identifica a refeicao nas violacoes e nas trocas do cenario.
+
+        Returns:
+            o plano validado.
+
+        Raises:
+            ValueError: duas refeicoes com o mesmo nome.
+        """
+        nomes = [r.nome.casefold() for r in self.refeicoes]
+        if len(nomes) != len(set(nomes)):
+            raise ValueError("refeicoes com nome repetido")
+        return self
 
 
 class Nutrientes(BaseModel):
