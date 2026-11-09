@@ -28,7 +28,7 @@ A documentação interativa da API (OpenAPI) fica em `http://localhost:8000/docs
 
 ## Contrato da API
 
-O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api`. O `POST /api/sessoes` gera o caso com o LLM e salva a sessão no banco (NS-019). O paciente responde com o LLM (prompt em `app/llm/prompts/paciente-v1.md`) e cada pergunta e resposta fica na tabela `mensagens` (NS-020).
+O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas ficam sob `/api`. O `POST /api/sessoes` gera o caso com o LLM e salva a sessão no banco (NS-019). O paciente responde com o LLM (prompt em `app/llm/prompts/paciente-v1.md`) e cada pergunta e resposta fica na tabela `mensagens` (NS-020). No cenário realista (NS-046), o LLM (prompt em `app/llm/prompts/cenario-v1.md`) estima só a adesão por refeição e as trocas, escolhendo os substitutos pela ferramenta de busca na TACO; composição, adequação e peso saem do motor.
 
 | Rota | Etapa | O que faz |
 |---|---|---|
@@ -41,6 +41,7 @@ O contrato com o frontend é o OpenAPI gerado pelo código (`/docs`). As rotas f
 | `GET /api/sessoes/{id}` | 2 | estado e histórico, para retomar |
 | `POST /api/sessoes/{id}/mensagens` | 2 | fala do paciente em SSE |
 | `POST /api/sessoes/{id}/anamnese/encerrar` | 2 | encerra a anamnese e vai para o plano |
+| `POST /api/sessoes/{id}/cenarios` | 4 | gera os cenários ideal e realista na primeira chamada e devolve os salvos nas seguintes (NS-046) |
 | `GET /api/alimentos?nome={termo}` | NS-013 | busca até 50 alimentos por nome, ignorando maiúsculas e acentos |
 
 - **Streaming (SSE):** vários eventos `trecho` (`{"texto"}`), depois `fim` (`{"mensagem_id"}`) ou `erro` (`{"codigo", "mensagem"}`).

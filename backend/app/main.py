@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import alimentos, anamnese, auth, caso
+from app.api import alimentos, anamnese, auth, caso, cenarios
 from app.api.erros import registrar_erros
 from app.schemas.api import RespostaErro
 from app.seguranca import segredo
@@ -38,7 +38,7 @@ app.add_middleware(
 # cadastro e login abertos; toda rota da simulacao exige o token (NS-035)
 app.include_router(auth.router, prefix="/api")
 protegida = Depends(auth.usuario_atual)
-for rotas in (alimentos.router, caso.router, anamnese.router):
+for rotas in (alimentos.router, caso.router, anamnese.router, cenarios.router):
     app.include_router(
         rotas,
         prefix="/api",
