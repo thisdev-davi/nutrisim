@@ -34,9 +34,13 @@ Vale para os commits e para o título dos PRs. Seguimos [Conventional Commits](h
 
 ```text
 <tipo>(<escopo>): <o que muda> (NS-<id>)
+
+<o que foi alterado, em 1 ou 2 linhas curtas>
 ```
 
-Exemplos:
+Todo commit leva esse corpo curto e objetivo, por exemplo `git commit -m "<título>" -m "<descrição>"`.
+
+Exemplos de título:
 
 ```text
 feat(motor): calcula GET por Mifflin-St Jeor (NS-024)
