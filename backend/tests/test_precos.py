@@ -1,5 +1,6 @@
 import csv
 import math
+import re
 from pathlib import Path
 
 import pytest
@@ -53,6 +54,38 @@ def test_precos_positivos_e_finitos():
 def test_conversao_para_100g(alimento_id, esperado):
     """preco por kg, duzia, litro ou pacote vira preco por 100 g."""
     assert precos()[alimento_id] == pytest.approx(esperado, abs=1e-3)
+
+
+def _gramas(unidade: str) -> float:
+    """peso da unidade da coluna fonte, com as conversoes do modulo.
+
+    Returns:
+        gramas da unidade.
+    """
+    fixas = {"dúzia": 12 * 55, "litro": 1030, "lata de 900 ml": 900 * 0.92}
+    if unidade in fixas:
+        return fixas[unidade]
+    if pacote := re.fullmatch(r"\w+ de (\d+) (g|kg)", unidade):
+        return int(pacote[1]) * (1000 if pacote[2] == "kg" else 1)
+    assert unidade.startswith("kg"), unidade
+    return 1000
+
+
+def test_toda_linha_bate_com_o_preco_original_da_fonte():
+    """recalcula cada preco a partir do 'R$ x/unidade' da coluna fonte."""
+    with CSV_PRECOS.open(encoding="utf-8") as f:
+        for linha in csv.DictReader(f):
+            original = re.search(r"R\$ ([\d,]+)/(.+)$", linha["fonte"])
+            assert original, linha["fonte"]
+            reais = float(original[1].replace(",", "."))
+            esperado = reais / _gramas(original[2]) * 100
+            assert float(linha["preco_100g_reais"]) == pytest.approx(esperado, abs=1e-4)
+
+
+def test_tabela_e_somente_leitura():
+    """escrever no resultado nao pode corromper o cache do processo."""
+    with pytest.raises(TypeError):
+        precos()[ARROZ_COZIDO] = 1.0
 
 
 def test_alimento_sem_preco_fica_de_fora():

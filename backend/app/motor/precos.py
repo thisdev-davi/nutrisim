@@ -21,8 +21,10 @@ alimento sem fonte fica fora da tabela: quem soma o custo avisa que esta incompl
 
 import csv
 import math
+from collections.abc import Mapping
 from functools import cache
 from pathlib import Path
+from types import MappingProxyType
 
 CSV_PRECOS = Path(__file__).resolve().parents[2] / "data" / "precos.csv"
 
@@ -53,10 +55,10 @@ def ler_precos(caminho: Path) -> dict[int, float]:
 
 
 @cache
-def precos() -> dict[int, float]:
+def precos() -> Mapping[int, float]:
     """tabela de data/precos.csv, lida uma vez so.
 
     Returns:
-        alimento_id -> R$ por 100 g.
+        alimento_id -> R$ por 100 g, somente leitura (o cache e do processo todo).
     """
-    return ler_precos(CSV_PRECOS)
+    return MappingProxyType(ler_precos(CSV_PRECOS))
