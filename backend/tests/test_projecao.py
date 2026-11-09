@@ -36,6 +36,7 @@ def test_padrao_sao_8_semanas():
 def test_deficit_perde_menos_que_a_regra_fixa():
     """o gasto cai com o peso, entao a perda fica abaixo dos 7700 kcal/kg fixos."""
     pesos = projetar_peso("masculino", 52, 92, 174, "sedentario", 1600)
+    # get inicial: mifflin 1752.5 x 1.2 (sedentario)
     deficit_inicial = 2103.0 - 1600
     assert 92 - pesos[-1] < deficit_inicial * 7 * 8 / 7700
 
@@ -70,3 +71,18 @@ def test_entrada_fora_da_faixa_falha(mudanca):
 def test_aviso_cita_a_limitacao():
     """o texto da interface deixa claro que e estimativa."""
     assert "estimativa" in AVISO.lower()
+
+
+@pytest.mark.parametrize(
+    ("kcal_dia", "semanas"), [(0, 1), (10000, 1), (2000, 1), (2000, 12)]
+)
+def test_bordas_das_faixas_sao_aceitas(kcal_dia, semanas):
+    """os limites de FAIXAS entram."""
+    pesos = projetar_peso("feminino", 30, 60, 165, "moderado", kcal_dia, semanas)
+    assert len(pesos) == semanas + 1
+
+
+def test_peso_projetado_fora_da_faixa_cita_a_semana():
+    """o erro no meio da projecao diz em que semana o peso saiu da faixa."""
+    with pytest.raises(ValueError, match="semana"):
+        projetar_peso("feminino", 30, 30.5, 165, "moderado", 0, 12)

@@ -39,7 +39,8 @@ def projetar_peso(  # noqa: PLR0913, PLR0917  assinatura fixa do contrato
 ) -> list[float]:
     """peso no fim de cada semana, com o get ajustado ao peso da semana.
 
-    No cenario ideal, kcal_dia e a kcal total do plano.
+    So a serie de peso; o cenario ideal (kcal_dia = kcal total do plano) e a
+    serie de adequacao sao montados no `Cenario` pela NS-046.
 
     Args:
         sexo: sexo biologico usado na equacao.
@@ -54,16 +55,23 @@ def projetar_peso(  # noqa: PLR0913, PLR0917  assinatura fixa do contrato
         pesos da semana 0 (peso inicial) ate `semanas`; len == semanas + 1.
 
     Raises:
-        ValueError: kcal_dia ou semanas fora de FAIXAS, ou dados de
-            `energia.get` fora das faixas dela.
+        ValueError: kcal_dia ou semanas fora de FAIXAS, dados da ficha fora
+            das faixas da energia ou peso projetado que sai delas.
     """
     for nome, valor in {"kcal_dia": kcal_dia, "semanas": semanas}.items():
         minimo, maximo = FAIXAS[nome]
         if not minimo <= valor <= maximo:
             raise ValueError(f"{nome}={valor} fora da faixa {minimo} a {maximo}")
     pesos = [peso_kg]
-    for _ in range(semanas):
+    for i in range(semanas):
         peso = pesos[-1]
-        gasto = energia.get(sexo, idade, peso, altura_cm, atividade)
+        try:
+            gasto = energia.get(sexo, idade, peso, altura_cm, atividade)
+        except ValueError as e:
+            if i == 0:
+                raise
+            # diz a semana para nao parecer erro da ficha
+            msg = f"semana {i}: peso projetado {peso:.1f} kg fora da faixa"
+            raise ValueError(msg) from e
         pesos.append(peso + 7 * (kcal_dia - gasto) / RHO_KCAL_KG)
     return pesos
