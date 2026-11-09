@@ -127,6 +127,21 @@ def test_llm_falhou_manda_erro_e_nao_grava_a_pergunta(monkeypatch, banco):
     assert client.get(f"/api/sessoes/{sessao['id']}").json()["mensagens"] == []
 
 
+def test_falha_na_etapa_de_gatilhos_manda_paciente_indisponivel(monkeypatch, banco):
+    """sem gatilhos validos o paciente nem e chamado e a pergunta nao entra."""
+    provedor_falso(monkeypatch, [EXEMPLO, *["nao e json"] * cliente.TENTATIVAS])
+    sessao = client.post("/api/sessoes", json=NOVA).json()
+
+    resposta = client.post(
+        f"/api/sessoes/{sessao['id']}/mensagens", json={"texto": "Bebe?"}
+    )
+    ((evento, dados),) = eventos(resposta)
+    assert (evento, dados["codigo"]) == ("erro", "paciente_indisponivel")
+    tarefas = [o.tarefa for o in banco.objetos if isinstance(o, ChamadaLLM)]
+    assert "paciente" not in tarefas
+    assert client.get(f"/api/sessoes/{sessao['id']}").json()["mensagens"] == []
+
+
 def test_erro_inesperado_manda_erro_interno_no_stream(monkeypatch, banco):
     """o stream ja abriu com 200; sem o evento o front ficaria sem resposta."""
     provedor_falso(monkeypatch, [EXEMPLO])

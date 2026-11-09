@@ -3,6 +3,7 @@ import json
 import pytest
 
 from app.api import anamnese
+from app.db import modelos
 from app.llm import cliente
 from app.schemas.ficha import FichaPaciente
 from tests.conftest import BancoFalso
@@ -64,3 +65,29 @@ def test_falha_na_etapa_de_gatilhos_nao_chama_o_paciente(monkeypatch):
     with pytest.raises(cliente.SaidaInvalidaError):
         anamnese.responder(BancoFalso(), PACIENTE, [], "Bebe?")
     assert len(chamadas) == cliente.TENTATIVAS
+
+
+def test_omissao_revelada_continua_no_prompt_nos_turnos_seguintes(monkeypatch):
+    """a etapa ve a conversa toda: o gatilho de um turno anterior segue acionado."""
+    historico = [
+        modelos.Mensagem(autor="estudante", texto="Bebe no fim de semana?"),
+        modelos.Mensagem(autor="paciente", texto="Umas cervejas no sabado."),
+    ]
+    fala = json.dumps({"texto": "Pouco."})
+    chamadas = provedor_falso(monkeypatch, [acionados(2), fala])
+    anamnese.responder(BancoFalso(), PACIENTE, historico, "E de cafe, toma muito?")
+
+    gatilhos, paciente = chamadas
+    assert gatilhos["input"].startswith("<pergunta>Bebe no fim de semana?</pergunta>")
+    assert "qualquer pergunta" in gatilhos["system_instruction"]
+    assert CERVEJA in paciente["system_instruction"]
+
+
+@pytest.mark.parametrize("indice", ["true", '"1"'])
+def test_indice_que_nao_e_inteiro_conta_como_saida_invalida(monkeypatch, indice):
+    """true ou "1" nao viram indice: a etapa tenta de novo."""
+    respostas = [f'{{"acionados": [{indice}]}}', acionados(), '{"texto": "Oi."}']
+    provedor_falso(monkeypatch, respostas)
+    db = BancoFalso()
+    anamnese.responder(db, PACIENTE, [], "Bebe?")
+    assert [c.tarefa for c in db.objetos] == ["gatilhos", "gatilhos", "paciente"]

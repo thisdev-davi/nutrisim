@@ -9,7 +9,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.sse import EventSourceResponse, ServerSentEvent
 from loguru import logger
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictInt
 from sqlalchemy.orm import Session
 
 from app.api.auth import UsuarioAtual
@@ -49,9 +49,10 @@ class Fala(BaseModel):
 
 
 class Gatilhos(BaseModel):
-    """gatilhos da ficha que a ultima pergunta acionou."""
+    """gatilhos da ficha que a conversa ja acionou."""
 
-    acionados: list[int]
+    # strict: true ou "1" viram nova tentativa, nao indice
+    acionados: list[StrictInt]
 
 
 def responder(
@@ -65,7 +66,7 @@ def responder(
 
     So a parte do paciente entra no prompt: restricoes e gabarito nem chegam
     ao llm, entao nao tem como vazarem. Das omissoes, so entram as que a
-    pergunta acionou; uma etapa antes decide isso vendo apenas os gatilhos.
+    conversa ja acionou; uma etapa antes decide isso vendo apenas os gatilhos.
 
     Args:
         db: sessao do banco, para o registro de tokens.
