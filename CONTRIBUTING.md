@@ -72,6 +72,52 @@ Um card só vai para *Concluído* quando:
 - Comentários bloqueantes precisam dizer o que mudar. Sugestões opcionais começam com "opcional:".
 - Prefira PRs pequenos. Um PR por card é a regra.
 
+## Tamanho do PR
+
+Um PR tem no máximo **500 linhas de lógica**, somando as adicionadas e as removidas em `backend/` e `frontend/`. Testes, lockfiles, docs, migrations e config não entram na conta. O check **Limite de 500 linhas** da CI reprova o PR que passar disso. Para conferir antes de abrir:
+
+```sh
+git diff --numstat origin/desenvolvimento...HEAD -- backend frontend \
+  ':!*test*' ':!*.lock' ':!*lock.json' ':!*.md' ':!**/migrations/**' ':!*.toml' ':!*.json' \
+  | awk '{s+=$1+$2} END {print s+0}'
+```
+
+Se passar, divida o card em PRs empilhados, cada um funcionando sozinho.
+
+## Trabalho em paralelo com agentes
+
+Vale para quem usa agentes de IA (Claude Code ou outro) em mais de um card ao mesmo tempo. É o mesmo fluxo de trabalho de antes, com quatro regras a mais.
+
+1. **Um agente, um card, uma branch, um worktree.** Cada agente trabalha numa cópia própria do repositório, criada a partir da `desenvolvimento` atualizada:
+   ```sh
+   git fetch origin
+   git worktree add ../nutrisim-NS-044 -b feat/NS-044-restricoes origin/desenvolvimento
+   ```
+   Ao terminar, rode `git worktree remove ../nutrisim-NS-044`.
+2. **O contrato vem antes.** Os schemas em `backend/app/schemas/api.py`, as colunas em `backend/app/db/modelos.py` (com a migration) e o `docs/api.md` são a fronteira entre as trilhas e mudam **só em PR de contrato** (`docs(api): ...`), sem lógica. Esse PR entra antes de os agentes começarem. Se um agente precisar mudar o contrato, ele para e abre esse PR separado; os outros fazem rebase depois do merge.
+3. **Cada trilha tem os seus arquivos.** O agente só edita os arquivos da trilha dele (veja a divisão da sprint em [`docs/sprints.md`](docs/sprints.md)). Nos arquivos compartilhados, a única mudança permitida é registrar a rota no `app/main.py` (uma linha).
+4. **Briefing da trilha.** Quem dispara o agente cola no prompt:
+   ```text
+   Card: NS-<id> (#<issue>), critérios de aceite da issue
+   Branch/worktree: <tipo>/NS-<id>-<descricao> em ../nutrisim-NS-<id>
+   Pode editar: <arquivos da trilha>
+   Só lê: app/schemas/api.py, app/db/modelos.py, docs/api.md
+   Entrega: <função ou rota que a trilha expõe, com a assinatura do contrato>
+   Consome: <o que vem de outra trilha; use mock se ainda não entrou>
+   Pronto quando: gate abaixo verde e PR aberto contra a desenvolvimento
+   ```
+
+**Gate antes de pedir revisão humana**, rodado pelo próprio agente:
+
+1. `uv run ruff check . && uv run pytest` no backend, ou `npm run lint && npm run test` no frontend;
+2. a conta de linhas acima, com até 500;
+3. `/ponytail-review` no diff, aplicando os cortes que fizerem sentido;
+4. `/ecc:pr desenvolvimento --draft` para abrir o PR como rascunho;
+5. `/ecc:review-pr` no rascunho, corrigindo o que for crítico ou importante;
+6. `gh pr ready` e o card em *Em revisão*.
+
+A CI repete as partes 1 e 2 em todo PR. A `desenvolvimento` só aceita merge com os checks verdes.
+
 ## Segredos e dados
 
 - **Nunca faça commit de `.env`** nem de chaves de API. Use `.env.example` com os nomes das variáveis e sem valores.
