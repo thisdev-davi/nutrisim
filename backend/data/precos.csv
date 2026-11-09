@@ -1,0 +1,60 @@
+alimento_id,nome,preco_100g_reais,fonte,data_referencia
+4,"Arroz, tipo 1, cru",0.409,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 4,09/kg",2026-09
+8,"Biscoito, doce, maisena",1.805,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 3,61/pacote de 200 g",2026-09
+13,"Biscoito, salgado, cream cracker",1.475,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 2,95/pacote de 200 g",2026-09
+35,"Farinha, de trigo",0.42,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 4,20/kg",2026-09
+41,"Macarrão, trigo, cru, com ovos",0.662,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 3,31/pacote de 500 g",2026-09
+53,"Pão, trigo, francês",2.06,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 20,60/kg",2026-09
+65,"Abóbora, cabotian, crua",0.239,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 2,39/kg",2026-10-30
+71,"Abobrinha, italiana, crua",0.309,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 3,09/kg",2026-10-30
+82,"Alho, cru",3.112,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 31,12/kg",2026-09
+92,"Batata, inglesa, crua",0.813,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 8,13/kg",2026-09
+96,"Berinjela, crua",0.4,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 4,00/kg",2026-10-30
+98,"Beterraba, crua",0.294,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 2,94/kg",2026-10-30
+101,"Brócolis, cru",0.526,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 5,26/kg",2026-10-30
+107,"Cebola, crua",0.777,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 7,77/kg",2026-09
+110,"Cenoura, crua",0.3,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 3,00/kg",2026-10-30
+113,"Chuchu, cru",0.103,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 1,03/kg",2026-10-30
+115,"Couve, manteiga, crua",0.455,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 4,55/kg",2026-10-30
+122,"Farinha, de mandioca, torrada",1.48,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 7,40/pacote de 500 g",2026-09
+142,"Pepino, cru",0.287,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 2,87/kg",2026-10-30
+144,"Pimentão, verde, cru",0.537,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 5,37/kg",2026-10-30
+147,"Quiabo, cru",0.841,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 8,41/kg",2026-10-30
+149,"Repolho, branco, cru",0.122,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 1,22/kg",2026-10-30
+157,"Tomate, com semente, cru",1.079,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 10,79/kg",2026-09
+162,"Vagem, crua",0.818,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 8,18/kg",2026-10-29
+163,"Abacate, cru",0.2,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 2,00/kg",2026-10-30
+179,"Banana, nanica, crua",0.35,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 3,50/kg",2026-10-30
+182,"Banana, prata, crua",0.45,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 4,50/kg",2026-10-30
+200,"Goiaba, vermelha, com casca, crua",0.6,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 6,00/kg",2026-10-30
+214,"Laranja, pêra, crua",0.188,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 1,88/kg",2026-10-30
+220,"Limão, tahiti, cru",1.033,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 10,33/kg",2026-10-30
+222,"Maçã, Fuji, com casca, crua",0.627,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 6,27/kg de maçã nacional",2026-10-30
+225,"Mamão, Formosa, cru",0.6,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 6,00/kg",2026-10-30
+226,"Mamão, Papaia, cru",0.467,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 4,67/kg de mamão havaí",2026-10-30
+231,"Manga, Tommy Atkins, crua",0.4,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 4,00/kg",2026-10-30
+232,"Maracujá, cru",0.875,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 8,75/kg",2026-10-30
+235,"Melancia, crua",0.23,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 2,30/kg",2026-10-30
+236,"Melão, cru",0.674,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 6,74/kg",2026-10-30
+239,"Morango, cru",2.5,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 25,00/kg",2026-10-30
+251,"Tangerina, Poncã, crua",0.6,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 6,00/kg",2026-10-30
+256,"Uva, Itália, crua",1.125,"CEASA-ES Grande Vitória via Agrolink, preço de atacado: R$ 11,25/kg",2026-10-30
+261,"Manteiga, com sal",6.439,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 64,39/kg",2026-09
+265,"Margarina, com óleo interesterificado, com sal (65%de lipídeos)",1.58,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 3,95/pote de 250 g",2026-09
+272,"Óleo, de soja",0.9626,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 7,97/lata de 900 ml",2026-09
+327,"Carne, bovina, acém, moído, cru",3.386,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 33,86/kg de carne de segunda sem osso",2026-09
+329,"Carne, bovina, acém, sem gordura, cru",3.386,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 33,86/kg de carne de segunda sem osso",2026-09
+352,"Carne, bovina, coxão mole, sem gordura, cru",5.078,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 50,78/kg de carne bovina de primeira",2026-09
+372,"Carne, bovina, músculo, sem gordura, cru",3.386,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 33,86/kg de carne de segunda sem osso",2026-09
+376,"Carne, bovina, patinho, sem gordura, cru",5.078,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 50,78/kg de carne bovina de primeira",2026-09
+402,"Frango, inteiro, com pele, cru",1.121,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 11,21/kg",2026-09
+439,"Presunto, sem capa de gordura",3.251,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 32,51/kg",2026-09
+458,"Leite, de vaca, integral",0.6437,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 6,63/litro",2026-09
+459,"Leite, de vaca, integral, pó",4.475,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 17,90/lata de 400 g",2026-09
+463,"Queijo, mozarela",5.629,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 56,29/kg",2026-09
+489,"Ovo, de galinha, inteiro, cru",1.5455,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 10,20/dúzia",2026-09
+492,"Açúcar, cristal",0.284,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 2,84/kg",2026-09
+494,"Açúcar, refinado",0.3534,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 17,67/pacote de 5 kg",2026-09
+511,"Café, pó, torrado",4.498,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 44,98/kg",2026-09
+562,"Feijão, carioca, cru",0.838,"Procon-SP/DIEESE, cesta básica da cidade de São Paulo, preço médio: R$ 8,38/kg",2026-09
+568,"Feijão, preto, cru",0.727,"DIEESE, cesta básica de Vitória-ES, preço médio: R$ 7,27/kg",2026-09

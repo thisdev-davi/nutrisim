@@ -101,6 +101,7 @@ backend/
 │   │                       composição, energia, adequação, restrições, projeção   NS-023+
 │   └── services/           orquestração das 5 etapas (caso → retorno)
 ├── data/
+│   ├── precos.csv          preço aproximado por 100 g, com fonte e data por linha  NS-043
 │   └── taco/               TACO original (fonte NEPA/UNICAMP) + importação         NS-013
 └── tests/
     ├── unit/               motor e schemas, comparados a contas feitas à mão       NS-029
