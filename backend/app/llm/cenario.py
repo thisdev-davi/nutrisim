@@ -2,6 +2,7 @@
 # o llm estima so a adesao e as trocas; composicao, adequacao e peso saem do motor
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 from uuid import UUID
@@ -12,6 +13,7 @@ from google.genai._gaos.lib.compat_errors import (  # noqa: PLC2701
     InternalServerError,
     RateLimitError,
 )
+from loguru import logger
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -21,7 +23,7 @@ from app.db import modelos
 from app.llm import cliente
 from app.motor.adequacao import calcular_adequacao
 from app.motor.composicao import NUTRIENTES, Item, calcular_refeicao
-from app.motor.energia import Atividade, Sexo
+from app.motor.projecao import AVISO, projetar_peso
 from app.schemas.api import (
     AdequacaoNutriente,
     AdesaoRefeicao,
@@ -36,6 +38,8 @@ from app.schemas.ficha import FichaPaciente
 
 PROMPT = Path(__file__).with_name("prompts") / "cenario-v1.md"
 BUSCAS = 6  # rodadas de ferramenta por tentativa: segura um llm que so busca
+# segundos: por chamada e para a geracao inteira, que roda com o estudante esperando
+TIMEOUT_CHAMADA, PRAZO = 30, 60
 FERRAMENTA = {
     "type": "function",
     "name": "buscar_alimentos",
@@ -46,26 +50,6 @@ FERRAMENTA = {
         "required": ["nome"],
     },
 }
-
-# ponytail: provisorio ate a NS-045, troca pelo import de app.motor.projecao
-AVISO = "Projeção simplificada do peso, só para fins didáticos."
-
-
-def projetar_peso(  # noqa: PLR0913, PLR0917
-    sexo: Sexo,
-    idade: int,
-    peso_kg: float,
-    altura_cm: float,
-    atividade: Atividade,
-    kcal_dia: float,
-    semanas: int = 8,
-) -> list[float]:
-    """peso constante ate a projecao da NS-045 entrar.
-
-    Returns:
-        pesos da semana 0 ate `semanas`.
-    """
-    return [peso_kg] * (semanas + 1)
 
 
 class Troca(BaseModel):
@@ -124,7 +108,11 @@ def buscar_taco(db: Session, nome: str) -> list[dict[str, Any]]:
 
 
 def _chamar(
-    db: Session, historico: list, tentativa: int, sessao_id: UUID | None
+    db: Session,
+    historico: list,
+    tentativa: int,
+    sessao_id: UUID | None,
+    prazo: float,
 ) -> Any:  # noqa: ANN401
     """uma chamada ao gemini com a ferramenta, com os tokens registrados.
 
@@ -132,12 +120,16 @@ def _chamar(
         interacao devolvida pelo provedor.
 
     Raises:
-        LLMIndisponivelError: falha passageira do provedor.
+        LLMIndisponivelError: falha passageira do provedor ou prazo esgotado.
     """
     modelo = os.environ["LLM_MODELO"]
+    restante = prazo - time.monotonic()
+    if restante <= 0:
+        raise cliente.LLMIndisponivelError("cenario: prazo esgotado")
     try:
         resposta = cliente._cliente().interactions.create(  # noqa: SLF001
             model=modelo,
+            timeout=min(TIMEOUT_CHAMADA, restante),
             input=list(historico),
             system_instruction=PROMPT.read_text(encoding="utf-8"),
             store=False,  # sem historico no provedor: ele volta inteiro a cada rodada
@@ -148,9 +140,12 @@ def _chamar(
                 "schema": Estimativa.model_json_schema(),
             },
         )
-    # 4xx fica de fora de proposito: e bug nosso, nao sobrecarga
+    # 4xx fica de fora de proposito: e bug nosso, nao sobrecarga; o timeout
+    # (APITimeoutError) e um APIConnectionError
     except (InternalServerError, RateLimitError, APIConnectionError) as e:
         raise cliente.LLMIndisponivelError("cenario: provedor indisponivel") from e
+    # ponytail: repete o registro do cliente.gerar; extrair registrar_uso no
+    # cliente.py quando outra tarefa usar ferramentas
     uso = resposta.usage
     db.add(
         modelos.ChamadaLLM(
@@ -172,12 +167,19 @@ def _conferir(estimativa: Estimativa, plano: NovoPlano, vistos: set[int]) -> Non
     """regras de coerencia que o schema nao pega.
 
     Raises:
-        ValueError: refeicao faltando ou a mais, troca de item fora da refeicao
-            ou substituto que a busca nao devolveu (inventado).
+        ValueError: refeicao faltando ou a mais, adesao zero no dia todo, troca
+            repetida, de item fora da refeicao ou com substituto que a busca
+            nao devolveu (inventado).
     """
     nomes = sorted(r.nome for r in plano.refeicoes)
     if sorted(a.refeicao for a in estimativa.adesao) != nomes:
         raise ValueError("adesao precisa de uma entrada por refeicao do plano")
+    # ninguem deixa de comer o dia todo; e saida quebrada, nao estimativa
+    if all(a.adesao == 0 for a in estimativa.adesao):
+        raise ValueError("adesao zero em todas as refeicoes")
+    pares = [(t.refeicao, t.original_id) for t in estimativa.trocas]
+    if len(pares) != len(set(pares)):
+        raise ValueError("troca repetida para o mesmo item")
     itens = {r.nome: {i.alimento_id for i in r.itens} for r in plano.refeicoes}
     for t in estimativa.trocas:
         if t.original_id not in itens.get(t.refeicao, set()):
@@ -232,13 +234,14 @@ def estimar(
         ensure_ascii=False,
     )
     erro: ValueError | None = None
+    prazo = time.monotonic() + PRAZO
     for tentativa in range(1, cliente.TENTATIVAS + 1):
         historico: list = [
             {"type": "user_input", "content": [{"type": "text", "text": entrada}]}
         ]
         vistos: set[int] = set()
         for _ in range(BUSCAS):
-            resposta = _chamar(db, historico, tentativa, sessao_id)
+            resposta = _chamar(db, historico, tentativa, sessao_id, prazo)
             passos = resposta.steps or []
             pedidos = [p for p in passos if p.type == "function_call"]
             if not pedidos:
@@ -250,7 +253,8 @@ def estimar(
                 if p.type != "user_input"
             ]
             for pedido in pedidos:
-                achados = buscar_taco(db, str(pedido.arguments.get("nome", "")))
+                argumentos = pedido.arguments or {}
+                achados = buscar_taco(db, str(argumentos.get("nome", "")))
                 vistos |= {a["id"] for a in achados}
                 historico.append({
                     "type": "function_result",
@@ -258,10 +262,13 @@ def estimar(
                     "name": pedido.name,
                     "result": json.dumps(achados, ensure_ascii=False),
                 })
+        else:
+            logger.warning("cenario: tentativa {} so buscou, sem resposta", tentativa)
         try:  # ValidationError do pydantic tambem e ValueError
             estimativa = Estimativa.model_validate_json(resposta.output_text or "")
             _conferir(estimativa, plano, vistos)
         except ValueError as e:
+            logger.warning("cenario: tentativa {} invalida: {}", tentativa, e)
             erro = e
             continue
         return estimativa

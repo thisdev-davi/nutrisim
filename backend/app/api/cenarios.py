@@ -1,5 +1,6 @@
 # etapa 4: cenarios ideal e realista (NS-046)
 from fastapi import APIRouter
+from loguru import logger
 
 from app.api.anamnese import Banco, SessaoAtual
 from app.api.erros import ApiError
@@ -30,22 +31,31 @@ def gerar(sessao: SessaoAtual, db: Banco) -> Cenarios:
         cenarios ideal e realista, com o aviso da projecao.
 
     Raises:
-        ApiError: fora da etapa de cenarios, ou o llm falhou.
+        ApiError: fora da etapa de cenarios, o llm falhou ou a projecao saiu
+            da faixa.
     """
     if sessao.etapa != Etapa.CENARIOS:
         raise ApiError(409, "etapa_invalida", "a sessao nao esta na etapa de cenarios")
-    # trava ate o commit: duas chamadas juntas gerariam (e cobrariam) duas vezes
-    db.refresh(sessao, with_for_update=True)
-    if sessao.cenarios is None:
-        try:
-            cenarios = gerar_cenarios(db, sessao)
-        except (SaidaInvalidaError, LLMIndisponivelError) as e:
-            db.commit()  # guarda os tokens gastos nas tentativas
+    if sessao.cenarios is not None:
+        return Cenarios.model_validate(sessao.cenarios)
+    db.commit()  # fecha a leitura: nada fica travado enquanto o llm responde
+    try:
+        cenarios = gerar_cenarios(db, sessao)
+    except Exception as e:
+        db.commit()  # guarda os tokens gastos, ate num erro inesperado
+        logger.exception("cenario nao gerado na sessao {}", sessao.id)
+        # ValueError: peso projetado fora das faixas do motor
+        if isinstance(e, SaidaInvalidaError | LLMIndisponivelError | ValueError):
             raise ApiError(
                 503,
                 "cenario_nao_gerado",
                 "nao foi possivel gerar o cenario, tente de novo",
             ) from e
+        raise
+    # ponytail: duplo clique gasta tokens duas vezes; o lock so garante que a
+    # resposta e uma so
+    db.refresh(sessao, with_for_update=True)
+    if sessao.cenarios is None:
         sessao.cenarios = cenarios.model_dump(mode="json")
-        db.commit()
+    db.commit()
     return Cenarios.model_validate(sessao.cenarios)
