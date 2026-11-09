@@ -143,9 +143,16 @@ def enviar_mensagem(
     """
     paciente = FichaPaciente.model_validate(sessao.ficha["paciente"])
     # trava a sessao ate o commit: o turno seguinte espera e ve este no historico
-    # ponytail: reenvio feito enquanto o llm responde ainda duplica; chave de
-    # idempotencia resolve
     db.refresh(sessao, with_for_update=True)
+    # reenvio da ultima pergunta (conexao caiu) devolve a fala ja salva.
+    # ponytail: repetir a mesma pergunta de proposito tambem cai aqui; chave de
+    # idempotencia no post se isso virar problema
+    ultima_pergunta = sessao.mensagens[-2:-1]  # o historico vem em pares
+    if ultima_pergunta and ultima_pergunta[0].texto == dados.texto:
+        fala = sessao.mensagens[-1]
+        yield ServerSentEvent(event="trecho", data=Trecho(texto=fala.texto))
+        yield ServerSentEvent(event="fim", data=Fim(mensagem_id=str(fala.id)))
+        return
     try:
         texto = responder(db, paciente, sessao.mensagens, dados.texto, sessao.id)
     except (SaidaInvalidaError, LLMIndisponivelError):

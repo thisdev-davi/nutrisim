@@ -146,6 +146,7 @@ def test_reenvio_da_mesma_pergunta_devolve_a_fala_salva(monkeypatch):
     reenvio = eventos(client.post(url, json={"texto": " Como tempera a comida? "}))
 
     assert reenvio == primeira
-    assert len(chamadas) == 2  # caso + um turno do paciente
+    assert len(chamadas[1:]) == 1  # a primeira e a do caso
     obtida = client.get(f"/api/sessoes/{sessao['id']}").json()
-    assert len(obtida["mensagens"]) == 2
+    autores = [m["autor"] for m in obtida["mensagens"]]
+    assert autores == ["estudante", "paciente"]
