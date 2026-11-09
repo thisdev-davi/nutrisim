@@ -35,7 +35,9 @@ router = APIRouter(
     responses={404: {"model": RespostaErro}, 422: {"model": RespostaErro}},
 )
 
-PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "paciente-v1.md"
+PROMPTS = Path(__file__).parents[1] / "llm" / "prompts"
+PROMPT = PROMPTS / "paciente-v2.md"
+PROMPT_GATILHOS = PROMPTS / "gatilhos-v1.md"
 
 Banco = Annotated[Session, Depends(obter_sessao)]
 
@@ -44,6 +46,12 @@ class Fala(BaseModel):
     """fala do paciente."""
 
     texto: str = Field(min_length=1)
+
+
+class Gatilhos(BaseModel):
+    """gatilhos da ficha que a ultima pergunta acionou."""
+
+    acionados: list[int]
 
 
 def responder(
@@ -56,7 +64,8 @@ def responder(
     """fala do paciente para a pergunta; o eval chama direto, sem a rota.
 
     So a parte do paciente entra no prompt: restricoes e gabarito nem chegam
-    ao llm, entao nao tem como vazarem.
+    ao llm, entao nao tem como vazarem. Das omissoes, so entram as que a
+    pergunta acionou; uma etapa antes decide isso vendo apenas os gatilhos.
 
     Args:
         db: sessao do banco, para o registro de tokens.
@@ -76,13 +85,26 @@ def responder(
 
     conversa = [marcar(m.autor, m.texto) for m in historico]
     conversa.append(marcar("estudante", pergunta))
+    entrada = "\n".join(conversa)
+    # a informacao omitida fica fora ate o gatilho: uma injecao na pergunta
+    # nao tem o que tirar do prompt (pi-09)
+    gatilhos = "\n".join(f"{i}. {o.gatilho}" for i, o in enumerate(paciente.omissoes))
+    acionados = gerar(
+        db,
+        tarefa="gatilhos",
+        schema=Gatilhos,
+        entrada=entrada,
+        instrucao=PROMPT_GATILHOS.read_text(encoding="utf-8") + gatilhos,
+        sessao_id=sessao_id,
+    ).acionados
+    omissoes = [o for i, o in enumerate(paciente.omissoes) if i in acionados]
+    ficha = paciente.model_copy(update={"omissoes": omissoes})
     return gerar(
         db,
         tarefa="paciente",
         schema=Fala,
-        entrada="\n".join(conversa),
-        instrucao=PROMPT.read_text(encoding="utf-8")
-        + paciente.model_dump_json(indent=2),
+        entrada=entrada,
+        instrucao=PROMPT.read_text(encoding="utf-8") + ficha.model_dump_json(indent=2),
         sessao_id=sessao_id,
     ).texto
 
