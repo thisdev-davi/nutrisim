@@ -1,0 +1,5 @@
+caso,sexo,idade,peso_kg,altura_cm,atividade,kcal_dia,semanas,conta,pesos
+deficit,masculino,52,92,174,sedentario,1600,8,p + 7 * (kcal - get(p)) / 7534,92.0000;91.5327;91.0705;90.6135;90.1616;89.7148;89.2729;88.8360;88.4039
+superavit,feminino,30,60,165,moderado,2600,8,p + 7 * (kcal - get(p)) / 7534,60.0000;60.5144;61.0213;61.5210;62.0135;62.4988;62.9772;63.4487;63.9134
+manutencao,feminino,30,60,165,moderado,2046.3875,8,kcal = get(60) = 2046.3875,60.0000;60.0000;60.0000;60.0000;60.0000;60.0000;60.0000;60.0000;60.0000
+deficit_curto,feminino,70,55,158,leve,1200,4,p + 7 * (kcal - get(p)) / 7534,55.0000;54.8035;54.6096;54.4181;54.2291
