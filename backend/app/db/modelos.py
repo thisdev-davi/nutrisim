@@ -35,6 +35,10 @@ class Sessao(Base):
     dificuldade: Mapped[str]
     etapa: Mapped[str]
     ficha: Mapped[dict] = mapped_column(JSONB)
+    # NovoPlano como o estudante montou; os numeros sao recalculados na leitura
+    plano: Mapped[dict | None] = mapped_column(JSONB)
+    # Cenarios ja gerados: guardados para nao chamar o llm de novo
+    cenarios: Mapped[dict | None] = mapped_column(JSONB)
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
