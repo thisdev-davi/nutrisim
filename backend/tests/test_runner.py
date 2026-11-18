@@ -347,7 +347,7 @@ def test_paciente_real_passa_o_historico_no_formato_da_anamnese(
         "Belisco um torresmo de vez em quando."
     )
     assert paciente.modelo == "modelo-paciente"
-    assert paciente.versao_prompt == "paciente-v1"
+    assert paciente.versao_prompt == "paciente-v2"
     banco, enviado, mensagens, pergunta = respostas_reais[0]
     assert banco is db
     assert enviado == FICHA.ficha.paciente
@@ -365,7 +365,7 @@ def test_linha_de_comando_com_o_paciente_real(julgados, respostas_reais, tmp_pat
     assert runner.main([*args, *pausas, "--saida", str(tmp_path)]) == 0
 
     arquivo = next(tmp_path.iterdir())
-    assert arquivo.name.endswith("_modelo-paciente_paciente-v1.json")
+    assert arquivo.name.endswith("_modelo-paciente_paciente-v2.json")
     resultado = json.loads(arquivo.read_text(encoding="utf-8"))
     assert resultado["modelo_paciente"] == "modelo-paciente"
     assert len(respostas_reais) == len(FICHA.roteiro)
