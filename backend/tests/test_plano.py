@@ -168,3 +168,11 @@ def test_encerrar_anamnese_grava_a_etapa(banco, usuario):
     de_novo = client.post(rota)
     assert de_novo.status_code == status.HTTP_409_CONFLICT
     assert de_novo.json()["erro"]["codigo"] == "etapa_invalida"
+
+
+def test_put_devolve_as_violacoes_do_motor(banco, usuario):
+    """as restricoes da NS-044 chegam na resposta do PUT."""
+    sessao = nova_sessao(banco, usuario)
+    sessao.ficha["paciente"]["orcamento_mensal_reais"] = 30  # R$ 1/dia
+    violacoes = client.put(url(sessao), json=PLANO).json()["violacoes"]
+    assert [v["tipo"] for v in violacoes] == ["orcamento"]  # custo de R$ 1,50/dia

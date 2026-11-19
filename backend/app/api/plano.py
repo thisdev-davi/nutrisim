@@ -11,6 +11,7 @@ from app.motor.adequacao import calcular_adequacao
 from app.motor.composicao import Item, calcular_composicao, calcular_refeicao
 from app.motor.energia import get
 from app.motor.precos import precos
+from app.motor.restricoes import verificar_restricoes
 from app.schemas.api import (
     AdequacaoNutriente,
     Etapa,
@@ -22,7 +23,6 @@ from app.schemas.api import (
     Plano,
     RefeicaoCalculada,
     RespostaErro,
-    Violacao,
 )
 from app.schemas.ficha import Ficha
 
@@ -34,16 +34,6 @@ router = APIRouter(
         422: {"model": RespostaErro},
     },
 )
-
-
-# trocar por app.motor.restricoes quando a NS-044 entrar
-def verificar_restricoes(ficha: Ficha, plano: Plano) -> list[Violacao]:  # noqa: ARG001
-    """stub da NS-044: sem violacoes ate o motor de restricoes entrar.
-
-    Returns:
-        lista vazia.
-    """
-    return []
 
 
 def calcular(db: Session, ficha: Ficha, novo: NovoPlano) -> Plano:
