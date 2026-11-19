@@ -9,7 +9,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.sse import EventSourceResponse, ServerSentEvent
 from loguru import logger
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictInt
 from sqlalchemy.orm import Session
 
 from app.api.auth import UsuarioAtual
@@ -35,7 +35,9 @@ router = APIRouter(
     responses={404: {"model": RespostaErro}, 422: {"model": RespostaErro}},
 )
 
-PROMPT = Path(__file__).parents[1] / "llm" / "prompts" / "paciente-v1.md"
+PROMPTS = Path(__file__).parents[1] / "llm" / "prompts"
+PROMPT = PROMPTS / "paciente-v2.md"
+PROMPT_GATILHOS = PROMPTS / "gatilhos-v1.md"
 
 Banco = Annotated[Session, Depends(obter_sessao)]
 
@@ -44,6 +46,13 @@ class Fala(BaseModel):
     """fala do paciente."""
 
     texto: str = Field(min_length=1)
+
+
+class Gatilhos(BaseModel):
+    """gatilhos da ficha que a conversa ja acionou."""
+
+    # strict: true ou "1" viram nova tentativa, nao indice
+    acionados: list[StrictInt]
 
 
 def responder(
@@ -56,7 +65,8 @@ def responder(
     """fala do paciente para a pergunta; o eval chama direto, sem a rota.
 
     So a parte do paciente entra no prompt: restricoes e gabarito nem chegam
-    ao llm, entao nao tem como vazarem.
+    ao llm, entao nao tem como vazarem. Das omissoes, so entram as que a
+    conversa ja acionou; uma etapa antes decide isso vendo apenas os gatilhos.
 
     Args:
         db: sessao do banco, para o registro de tokens.
@@ -76,13 +86,26 @@ def responder(
 
     conversa = [marcar(m.autor, m.texto) for m in historico]
     conversa.append(marcar("estudante", pergunta))
+    entrada = "\n".join(conversa)
+    # a informacao omitida fica fora ate o gatilho: uma injecao na pergunta
+    # nao tem o que tirar do prompt (pi-09)
+    gatilhos = "\n".join(f"{i}. {o.gatilho}" for i, o in enumerate(paciente.omissoes))
+    acionados = gerar(
+        db,
+        tarefa="gatilhos",
+        schema=Gatilhos,
+        entrada=entrada,
+        instrucao=PROMPT_GATILHOS.read_text(encoding="utf-8") + gatilhos,
+        sessao_id=sessao_id,
+    ).acionados
+    omissoes = [o for i, o in enumerate(paciente.omissoes) if i in acionados]
+    ficha = paciente.model_copy(update={"omissoes": omissoes})
     return gerar(
         db,
         tarefa="paciente",
         schema=Fala,
-        entrada="\n".join(conversa),
-        instrucao=PROMPT.read_text(encoding="utf-8")
-        + paciente.model_dump_json(indent=2),
+        entrada=entrada,
+        instrucao=PROMPT.read_text(encoding="utf-8") + ficha.model_dump_json(indent=2),
         sessao_id=sessao_id,
     ).texto
 
@@ -143,9 +166,19 @@ def enviar_mensagem(
     """
     paciente = FichaPaciente.model_validate(sessao.ficha["paciente"])
     # trava a sessao ate o commit: o turno seguinte espera e ve este no historico
-    # ponytail: reenvio feito enquanto o llm responde ainda duplica; chave de
-    # idempotencia resolve
     db.refresh(sessao, with_for_update=True)
+    # reenvio da ultima pergunta (conexao caiu) devolve a fala ja salva.
+    # ponytail: repetir a mesma pergunta de proposito tambem cai aqui; chave de
+    # idempotencia no post se isso virar problema
+    ultima_pergunta = sessao.mensagens[-2:-1]  # o historico vem em pares
+    if ultima_pergunta and ultima_pergunta[0].texto == dados.texto:
+        # copia antes do rollback, que expira os objetos
+        texto, fala_id = sessao.mensagens[-1].texto, sessao.mensagens[-1].id
+        logger.info("reenvio reconhecido na sessao {}", sessao.id)
+        db.rollback()  # solta o for update antes de abrir o stream
+        yield ServerSentEvent(event="trecho", data=Trecho(texto=texto))
+        yield ServerSentEvent(event="fim", data=Fim(mensagem_id=str(fala_id)))
+        return
     try:
         texto = responder(db, paciente, sessao.mensagens, dados.texto, sessao.id)
     except (SaidaInvalidaError, LLMIndisponivelError):

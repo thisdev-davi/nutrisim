@@ -1,9 +1,11 @@
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
+from pydantic import ValidationError
 
 from app.db.deps import obter_sessao
 from app.main import app
+from app.schemas.api import NovoPlano
 from tests.test_cliente_llm import provedor_falso
 from tests.test_ficha import EXEMPLO
 
@@ -16,7 +18,7 @@ client = TestClient(app=app)
 @pytest.mark.usefixtures("banco")
 def test_criar_sessao_e_conversar(monkeypatch):
     """cria a sessao com o llm falso e recebe a fala em sse."""
-    provedor_falso(monkeypatch, [EXEMPLO, '{"texto": "oi"}'])
+    provedor_falso(monkeypatch, [EXEMPLO, '{"acionados": []}', '{"texto": "oi"}'])
     sessao = client.post(
         "/api/sessoes", json={"perfil_id": "adulto-hipertensao", "dificuldade": "facil"}
     )
@@ -63,3 +65,11 @@ def test_erro_interno_e_405_mantem_cabecalhos():
     metodo = client.delete("/api/perfis")
     assert metodo.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     assert "GET" in metodo.headers["allow"]
+
+
+def test_plano_rejeita_refeicao_com_nome_repetido():
+    """o nome identifica a refeicao nas violacoes e nas trocas."""
+    item = {"alimento_id": 1, "gramas": 100}
+    refeicoes = [{"nome": n, "itens": [item]} for n in ("Almoco", "almoco")]
+    with pytest.raises(ValidationError, match="nome repetido"):
+        NovoPlano.model_validate({"refeicoes": refeicoes})

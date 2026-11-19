@@ -1,0 +1,28 @@
+name: Limite do PR
+
+on:
+  pull_request:
+    branches:
+      - desenvolvimento
+
+jobs:
+  limite:
+    name: Limite de 500 linhas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # precisa do historico para achar a base do pr
+
+      # conta so logica: testes, lockfiles, docs, migrations e config ficam fora
+      - name: Contar linhas de logica
+        run: |
+          total=$(git diff --numstat "origin/${{ github.base_ref }}...HEAD" -- backend frontend \
+            ':!*test*' ':!*.lock' ':!*lock.json' ':!*.md' ':!**/migrations/**' ':!*.toml' ':!*.json' \
+            | awk '{s+=$1+$2} END {print s+0}')
+          echo "linhas de logica: $total"
+          if [ "$total" -gt 500 ]; then
+            echo "::error::$total linhas de logica (limite 500). Divida o PR, veja o CONTRIBUTING.md."
+            exit 1
+          fi

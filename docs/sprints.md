@@ -114,6 +114,46 @@ Nos checkpoints (Sprints 0, 3 e 7), cada integrante também faz a **autoavaliaç
 - A TACO não tem preços, então a tabela de preços (NS-043) precisa sair no começo da sprint.
 - A rubrica é enviada nesta sprint para o professor ter tempo de revisar.
 
+### Replanejamento de 09/11
+
+A sprint começou com todos os cards em *Backlog* e mais três sobras da Sprint 3. Faltam 5 dias úteis (09 a 13/11).
+
+- **Sobras da Sprint 3:** a NS-072 e a NS-073 ficam com o Mauro e fecham até 11/11. A NS-070 (streaming) virou P2 e foi para a Sprint 5, porque não bloqueia nenhum card.
+- **NS-071 é P0:** a equipe decide até 10/11 o que acontece nas etapas 3 e 4 quando a conduta esperada é encaminhar, porque isso trava a rubrica (NS-049).
+- **As telas NS-042 e NS-048 podem escorregar para a Sprint 5.** Elas usam o mock do contrato e não atrasam a C3.
+- **O contrato das etapas 3 e 4 entra primeiro**, num PR só de schemas, colunas e `docs/api.md`. Depois dele, as trilhas abaixo correm em paralelo (regras em [`CONTRIBUTING.md`](../CONTRIBUTING.md#trabalho-em-paralelo-com-agentes)).
+
+Seta tracejada é dependência que a trilha contorna com mock até o merge.
+
+```mermaid
+flowchart LR
+  C["Contrato etapas 3 e 4<br/>Davi"] --> NS041["NS-041 Endpoints do plano<br/>Mauro"]
+  C --> NS046["NS-046 Cenário realista<br/>Davi"]
+  NS043["NS-043 Preços<br/>Mauro"] --> NS044["NS-044 Restrições<br/>Davi"]
+  NS044 -.-> NS041
+  NS045["NS-045 Projeção<br/>Mauro"] -.-> NS046
+  NS041 --> NS042["NS-042 Tela do plano<br/>Pedro"]
+  NS046 --> NS048["NS-048 Tela de cenários<br/>Pedro"]
+  NS046 --> NS047["NS-047 Coerência<br/>Arthur"]
+  NS046 --> NS050["NS-050 Retorno (S5)<br/>Mauro"]
+  NS071["NS-071 Encaminhamento<br/>equipe"] --> NS049["NS-049 Rubrica<br/>Arthur"]
+  NS049 --> NS051["NS-051 Avaliação (S5)<br/>Davi"]
+```
+
+O caminho crítico até a C3 passa por **NS-071 → NS-049 → NS-051** e por **contrato → NS-046 → NS-050**. Os dois precisam fechar nesta sprint.
+
+| Trilha | Cards | Dono | Pode editar | Entrega |
+|---|---|---|---|---|
+| Contrato | – | Davi | `app/schemas/api.py`, `app/db/modelos.py` e a migration, `docs/api.md` | os modelos e as rotas das etapas 3 e 4 |
+| Preços e restrições | NS-043 → NS-044 | Mauro → Davi | `backend/data/precos.csv`, `app/motor/restricoes.py` | `verificar_restricoes(...)` → `list[Violacao]` |
+| Projeção | NS-045 | Mauro | `app/motor/projecao.py` | `projetar_peso(...)` → `list[PontoSemana]` |
+| Plano | NS-041 | Mauro | `app/api/plano.py`, e o `encerrar_anamnese` passa a gravar a etapa | `GET` e `PUT /api/sessoes/{id}/plano`, `POST .../plano/encerrar` |
+| Cenários | NS-046 | Davi | `app/llm/cenario.py`, `app/llm/prompts/cenario*`, `app/api/cenarios.py` | `POST /api/sessoes/{id}/cenarios` |
+| Telas | NS-037, NS-042, NS-048 | Pedro | `frontend/src/app/(app)/sessoes/[id]/` e `frontend/src/lib/` | as etapas 3 e 4 na interface |
+| Rubrica e eval | NS-071 → NS-049, NS-047 | equipe → Arthur | `content/`, `evals/` | rubrica enviada ao professor e regras de coerência |
+
+Enquanto a função de outra trilha não entra, cada uma usa um mock com a assinatura do contrato. Os testes da trilha não dependem do código das outras.
+
 ## Sprint 5 — Retorno e rubrica · 16/11 a 22/11
 
 **Meta:** fluxo completo, da etapa 1 à 5.
