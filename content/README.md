@@ -4,14 +4,21 @@ Material didático que o NutriSim usa para avaliar as consultas: **rubricas** de
 
 **Responsáveis:** Arthur Pomarolli (organização), com revisão do professor de Nutrição.
 
-## Estrutura prevista
+## Estrutura
 
 ```text
 content/
-├── perfis.md     perfis do MVP e níveis de dificuldade               NS-015
-├── rubricas/     critérios de correção da consulta, por perfil     NS-049
-└── roteiros/     o que uma boa anamnese deve investigar, por perfil NS-049
+├── perfis.md                 perfis do MVP e níveis de dificuldade                NS-015
+├── rubricas/                 critérios de correção da consulta (100 pontos)       NS-049
+│   ├── consulta.md           anamnese e escolha da conduta, todos os perfis (60)
+│   ├── plano.md              plano alimentar, perfis com conduta "plano" (40)
+│   └── encaminhamento.md     encaminhamento, perfil com conduta "encaminhamento" (40)
+└── roteiros/                 o que uma boa anamnese investiga                     NS-049
+    ├── geral.md              temas de todos os perfis
+    └── <perfil>.md           temas e perguntas de cada perfil
 ```
+
+A soma é sempre 100: `consulta.md` mais o arquivo da conduta que o **gabarito** pede.
 
 ## Formato dos arquivos
 
