@@ -185,6 +185,8 @@ export GEMINI_API_KEY=... LLM_MODELO=... DATABASE_URL=...
 uv run python ../evals/scripts/rodar_eval.py --cenarios --execucoes 3
 ```
 
+**Taxa ainda não medida (19/11).** Três tentativas do lote acima pararam por erro do provedor (cota ou prazo) antes de gravar o primeiro cenário. A causa está na geração (NS-046): o LLM costuma gastar as 6 rodadas só buscando, sem responder, e uma geração chega a 10 chamadas em menos de um minuto, o que estoura a cota por minuto do plano gratuito. O comando acima retoma de onde parar; o número entra aqui quando o lote fechar.
+
 ## Formato dos resultados
 
 Uma execução da bateria por arquivo, em `resultados/AAAA-MM-DD_<modelo>_<versao-prompt>.json`:
