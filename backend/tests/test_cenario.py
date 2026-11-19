@@ -263,6 +263,17 @@ def test_busca_sem_fim_conta_como_saida_invalida(monkeypatch, banco, usuario, kc
     assert kcal == []
 
 
+def test_ultima_rodada_desliga_a_ferramenta(monkeypatch, banco, usuario, kcal):
+    """na rodada BUSCAS o llm e obrigado a responder, sem gastar outra tentativa."""
+    respostas = [busca("macarrao")] * (cenario.BUSCAS - 1) + [final(ESTIMATIVA)]
+    chamadas = provedor(monkeypatch, respostas)
+    assert post(nova_sessao(banco, usuario)).status_code == status.HTTP_200_OK
+    assert len(chamadas) == cenario.BUSCAS
+    assert chamadas[-1]["generation_config"] == {"tool_choice": "none"}
+    assert all("generation_config" not in c for c in chamadas[:-1])
+    assert len(kcal) == 2  # noqa: PLR2004
+
+
 @pytest.mark.usefixtures("kcal")
 def test_prazo_esgotado_da_503(monkeypatch, banco, usuario):
     """a geracao inteira tem prazo; estourou, o estudante tenta de novo."""
