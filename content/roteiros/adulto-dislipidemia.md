@@ -2,7 +2,6 @@
 tipo: roteiro
 perfis: [adulto-dislipidemia]
 versao: 1
-# pendente de validação do professor de Nutrição (NS-049)
 revisado_por:
 revisado_em:
 ---

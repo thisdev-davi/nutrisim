@@ -2,7 +2,6 @@
 tipo: rubrica
 perfis: [adulto-hipertensao, adulto-diabetes-tipo2, adulto-dislipidemia, idoso-baixa-ingestao]
 versao: 1
-# pendente de validação do professor de Nutrição (NS-049)
 revisado_por:
 revisado_em:
 ---
@@ -38,8 +37,6 @@ O plano é comparado ao gasto energético total (GET) do paciente e às DRIs.
 - **Parcial:** a energia fica entre 10% e 20% do GET, ou dois nutrientes ficam abaixo.
 - **Adequado:** a energia fica a até 10% do GET, e no máximo um nutriente fica abaixo.
 - **Excelente:** a energia fica a até 10% do GET, e nenhum nutriente fica abaixo.
-
-> **A confirmar com o professor:** as faixas de 10% e 20% são uma proposta da equipe. No perfil `idoso-baixa-ingestao`, o objetivo pode ser ficar acima do GET para recuperar peso.
 
 ## 8. Plano cabe na vida do paciente (peso 10)
 

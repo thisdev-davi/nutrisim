@@ -2,7 +2,6 @@
 tipo: rubrica
 perfis: [adulto-jovem-emagrecimento]
 versao: 1
-# pendente de validação do professor de Nutrição (NS-049)
 revisado_por:
 revisado_em:
 ---

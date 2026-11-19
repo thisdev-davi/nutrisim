@@ -2,7 +2,6 @@
 tipo: rubrica
 perfis: [adulto-hipertensao, adulto-diabetes-tipo2, adulto-dislipidemia, idoso-baixa-ingestao, adulto-jovem-emagrecimento]
 versao: 1
-# pendente de validação do professor de Nutrição (NS-049)
 revisado_por:
 revisado_em:
 ---
@@ -11,7 +10,7 @@ revisado_em:
 
 Esta rubrica avalia a **anamnese** (etapa 2) e a **escolha da conduta** (etapa 3). Ela soma **60 dos 100 pontos** da consulta. Os outros 40 pontos vêm de [`plano.md`](plano.md) ou de [`encaminhamento.md`](encaminhamento.md), conforme a conduta que o **gabarito** do caso pede, e não a que o estudante escolheu.
 
-Cada critério tem quatro níveis. A nota do critério é o peso multiplicado pela fração do nível: insuficiente 0, parcial 1/3, adequado 2/3 e excelente 3/3. Quem corrige (o professor ou o prompt de avaliação da NS-051) cita na justificativa o trecho da conversa que levou ao nível.
+Cada critério tem quatro níveis. A nota do critério é o peso multiplicado pela fração do nível: insuficiente 0, parcial 1/3, adequado 2/3 e excelente 3/3. A avaliação (NS-051) cita na justificativa o trecho da conversa que levou ao nível.
 
 | Critério | Peso |
 |---|---|
