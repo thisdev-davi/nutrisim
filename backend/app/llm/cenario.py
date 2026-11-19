@@ -83,13 +83,25 @@ def carregar_taco(db: Session, ids: set[int]) -> Taco:
         id -> (nome, nutrientes por 100 g); sem linha de nutrientes vira NA.
     """
     linhas = db.execute(
-        select(modelos.Alimentos.id, modelos.Alimentos.nome, modelos.Nutrientes)
+        select(
+            modelos.Alimentos.id,
+            modelos.Alimentos.nome,
+            modelos.Nutrientes,
+            modelos.AcidosGraxos.gordura_saturada,
+        )
         .outerjoin(modelos.Nutrientes, modelos.Nutrientes.id == modelos.Alimentos.id)
+        .outerjoin(
+            modelos.AcidosGraxos, modelos.AcidosGraxos.id == modelos.Alimentos.id
+        )
         .where(modelos.Alimentos.id.in_(ids))
     )
     return {
-        id_: (nome, {n: getattr(nutrientes, n, None) for n in NUTRIENTES})
-        for id_, nome, nutrientes in linhas
+        id_: (
+            nome,
+            {n: getattr(nutrientes, n, None) for n in NUTRIENTES}
+            | {"gordura_saturada": saturada},
+        )
+        for id_, nome, nutrientes, saturada in linhas
     }
 
 
