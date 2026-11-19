@@ -119,14 +119,18 @@ def buscar_taco(db: Session, nome: str) -> list[dict[str, Any]]:
     return [{"id": a.id, "nome": a.nome} for a in achados]
 
 
-def _chamar(
+def _chamar(  # noqa: PLR0913  um flag a mais que o resto
     db: Session,
     historico: list,
     tentativa: int,
     sessao_id: UUID | None,
     prazo: float,
+    *,
+    responder: bool = False,
 ) -> Any:  # noqa: ANN401
     """uma chamada ao gemini com a ferramenta, com os tokens registrados.
+
+    Com responder, a ferramenta fica desligada e o modelo tem de devolver o json.
 
     Returns:
         interacao devolvida pelo provedor.
@@ -146,6 +150,8 @@ def _chamar(
             system_instruction=PROMPT.read_text(encoding="utf-8"),
             store=False,  # sem historico no provedor: ele volta inteiro a cada rodada
             tools=[FERRAMENTA],
+            # ultima rodada: sem isso o llm que so busca queima a tentativa inteira
+            **({"generation_config": {"tool_choice": "none"}} if responder else {}),
             response_format={
                 "type": "text",
                 "mime_type": "application/json",
@@ -252,8 +258,15 @@ def estimar(
             {"type": "user_input", "content": [{"type": "text", "text": entrada}]}
         ]
         vistos: set[int] = set()
-        for _ in range(BUSCAS):
-            resposta = _chamar(db, historico, tentativa, sessao_id, prazo)
+        for rodada in range(BUSCAS):
+            resposta = _chamar(
+                db,
+                historico,
+                tentativa,
+                sessao_id,
+                prazo,
+                responder=rodada == BUSCAS - 1,
+            )
             passos = resposta.steps or []
             pedidos = [p for p in passos if p.type == "function_call"]
             if not pedidos:
