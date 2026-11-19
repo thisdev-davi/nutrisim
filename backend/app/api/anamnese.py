@@ -32,7 +32,11 @@ from app.schemas.ficha import FichaPaciente
 
 router = APIRouter(
     tags=["etapa 2: anamnese"],
-    responses={404: {"model": RespostaErro}, 422: {"model": RespostaErro}},
+    responses={
+        404: {"model": RespostaErro},
+        409: {"model": RespostaErro},
+        422: {"model": RespostaErro},
+    },
 )
 
 PROMPTS = Path(__file__).parents[1] / "llm" / "prompts"
@@ -203,13 +207,21 @@ def enviar_mensagem(
 
 
 @router.post("/sessoes/{sessao_id}/anamnese/encerrar")
-async def encerrar_anamnese(sessao: SessaoAtual) -> EtapaAtual:
+def encerrar_anamnese(sessao: SessaoAtual, db: Banco) -> EtapaAtual:
     """fecha a anamnese e libera o plano alimentar.
 
     Args:
         sessao: sessao da url.
+        db: sessao do banco.
 
     Returns:
         nova etapa da sessao.
+
+    Raises:
+        ApiError: a anamnese ja foi encerrada.
     """
+    if sessao.etapa != Etapa.ANAMNESE:
+        raise ApiError(409, "etapa_invalida", "a anamnese ja foi encerrada")
+    sessao.etapa = Etapa.PLANO
+    db.commit()
     return EtapaAtual(etapa=Etapa.PLANO)
