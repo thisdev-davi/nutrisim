@@ -2,7 +2,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, func
+from sqlalchemy import DateTime, ForeignKey, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -39,6 +39,8 @@ class Sessao(Base):
     plano: Mapped[dict | None] = mapped_column(JSONB)
     # Cenarios ja gerados: guardados para nao chamar o llm de novo
     cenarios: Mapped[dict | None] = mapped_column(JSONB)
+    # motivo do encaminhamento; preenchido = o estudante nao montou plano
+    encaminhamento: Mapped[str | None] = mapped_column(Text)
     criada_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

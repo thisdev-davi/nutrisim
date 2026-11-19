@@ -70,7 +70,7 @@ VET: valor energético total do plano.
 - **Conduta esperada:** acolher, **não prescrever dieta restritiva** e encaminhar para avaliação com a equipe multiprofissional (psicologia e psiquiatria), mantendo o acompanhamento nutricional.
 - **O que o estudante precisa investigar:** histórico de peso, frequência das refeições, comportamentos compensatórios, como a pessoa se sente em relação à comida e ao corpo.
 - **Cuidados de conteúdo:** os sinais aparecem no nível do comportamento, sem detalhar métodos. O paciente simulado não estimula nem ensina comportamentos de risco, e o feedback (NS-051) explica a conduta esperada.
-- **Decisão pendente da equipe:** como as etapas 3 e 4 funcionam neste perfil. Proposta: o estudante pode registrar o encaminhamento em vez do plano, e a rubrica valoriza essa escolha. A decisão está no card NS-071 (#85), que afeta o frontend (NS-042) e a rubrica (NS-049).
+- **Etapas 3 e 4:** o estudante registra o encaminhamento, com o motivo, no lugar do plano, e vai direto para o retorno, sem cenários. A ação aparece em todos os perfis. A rubrica (NS-049) valoriza essa escolha. Decisão em [ADR-006](../docs/decisoes.md#adr-006--encaminhamento-no-lugar-do-plano) (NS-071).
 
 ## Níveis de dificuldade
 

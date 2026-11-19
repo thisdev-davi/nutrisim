@@ -101,6 +101,7 @@ Contrato combinado antes da implementação (NS-041, NS-044, NS-045 e NS-046). O
 | `GET /api/sessoes/{id}/plano` | – | `Plano` | NS-041 |
 | `PUT /api/sessoes/{id}/plano` | `NovoPlano` | `Plano` | NS-041 |
 | `POST /api/sessoes/{id}/plano/encerrar` | – | `EtapaAtual` com `{"etapa": "cenarios"}` | NS-041 |
+| `POST /api/sessoes/{id}/plano/encaminhar` | `NovoEncaminhamento` | `EtapaAtual` com `{"etapa": "retorno"}` | NS-041 (NS-071) |
 | `POST /api/sessoes/{id}/cenarios` | – | `Cenarios` | NS-046 |
 
 1. Ao encerrar a anamnese, a sessão passa para a etapa `plano`.
@@ -108,7 +109,8 @@ Contrato combinado antes da implementação (NS-041, NS-044, NS-045 e NS-046). O
 3. Cada `Violacao` traz `refeicao` e `alimento_id` quando um item causa o problema. Use os dois para mostrar o alerta junto do item. Quando os dois vêm `null`, a violação vale para o dia todo (por exemplo, o orçamento).
 4. `sem_preco` não vazio quer dizer que o `custo_diario_reais` está incompleto. Mostre isso junto do custo.
 5. `POST .../plano/encerrar` trava o plano. Depois dele, o `PUT` responde `409`.
-6. `POST .../cenarios` gera os dois cenários na primeira chamada e devolve o mesmo resultado nas próximas, sem chamar o LLM de novo. Pode demorar alguns segundos, então mostre carregamento. Os gráficos (NS-048) usam `peso` de cada cenário, e o `aviso` fica sempre visível.
+6. **Encaminhar no lugar do plano (NS-071, [ADR-006](decisoes.md#adr-006--encaminhamento-no-lugar-do-plano)).** A tela do plano oferece, em **todos os perfis**, a ação "Encaminhar o paciente", com um campo de texto para o motivo (de 1 a 2.000 caracteres). `POST .../plano/encaminhar` grava o motivo e leva a sessão direto para a etapa `retorno`, sem cenários. Só vale na etapa `plano`; nas outras, responde `409 etapa_invalida`. Um plano salvo antes fica guardado, mas não é avaliado.
+7. `POST .../cenarios` gera os dois cenários na primeira chamada e devolve o mesmo resultado nas próximas, sem chamar o LLM de novo. Pode demorar alguns segundos, então mostre carregamento. Os gráficos (NS-048) usam `peso` de cada cenário, e o `aviso` fica sempre visível.
 
 Erros novos (o formato é o mesmo de [Como exibir cada erro](#como-exibir-cada-erro)):
 
