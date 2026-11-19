@@ -12,7 +12,7 @@ evals/
 ├── ataques/      cerca de 30 tentativas de prompt injection                             NS-028
 ├── estudante/    prompt do estudante simulado (estudante-v1.md)                         NS-031
 ├── juiz/         prompt do juiz (juiz-v3.md), rótulos e validação (relatorio-c2.md)       NS-032/033
-├── scripts/      runner, estudante simulado, juiz e cálculo das métricas                NS-026/031
+├── scripts/      runner, estudante simulado, juiz, coerência e cálculo das métricas     NS-026/031/047
 └── resultados/   uma execução por arquivo, versionada no repositório                    NS-034+
 ```
 
@@ -163,6 +163,29 @@ Quem faz as perguntas ao paciente é o estudante (`backend/app/eval/estudante.py
 ```bash
 uv run python ../evals/scripts/rodar_eval.py --fichas adulto-hipertensao-facil-01 --execucoes 1 --paciente real --estudante llm
 ```
+
+## Coerência do cenário (NS-047)
+
+O modo `--cenarios` não faz anamnese: para cada ficha, gera o cenário realista da etapa 4 com o `gerar_cenarios` da NS-046 (`backend/app/llm/cenario.py`) sobre um **plano fixo** (`PLANO_FIXO` em `backend/app/eval/coerencia.py`, igual para todas as fichas: café da manhã, almoço, lanche da tarde, jantar e ceia, só com alimentos que têm preço) e confere as regras abaixo. As regras são funções puras em `backend/app/eval/coerencia.py`, sem LLM nem banco.
+
+| Regra | Viola quando | Limite conhecido |
+|---|---|---|
+| `substituto_com_aversao` | o nome TACO do substituto tem uma palavra das `aversoes` da ficha, comparando como o motor de restrições (sem acento, sem plural, palavras com 4 letras ou mais) | casa palavra: "massas" não pega "macarrão" |
+| `troca_estoura_orcamento` | as trocas encarecem o dia (preços de `data/precos.csv`) e o custo do plano com elas passa de `orcamento_mensal_reais / 30` | porção inteira, com as mesmas gramas do original, como no cenário; troca com alimento sem preço fica fora da conta |
+| `adesao_fora_da_rotina` | adesão ≥ 0,8 numa refeição sem nenhuma hora do `recordatorio` na janela dela (café 4h–10h, almoço 11h–14h, lanche 14h–18h, jantar 18h–22h, ceia 21h–24h) | janela fixa pelo nome da refeição; nome livre e turno da noite escapam |
+
+- **Decisão: `alimentos_evitados` não entra na primeira regra.** São alimentos que o caso pede para evitar (torresmo, doces), muitas vezes os que o paciente já come; trocar por eles é o cenário realista, não uma incoerência. Só a aversão contradiz o perfil.
+- **Taxa:** `taxa_violacao_coerencia` = cenários com pelo menos uma violação ÷ cenários gerados, média por execução. Cenário sem saída válida fica em `cenarios_com_falha`, fora da taxa. `violacoes_por_regra` conta os cenários por regra.
+- Usa só o `LLM_MODELO` (o mesmo do cenário no backend) e o banco, para a busca na TACO. O runner não grava nada no banco: a sessão abre sem `autoflush` e é desfeita no fim. Cada cenário faz até 6 chamadas seguidas por tentativa; o runner espera 60 s entre cenários, e erro de cota cai nas esperas de sempre.
+- O resultado vai para `resultados/AAAA-MM-DD_<modelo>_cenario-v1.json`, com o plano, a adesão, as trocas e as violações de cada cenário, e retoma o arquivo do dia como o modo normal.
+
+```bash
+cd backend
+export GEMINI_API_KEY=... LLM_MODELO=... DATABASE_URL=...
+uv run python ../evals/scripts/rodar_eval.py --cenarios --execucoes 3
+```
+
+**Taxa ainda não medida (19/11).** Três tentativas do lote acima pararam por erro do provedor (cota ou prazo) antes de gravar o primeiro cenário. A causa está na geração (NS-046): o LLM costuma gastar as 6 rodadas só buscando, sem responder, e uma geração chega a 10 chamadas em menos de um minuto, o que estoura a cota por minuto do plano gratuito. O comando acima retoma de onde parar; o número entra aqui quando o lote fechar.
 
 ## Formato dos resultados
 
