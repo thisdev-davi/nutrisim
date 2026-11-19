@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import time
+from collections import Counter
 from collections.abc import Callable
 from datetime import date
 from functools import partial
@@ -12,12 +13,18 @@ from typing import Any, TypeVar
 
 from loguru import logger
 from pydantic import BaseModel, TypeAdapter
+from sqlalchemy.orm import Session
 
-from app.db.modelos import ChamadaLLM
-from app.eval import juiz
+from app.db.deps import obter_engine
+from app.db.modelos import ChamadaLLM, Sessao
+from app.eval import coerencia, juiz
 from app.eval.estudante import Estudante, EstudanteLLM, EstudanteRoteiro
 from app.eval.paciente import FichaEval, Paciente, PacienteFalso, PacienteReal
+from app.llm import cenario as llm_cenario
+from app.llm.cenario import gerar_cenarios
 from app.llm.cliente import LLMIndisponivelError, SaidaInvalidaError
+from app.motor.precos import precos
+from app.schemas.api import CenarioRealista
 
 PASTA_EVALS = Path(__file__).parents[3] / "evals"
 ARQUIVO_ATAQUES = PASTA_EVALS / "ataques" / "c2.json"
@@ -25,6 +32,10 @@ ARQUIVO_ATAQUES = PASTA_EVALS / "ataques" / "c2.json"
 PAUSA_PACIENTE_S = 60 / 4
 PAUSA_JUIZ_S = 60 / 12
 ESPERAS_COTA_S = (30, 60, 120)
+# ponytail: um cenario faz ate 6 chamadas seguidas por tentativa; a pausa so vale
+# entre cenarios e o erro de cota cai nas esperas acima. pausar no cenario.py se
+# a cota estourar sempre
+PAUSA_CENARIO_S = 60
 # o maior roteiro tem 9 perguntas; o limite segura o custo se um roteiro crescer
 MAX_TURNOS = 10
 INCONSISTENTES = {"contradicao", "invencao_relevante"}
@@ -571,6 +582,117 @@ def rodar(  # noqa: PLR0913
     return resultado
 
 
+def coerencia_do_lote(cenarios: list[dict[str, Any]]) -> float | None:
+    """cenarios com alguma violacao da NS-047 / cenarios gerados.
+
+    Args:
+        cenarios: linhas de `cenarios` de uma execucao.
+
+    Returns:
+        taxa; None sem cenario gerado.
+    """
+    gerados = [c for c in cenarios if "falha" not in c]
+    if not gerados:
+        return None
+    return sum(bool(c["violacoes"]) for c in gerados) / len(gerados)
+
+
+def rodar_cenarios(  # noqa: PLR0913
+    fichas: list[FichaEval],
+    gerar: Callable[[FichaEval], CenarioRealista],
+    *,
+    execucoes: int,
+    arquivo: Path,
+    ritmo: Ritmo,
+    db: BancoMemoria,
+    esperas_cota: tuple[float, ...] = ESPERAS_COTA_S,
+    cabecalho: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """gera o cenario realista do plano fixo e confere as regras de coerencia.
+
+    Salva depois de cada cenario e retoma o arquivo do dia, como `rodar`.
+
+    Args:
+        fichas: fichas do lote.
+        gerar: cenario realista de PLANO_FIXO para a ficha.
+        execucoes: cenarios por ficha.
+        arquivo: arquivo de resultado.
+        ritmo: ritmo entre geracoes.
+        db: onde o cliente do llm registra os tokens.
+        esperas_cota: esperas entre tentativas em erro de cota.
+        cabecalho: modelo e versao do prompt, para o resultado.
+
+    Returns:
+        resultado completo.
+    """
+    if arquivo.exists():
+        resultado = json.loads(arquivo.read_text(encoding="utf-8"))
+    else:
+        resultado = {"cenarios": []}
+    resultado.update(
+        cabecalho or {},
+        data=arquivo.name[:10],
+        execucoes_por_caso=execucoes,
+        plano=coerencia.PLANO_FIXO.model_dump(),
+    )
+    feitos = {(c["id"], c["execucao"]) for c in resultado["cenarios"]}
+    for ficha in fichas:
+        for execucao in range(1, execucoes + 1):
+            if (ficha.id, execucao) in feitos:
+                continue
+            logger.info("cenario {} execucao {}", ficha.id, execucao)
+            linha: dict[str, Any] = {"id": ficha.id, "execucao": execucao}
+            inicio = len(db)
+            try:
+                cenario = com_ritmo(lambda f=ficha: gerar(f), ritmo, esperas_cota)
+            except SaidaInvalidaError:
+                linha["falha"] = "cenario_saida_invalida"
+            else:
+                linha["adesao"] = [a.model_dump() for a in cenario.adesao]
+                linha["substituicoes"] = [s.model_dump() for s in cenario.substituicoes]
+                linha["violacoes"] = coerencia.violacoes(
+                    ficha.ficha, coerencia.PLANO_FIXO, cenario, precos()
+                )
+            linha["uso"] = uso(db[inicio:])
+            resultado["cenarios"].append(linha)
+            gerados = [c for c in resultado["cenarios"] if "falha" not in c]
+            resultado["metricas"] = {
+                "taxa_violacao_coerencia": media_por_execucao(
+                    resultado["cenarios"], coerencia_do_lote
+                ),
+                "violacoes_por_regra": dict(
+                    Counter(r for c in gerados for r in c["violacoes"])
+                ),
+                "cenarios_com_falha": len(resultado["cenarios"]) - len(gerados),
+            }
+            resultado["uso_total"] = somar_uso(resultado["cenarios"])
+            arquivo.parent.mkdir(parents=True, exist_ok=True)
+            texto = json.dumps(resultado, ensure_ascii=False, indent=2) + "\n"
+            arquivo.write_text(texto, encoding="utf-8")
+    return resultado
+
+
+def gerar_com_banco(ficha: FichaEval, db: BancoMemoria) -> CenarioRealista:
+    """cenario realista pelo gerar_cenarios da NS-046, so lendo a TACO do banco.
+
+    Args:
+        ficha: ficha de eval.
+        db: recebe as chamadas ao llm, para o uso.
+
+    Returns:
+        cenario realista do plano fixo.
+    """
+    sessao = Sessao(
+        plano=coerencia.PLANO_FIXO.model_dump(), ficha=ficha.ficha.model_dump()
+    )
+    # sem autoflush nem commit: as chamadas ao llm nao viram linha no banco
+    with Session(obter_engine(), autoflush=False) as banco:
+        try:
+            return gerar_cenarios(banco, sessao).realista
+        finally:
+            db.extend(o for o in banco.new if isinstance(o, ChamadaLLM))
+
+
 def ler_fichas(ids: list[str] | None, pasta: Path) -> list[FichaEval]:
     """le as fichas pedidas, ou todas.
 
@@ -659,10 +781,17 @@ def main(argv: list[str] | None = None) -> int:
         default=PAUSA_JUIZ_S,
         help="segundos entre chamadas ao juiz (padrao: 5, 12 por minuto)",
     )
+    p.add_argument(
+        "--cenarios",
+        action="store_true",
+        help="em vez da anamnese, gera o cenario realista e mede a coerencia",
+    )
     p.add_argument("--saida", type=Path, default=PASTA_EVALS / "resultados")
     args = p.parse_args(argv)
 
     fichas = ler_fichas(args.fichas, PASTA_EVALS / "fichas")
+    if args.cenarios:
+        return main_cenarios(fichas, args.execucoes, args.saida)
     ataques = [] if args.ataques == [] else ler_ataques(args.ataques, ARQUIVO_ATAQUES)
     juiz.modelo_do_juiz()  # falha antes de gastar cota se o ambiente estiver errado
     db = BancoMemoria()
@@ -696,6 +825,37 @@ def main(argv: list[str] | None = None) -> int:
             ritmo_estudante=ritmo_estudante,
             max_turnos=args.max_turnos,
             ataques=ataques,
+        )
+    except CotaEsgotadaError:
+        logger.error("cota esgotada; rode de novo depois, o que foi feito e pulado")
+        return 1
+    logger.info("resultado em {}", arquivo)
+    return 0
+
+
+def main_cenarios(fichas: list[FichaEval], execucoes: int, saida: Path) -> int:
+    """modo --cenarios: so o llm do cenario (LLM_MODELO) e o banco da TACO.
+
+    Args:
+        fichas: fichas do lote.
+        execucoes: cenarios por ficha.
+        saida: pasta dos resultados.
+
+    Returns:
+        codigo de saida (1 quando a cota acabou no meio).
+    """
+    modelo, versao = os.environ["LLM_MODELO"], llm_cenario.PROMPT.stem
+    arquivo = caminho_resultado(saida, date.today(), modelo, versao)
+    db = BancoMemoria()
+    try:
+        rodar_cenarios(
+            fichas,
+            partial(gerar_com_banco, db=db),
+            execucoes=execucoes,
+            arquivo=arquivo,
+            ritmo=Ritmo(PAUSA_CENARIO_S),
+            db=db,
+            cabecalho={"modelo": modelo, "versao_prompt": versao},
         )
     except CotaEsgotadaError:
         logger.error("cota esgotada; rode de novo depois, o que foi feito e pulado")
