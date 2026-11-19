@@ -43,7 +43,13 @@ def _plano(*refeicoes, custo=10, **total):
     Returns:
         o plano calculado.
     """
-    total = {"kcal": 2000, "proteina": 100, "fibra_alimentar": 30, "sodio": 0} | total
+    total = {
+        "kcal": 2000,
+        "proteina": 100,
+        "fibra_alimentar": 30,
+        "sodio": 0,
+        "gordura_saturada": 0,
+    } | total
     return Plano(
         refeicoes=list(refeicoes) or [_refeicao("almoco")],
         total=Nutrientes(valores=total, sem_dado={}),
@@ -95,11 +101,6 @@ def test_gordura_saturada_no_limite_ja_viola():
     )
     [v] = verificar_restricoes(_ficha(gordura_saturada_max_pct_vet=10), plano)
     assert (v.tipo, v.refeicao) == ("gordura_saturada", "jantar")
-
-
-def test_gordura_saturada_sem_dado_na_composicao_nao_confere():
-    """sem a chave na composicao nao ha como conferir."""
-    assert verificar_restricoes(_ficha(gordura_saturada_max_pct_vet=10), _plano()) == []
 
 
 def test_proteina_por_kg_abaixo_e_acima():

@@ -13,6 +13,8 @@ NUTRIENTES = (
     "ferro",
     "potassio",
     "vitamina_c",
+    # vem de acidos_graxos; a restricao do perfil dislipidemia depende dela
+    "gordura_saturada",
 )
 
 

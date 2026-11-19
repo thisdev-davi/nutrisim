@@ -55,10 +55,8 @@ def verificar_restricoes(ficha: Ficha, plano: Plano) -> list[Violacao]:
                 )
             )
 
-    # a composicao do motor ainda nao soma gordura saturada; sem a chave, nao confere
-    saturada = total.get("gordura_saturada")
-    if r.gordura_saturada_max_pct_vet is not None and saturada is not None and kcal > 0:
-        pct = saturada * 9 / kcal * 100
+    if r.gordura_saturada_max_pct_vet is not None and kcal > 0:
+        pct = total["gordura_saturada"] * 9 / kcal * 100
         if pct >= r.gordura_saturada_max_pct_vet:
             violacoes.append(
                 Violacao(
