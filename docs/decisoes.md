@@ -94,6 +94,25 @@ Cada decisão importante fica registrada aqui, com contexto e consequências, pa
 
 ---
 
+## ADR-006 — Encaminhamento no lugar do plano
+
+**Status:** aceita · **Data:** 19/11/2026
+
+**Contexto.** No perfil `adulto-jovem-emagrecimento` (NS-015), a conduta esperada é encaminhar para a equipe multiprofissional, não prescrever dieta. As etapas 3 (plano) e 4 (cenários) pressupunham um plano, e a rubrica (NS-049) precisava saber como avaliar essa escolha (NS-071).
+
+**Decisão.**
+- Na etapa 3, o estudante escolhe entre montar o plano e **registrar o encaminhamento**, com o motivo em texto (`POST /api/sessoes/{id}/plano/encaminhar`).
+- A ação aparece em **todos os perfis**, para não denunciar qual caso pede encaminhamento.
+- Quem encaminha **pula a etapa 4** e vai direto para o retorno (etapa 5, `retorno`). Projetar peso de um plano que não deveria existir não ensina nada.
+- A rubrica avalia a conduta: encaminhar quando o gabarito pede encaminhamento pontua; encaminhar sem sinais de alerta, ou montar plano restritivo quando havia sinais, perde pontos. O motivo escrito é avaliado pelos sinais que ele cita.
+
+**Consequências.**
+- (+) O fluxo continua linear e o contrato cresce só uma rota, uma coluna (`sessoes.encaminhamento`) e a etapa `retorno`.
+- (+) O estudante precisa decidir pela anamnese, não pelo nome do perfil.
+- (−) As sessões encaminhadas não têm cenários, então o eval de coerência (NS-047) não se aplica a elas.
+
+---
+
 ## Modelo
 
 ```markdown

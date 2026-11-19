@@ -1,4 +1,4 @@
-# contrato da api com o front (etapas 1 e 2)
+# contrato da api com o front (etapas 1 a 4)
 # nenhum modelo aqui carrega a ficha oculta: ela nunca sai do backend
 from datetime import datetime
 from enum import StrEnum
@@ -16,11 +16,13 @@ class Dificuldade(StrEnum):
 
 
 class Etapa(StrEnum):
-    """etapa atual da sessao (o retorno entra com a etapa 5)."""
+    """etapa atual da sessao."""
 
     ANAMNESE = "anamnese"
     PLANO = "plano"
     CENARIOS = "cenarios"
+    # etapa 5 (NS-050); o encaminhamento pula direto para ca (NS-071)
+    RETORNO = "retorno"
 
 
 class Perfil(BaseModel):
@@ -223,6 +225,14 @@ class Plano(BaseModel):
     custo_diario_reais: float
     # alimentos sem preco na tabela: o custo acima esta incompleto (NS-043)
     sem_preco: list[str]
+
+
+class NovoEncaminhamento(BaseModel):
+    """corpo do encaminhamento: substitui o plano e pula os cenarios (NS-071)."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    motivo: str = Field(min_length=1, max_length=2000)
 
 
 # etapa 4: cenarios ideal e realista (NS-045, NS-046)
