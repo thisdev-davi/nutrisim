@@ -20,9 +20,11 @@ export interface Mensagem {
   criada_em: string;
 }
 
+export type Etapa = "anamnese" | "plano" | "cenarios" | "retorno";
+
 export interface Sessao {
   id: string;
-  etapa: string;
+  etapa: Etapa;
   perfil_id: string;
   dificuldade: "facil" | "medio" | "dificil";
   paciente: { nome: string; idade: number; queixa_principal: string };
@@ -76,7 +78,6 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
   const { data: sessao, error, refetch } = useSessao(sessaoId);
   const { data: opcoes } = useQuery({ queryKey: ["perfis-e-dificuldades"], queryFn: () => api<{ perfis?: { id: string; nome: string }[] }>("/perfis") });
   const mensagens = sessao?.mensagens ?? [];
-  const aberta = sessao?.etapa === "anamnese";
 
   // sair da tela cancela o stream em andamento
   useEffect(() => () => abortRef.current?.abort(), []);
@@ -181,7 +182,7 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
             <button type="button" className={`${ICONE} md:hidden`} aria-controls="anotacoes" aria-expanded={painel} aria-label="Abrir anotações" onClick={() => setPainel(true)}>
               <NotebookPen size={16} strokeWidth={1.5} aria-hidden />
             </button>
-            <EncerrarAnamnese sessaoId={sessaoId} disabled={streaming !== null || !aberta} />
+            <EncerrarAnamnese sessaoId={sessaoId} disabled={streaming !== null || !sessao} />
           </div>
         </div>
 
@@ -251,49 +252,43 @@ export function AnamneseChat({ sessaoId }: { sessaoId: string }) {
               </Alert>
             )}
 
-            {!sessao || aberta ? (
-              <>
-                <form
-                  onSubmit={(e) => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                submeter();
+              }}
+              className="flex items-end gap-2 py-[6px] pr-[6px] pl-[18px] border border-line-strong rounded-xl bg-surface focus-within:border-transparent focus-within:outline-2 focus-within:outline-focus"
+            >
+              <label htmlFor="pergunta" className="sr-only">Pergunta para o paciente</label>
+              <textarea
+                id="pergunta"
+                ref={inputRef}
+                rows={1}
+                value={textoInput}
+                onChange={(e) => setTextoInput(e.target.value)}
+                onKeyDown={(e) => {
+                  // enter envia; shift+enter e a composicao do teclado (acentos) quebram a linha
+                  if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
                     e.preventDefault();
                     submeter();
-                  }}
-                  className="flex items-end gap-2 py-[6px] pr-[6px] pl-[18px] border border-line-strong rounded-xl bg-surface focus-within:border-transparent focus-within:outline-2 focus-within:outline-focus"
-                >
-                  <label htmlFor="pergunta" className="sr-only">Pergunta para o paciente</label>
-                  <textarea
-                    id="pergunta"
-                    ref={inputRef}
-                    rows={1}
-                    value={textoInput}
-                    onChange={(e) => setTextoInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      // enter envia; shift+enter e a composicao do teclado (acentos) quebram a linha
-                      if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-                        e.preventDefault();
-                        submeter();
-                      }
-                    }}
-                    disabled={!sessao || streaming !== null}
-                    maxLength={LIMITE}
-                    placeholder="Escreva sua pergunta…"
-                    className="flex-1 min-w-0 min-h-6 max-h-36 py-[6px] border-0 bg-transparent text-fg text-[16px] md:text-[15px] leading-6 resize-none [field-sizing:content] outline-none placeholder:text-fg-muted disabled:cursor-not-allowed"
-                  />
-                  <button
-                    type="submit"
-                    aria-label="Enviar pergunta"
-                    disabled={!textoInput.trim() || streaming !== null}
-                    // a bolinha so aparece com texto; vazio fica so o icone
-                    className={`grid place-items-center shrink-0 size-10 md:size-9 rounded-full transition-colors disabled:cursor-not-allowed ${textoInput.trim() ? "bg-fg text-bg cursor-pointer hover:bg-fg/85" : "text-fg-muted"}`}
-                  >
-                    <Send size={16} strokeWidth={1.5} aria-hidden />
-                  </button>
-                </form>
-                <p className="hidden md:block m-0 text-[12px] leading-4 text-fg-muted">Enter envia · Shift+Enter quebra a linha</p>
-              </>
-            ) : (
-              <Alert type="info">A anamnese foi encerrada. O plano alimentar chega na próxima etapa.</Alert>
-            )}
+                  }
+                }}
+                disabled={!sessao || streaming !== null}
+                maxLength={LIMITE}
+                placeholder="Escreva sua pergunta…"
+                className="flex-1 min-w-0 min-h-6 max-h-36 py-[6px] border-0 bg-transparent text-fg text-[16px] md:text-[15px] leading-6 resize-none [field-sizing:content] outline-none placeholder:text-fg-muted disabled:cursor-not-allowed"
+              />
+              <button
+                type="submit"
+                aria-label="Enviar pergunta"
+                disabled={!textoInput.trim() || streaming !== null}
+                // a bolinha so aparece com texto; vazio fica so o icone
+                className={`grid place-items-center shrink-0 size-10 md:size-9 rounded-full transition-colors disabled:cursor-not-allowed ${textoInput.trim() ? "bg-fg text-bg cursor-pointer hover:bg-fg/85" : "text-fg-muted"}`}
+              >
+                <Send size={16} strokeWidth={1.5} aria-hidden />
+              </button>
+            </form>
+            <p className="hidden md:block m-0 text-[12px] leading-4 text-fg-muted">Enter envia · Shift+Enter quebra a linha</p>
           </div>
         </div>
       </div>

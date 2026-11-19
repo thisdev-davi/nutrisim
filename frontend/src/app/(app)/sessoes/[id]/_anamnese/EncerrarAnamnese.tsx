@@ -6,15 +6,17 @@ import { ArrowRight } from "lucide-react";
 import { api, type Erro } from "@/lib/api";
 import { estiloBotao } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
-import { chaveSessao, type Sessao } from "./AnamneseChat";
+import { chaveSessao, type Etapa, type Sessao } from "./AnamneseChat";
 
 export function EncerrarAnamnese({ sessaoId, disabled }: { sessaoId: string; disabled: boolean }) {
   const dialogo = useRef<HTMLDialogElement>(null);
   const queryClient = useQueryClient();
   const { mutate: encerrar, isPending, error } = useMutation({
-    mutationFn: () => api<{ etapa: string }>(`/sessoes/${sessaoId}/anamnese/encerrar`, { method: "POST" }),
+    mutationFn: () => api<{ etapa: Etapa }>(`/sessoes/${sessaoId}/anamnese/encerrar`, { method: "POST" }),
     onSuccess: ({ etapa }) => {
+      // a pagina troca de tela pela etapa nova; o inicio refaz a lista
       queryClient.setQueryData<Sessao>(chaveSessao(sessaoId), (s) => s && { ...s, etapa });
+      queryClient.invalidateQueries({ queryKey: ["sessoes"] });
       dialogo.current?.close();
     },
   });
