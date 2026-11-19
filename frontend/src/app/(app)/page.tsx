@@ -10,13 +10,14 @@ import { Avatar } from "@/components/ui/Avatar";
 import { estiloBotao } from "@/components/ui/Button";
 import { ETAPAS, Progresso } from "@/components/ui/Etapas";
 import { DIFICULDADE, type Sessao } from "./sessoes/[id]/_anamnese/AnamneseChat";
+import { NUMERO_ETAPA } from "./sessoes/[id]/EtapaSessao";
+import type { Etapa } from "./sessoes/[id]/_anamnese/AnamneseChat";
 
 interface Resumo extends Pick<Sessao, "id" | "etapa" | "dificuldade" | "paciente"> {
   perfil: string;
   criada_em: string;
 }
 
-const NUMERO_ETAPA: Record<string, number> = { anamnese: 2, plano: 3 };
 const TITULO_SECAO = "m-0 text-[13px] leading-5 font-medium text-fg-muted";
 
 const data = (iso: string) => new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "short" }).replace(" de ", " ").replace(".", "");
@@ -27,7 +28,7 @@ export default function InicioPage() {
 
   // ponytail: nenhuma sessao conclui antes da etapa 5, entao a mais nova e a que continua
   const [atual, ...recentes] = sessoes ?? [];
-  const etapa = atual && (NUMERO_ETAPA[atual.etapa] ?? 1);
+  const etapa = atual && (NUMERO_ETAPA[atual.etapa as Etapa] ?? 1);
   const nome = usuario?.nome.split(" ")[0];
 
   return (
