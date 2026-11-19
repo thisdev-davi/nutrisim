@@ -30,7 +30,10 @@ describe("EtapaSessao", () => {
   });
 
   it("encerra a anamnese e passa para o plano sem recarregar a sessao", async () => {
-    jest.mocked(api).mockImplementation(async (caminho) => (caminho.endsWith("/encerrar") ? { etapa: "plano" } : caminho === "/perfis" ? {} : SESSAO));
+    jest.mocked(api).mockImplementation(async (caminho) => {
+      if (caminho.endsWith("/plano")) throw { codigo: "plano_nao_encontrado", mensagem: "nenhum plano salvo" };
+      return caminho.endsWith("/encerrar") ? { etapa: "plano" } : caminho === "/perfis" ? {} : SESSAO;
+    });
     // o jsdom nao implementa o dialog
     HTMLDialogElement.prototype.showModal = jest.fn();
     HTMLDialogElement.prototype.close = jest.fn();
@@ -42,7 +45,7 @@ describe("EtapaSessao", () => {
     await user.click(screen.getByRole("button", { name: "Montar o plano" }));
     await user.click(screen.getByRole("button", { name: "Encerrar e montar o plano", hidden: true }));
 
-    expect(await screen.findByText("Esta etapa ainda não está disponível")).toBeInTheDocument();
+    expect(await screen.findByText("Monte o plano alimentar")).toBeInTheDocument();
     expect(etapaAtual()).toHaveTextContent("Plano alimentar");
     expect(jest.mocked(api).mock.calls.filter(([c]) => c === "/sessoes/s1")).toHaveLength(1);
   });
