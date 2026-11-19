@@ -4,6 +4,7 @@ import { Construction } from "lucide-react";
 import { Etapas } from "@/components/ui/Etapas";
 import { AnamneseChat, useSessao, type Etapa } from "./_anamnese/AnamneseChat";
 import { CenariosTela } from "./_cenarios/CenariosTela";
+import { PlanoAlimentar } from "./_plano/PlanoAlimentar";
 
 export const NUMERO_ETAPA: Record<Etapa, number> = { anamnese: 2, plano: 3, cenarios: 4, retorno: 5 };
 
@@ -12,8 +13,9 @@ export function EtapaSessao({ sessaoId }: { sessaoId: string }) {
   const { data: sessao } = useSessao(sessaoId);
   if (!sessao || sessao.etapa === "anamnese") return <AnamneseChat sessaoId={sessaoId} />;
   if (sessao.etapa === "cenarios") return <CenariosTela sessaoId={sessaoId} />;
+  if (sessao.etapa === "plano") return <PlanoAlimentar sessaoId={sessaoId} />;
 
-  // ponytail: plano (NS-042) e retorno ainda sem tela
+  // ponytail: retorno ainda sem tela
   const atual = NUMERO_ETAPA[sessao.etapa];
   return (
     <div className="flex-1 min-h-0 flex flex-col">
