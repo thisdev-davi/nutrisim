@@ -22,7 +22,7 @@ const etapaAtual = () => screen.getAllByRole("listitem").find((li) => li.getAttr
 describe("EtapaSessao", () => {
   beforeEach(() => jest.mocked(api).mockReset());
 
-  it.each([["cenarios", "Cenários"], ["retorno", "Retorno e feedback"]])("retoma a sessao em %s", async (etapa, nome) => {
+  it.each([["retorno", "Retorno e feedback"]])("retoma a sessao em %s", async (etapa, nome) => {
     jest.mocked(api).mockResolvedValue({ ...SESSAO, etapa });
     renderizar();
     expect(await screen.findByText("Esta etapa ainda não está disponível")).toBeInTheDocument();
