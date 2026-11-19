@@ -2,7 +2,7 @@
 
 O contrato vivo é o OpenAPI gerado pelo código: rode o backend e abra `http://localhost:8000/docs`. Lá ficam as rotas, os corpos e as respostas de cada endpoint (resumo no [`backend/README.md`](../backend/README.md#contrato-da-api)). Este arquivo cobre o que o OpenAPI não mostra: **como o frontend consome o stream do paciente** e **como exibe cada erro**.
 
-Card: NS-007. Por enquanto só existem as etapas 1 (caso) e 2 (anamnese). As etapas 3 a 5 entram aqui quando forem construídas.
+Card: NS-007. As etapas 1 (caso) e 2 (anamnese) estão construídas. As etapas 3 (plano) e 4 (cenários) já têm contrato, descrito [mais abaixo](#etapas-3-e-4-plano-e-cenários), e a 5 entra quando for construída.
 
 ## Regras gerais
 
@@ -89,6 +89,35 @@ Toda resposta de erro, fora do stream, tem o formato `{"erro": {"codigo", "mensa
 | `http_<status>` | outro | rota ou método inexistente | é bug do front: mensagem genérica |
 | `paciente_indisponivel` | – (evento `erro`) | o LLM estava indisponível ou não devolveu uma fala válida. A pergunta não é salva | a mensagem e "Tentar de novo", reenviando a mesma pergunta |
 | `stream_interrompido` | – | gerado pelo front quando a conexão cai. O backend segue até o fim e pode ter salvo a pergunta e a fala | a mensagem e "Tentar de novo". Antes de reenviar, faça `GET /api/sessoes/{id}`: se a última fala do estudante for a mesma pergunta, mostre a fala do paciente que vem depois dela, sem reenviar. Se não for, reenvie |
+
+## Etapas 3 e 4: plano e cenários
+
+Contrato combinado antes da implementação (NS-041, NS-044, NS-045 e NS-046). Os modelos estão em `backend/app/schemas/api.py`. Enquanto as rotas não existem, o front monta o mock a partir deles.
+
+**Regra de fronteira:** o front manda só ids da TACO e gramas. Todo número da resposta (composição, GET, adequação, custo, peso) sai do motor. O LLM estima só a adesão e as substituições (NS-046).
+
+| Rota | Corpo | Resposta | Card |
+|---|---|---|---|
+| `GET /api/sessoes/{id}/plano` | – | `Plano` | NS-041 |
+| `PUT /api/sessoes/{id}/plano` | `NovoPlano` | `Plano` | NS-041 |
+| `POST /api/sessoes/{id}/plano/encerrar` | – | `EtapaAtual` com `{"etapa": "cenarios"}` | NS-041 |
+| `POST /api/sessoes/{id}/cenarios` | – | `Cenarios` | NS-046 |
+
+1. Ao encerrar a anamnese, a sessão passa para a etapa `plano`.
+2. A tela do plano (NS-042) manda o **plano inteiro** num `PUT` a cada mudança, com debounce de uns 400 ms, e redesenha a tela com a resposta: totais, adequação, GET, violações e custo. Não existe rota por item.
+3. Cada `Violacao` traz `refeicao` e `alimento_id` quando um item causa o problema. Use os dois para mostrar o alerta junto do item. Quando os dois vêm `null`, a violação vale para o dia todo (por exemplo, o orçamento).
+4. `sem_preco` não vazio quer dizer que o `custo_diario_reais` está incompleto. Mostre isso junto do custo.
+5. `POST .../plano/encerrar` trava o plano. Depois dele, o `PUT` responde `409`.
+6. `POST .../cenarios` gera os dois cenários na primeira chamada e devolve o mesmo resultado nas próximas, sem chamar o LLM de novo. Pode demorar alguns segundos, então mostre carregamento. Os gráficos (NS-048) usam `peso` de cada cenário, e o `aviso` fica sempre visível.
+
+Erros novos (o formato é o mesmo de [Como exibir cada erro](#como-exibir-cada-erro)):
+
+| `codigo` | Status | Quando | O que o front exibe |
+|---|---|---|---|
+| `etapa_invalida` | 409 | a rota não vale para a etapa atual da sessão (por exemplo, `PUT` depois de encerrar o plano) | recarrega a sessão e vai para a etapa certa |
+| `plano_nao_encontrado` | 404 | `GET` do plano ou encerramento antes do primeiro `PUT` | a tela do plano vazia, sem erro |
+| `alimento_invalido` | 422 | algum `alimento_id` não existe na TACO | é bug do front, porque os ids vêm da busca: mensagem genérica |
+| `cenario_nao_gerado` | 503 | o LLM não devolveu uma estimativa válida ou estava indisponível | a mensagem e "Tentar de novo" |
 
 ## Busca de alimentos
 
