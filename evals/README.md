@@ -172,7 +172,7 @@ O modo `--cenarios` não faz anamnese: para cada ficha, gera o cenário realista
 |---|---|---|
 | `substituto_com_aversao` | o nome TACO do substituto tem uma palavra das `aversoes` da ficha, comparando como o motor de restrições (sem acento, sem plural, palavras com 4 letras ou mais) | casa palavra: "massas" não pega "macarrão" |
 | `troca_estoura_orcamento` | as trocas encarecem o dia (preços de `data/precos.csv`) e o custo do plano com elas passa de `orcamento_mensal_reais / 30` | porção inteira, com as mesmas gramas do original, como no cenário; troca com alimento sem preço fica fora da conta |
-| `adesao_fora_da_rotina` | adesão ≥ 0,8 numa refeição sem nenhuma hora do `recordatorio` na janela dela (café 4h–10h, almoço 11h–14h, lanche 14h–18h, jantar 18h–22h, ceia 21h–24h) | janela fixa pelo nome da refeição; nome livre e turno da noite escapam |
+| `adesao_fora_da_rotina` | adesão ≥ 0,8 numa refeição sem nenhuma hora do `recordatorio` na janela dela (café 4h–10h, almoço 11h–14h, lanche 14h–19h, jantar 18h–22h, ceia 21h–24h) | janela fixa pelo nome da refeição; nome livre e turno da noite escapam |
 
 - **Decisão: `alimentos_evitados` não entra na primeira regra.** São alimentos que o caso pede para evitar (torresmo, doces), muitas vezes os que o paciente já come; trocar por eles é o cenário realista, não uma incoerência. Só a aversão contradiz o perfil.
 - **Taxa:** `taxa_violacao_coerencia` = cenários com pelo menos uma violação ÷ cenários gerados, média por execução. Cenário sem saída válida fica em `cenarios_com_falha`, fora da taxa. `violacoes_por_regra` conta os cenários por regra.
@@ -185,7 +185,18 @@ export GEMINI_API_KEY=... LLM_MODELO=... DATABASE_URL=...
 uv run python ../evals/scripts/rodar_eval.py --cenarios --execucoes 3
 ```
 
-**Taxa ainda não medida (19/11).** Três tentativas do lote acima pararam por erro do provedor (cota ou prazo) antes de gravar o primeiro cenário. A causa está na geração (NS-046): o LLM costuma gastar as 6 rodadas só buscando, sem responder, e uma geração chega a 10 chamadas em menos de um minuto, o que estoura a cota por minuto do plano gratuito. O comando acima retoma de onde parar; o número entra aqui quando o lote fechar.
+**Resultado de 19/11** ([`resultados/2026-11-19_gemini-3.1-flash-lite_cenario-v1.json`](resultados/2026-11-19_gemini-3.1-flash-lite_cenario-v1.json)): **0% de violações** em 15 cenários (5 fichas × 3 execuções), abaixo da meta de 5%. Nenhum cenário falhou.
+
+| Métrica | Valor |
+|---|---|
+| Taxa de violação de coerência | 0% (era 20% antes da correção da janela, ver abaixo) |
+| Cenários gerados | 15 de 15 |
+| Chamadas ao LLM | 160, cerca de 10,7 por cenário |
+| Saídas refeitas por serem inválidas | 24 de 124 (19%): troca repetida no mesmo item, ou substituto que não veio da busca |
+
+- **Correção da janela do lanche.** Na primeira conta, a taxa deu 20%. As 3 violações eram da ficha `adulto-jovem-emagrecimento-medio-01`, com adesão de 100% ao lanche da tarde (uma banana no plano fixo). A paciente já come "uma fruta antes da academia" às 19h, uma hora depois do fim da janela de 14h–18h, então o LLM estava certo e a regra errada. A janela foi para 14h–19h, e as métricas foram recalculadas sobre as mesmas saídas do LLM. O arquivo guarda as duas versões (`metricas_antes_da_correcao`).
+- **Custo.** A NS-046 passou a obrigar o modelo a responder na última rodada de busca (#149). Mesmo assim, cada cenário custa umas 10 chamadas, e o lote leva uns 40 minutos com as esperas de cota. O próximo ganho é reduzir as saídas refeitas.
+- **Para repetir:** rode o comando acima. Ele retoma o arquivo do dia.
 
 ## Formato dos resultados
 

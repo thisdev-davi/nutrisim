@@ -1,0 +1,969 @@
+{
+  "cenarios": [
+    {
+      "id": "adulto-diabetes-tipo2-medio-01",
+      "execucao": 1,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Almoço",
+          "original_id": 4,
+          "original": "Arroz, tipo 1, cru",
+          "substituto_id": 43,
+          "substituto": "Milho, fubá, cru",
+          "motivo": "O Jorge prefere muito comer angu feito com fubá de milho e sente falta disso no plano."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 402,
+          "original": "Frango, inteiro, com pele, cru",
+          "substituto_id": 56,
+          "substituto": "Pastel, de carne, frito",
+          "motivo": "Como ele tem o hábito de comer salgados na padaria, adicionar um pastel é algo que ele faria na rotina de obra."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 18,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 6,
+          "tokens_entrada": 33554,
+          "tokens_saida": 1332
+        }
+      }
+    },
+    {
+      "id": "adulto-diabetes-tipo2-medio-01",
+      "execucao": 2,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.9
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Almoço",
+          "original_id": 4,
+          "original": "Arroz, tipo 1, cru",
+          "substituto_id": 33,
+          "substituto": "Farinha, de milho, amarela",
+          "motivo": "Jorge prefere incluir o angu, que ele costuma comer diariamente, no lugar de parte do arroz."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 157,
+          "original": "Tomate, com semente, cru",
+          "substituto_id": 480,
+          "substituto": "Refrigerante, tipo cola",
+          "motivo": "Ele tem o costume enraizado de compartilhar refrigerante com os colegas na obra e dificilmente abrirá mão disso."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 8,
+          "saidas": 8,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 14470,
+          "tokens_saida": 514
+        }
+      }
+    },
+    {
+      "id": "adulto-diabetes-tipo2-medio-01",
+      "execucao": 3,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.0
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Almoço",
+          "original_id": 4,
+          "original": "Arroz, tipo 1, cru",
+          "substituto_id": 33,
+          "substituto": "Farinha, de milho, amarela",
+          "motivo": "Ele prefere muito o angu, que é parte da cultura e costume mineiro dele, então trocaria parte do arroz por farinha de milho."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 56,
+          "substituto": "Pastel, de carne, frito",
+          "motivo": "Como ele sente muita fome na obra e já tem o hábito de comer salgados, provavelmente optará pelo pastel no lugar da fruta."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 5,
+          "saidas": 5,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 9670,
+          "tokens_saida": 427
+        }
+      }
+    },
+    {
+      "id": "adulto-dislipidemia-dificil-01",
+      "execucao": 1,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.2
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.6
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.9
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 261,
+          "substituto": "Manteiga, com sal",
+          "motivo": "A paciente tem o hábito de passar manteiga no pão e provavelmente manterá isso."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 386,
+          "substituto": "Coxinha de frango, frita",
+          "motivo": "A paciente tem o hábito enraizado de comer coxinha na praça de alimentação durante o intervalo do trabalho."
+        },
+        {
+          "refeicao": "Jantar",
+          "original_id": 489,
+          "original": "Ovo, de galinha, inteiro, cru",
+          "substituto_id": 272,
+          "substituto": "Óleo, de soja",
+          "motivo": "A paciente costuma usar banha de porco para fritar ovos e pode aceitar a troca por óleo de soja para reduzir gordura saturada."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 6,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 11860,
+          "tokens_saida": 500
+        }
+      }
+    },
+    {
+      "id": "adulto-dislipidemia-dificil-01",
+      "execucao": 2,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.6
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.9
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 261,
+          "substituto": "Manteiga, com sal",
+          "motivo": "Como ela tem o hábito de passar manteiga no pão diariamente, é mais realista incluir uma porção controlada no planejamento."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 56,
+          "substituto": "Pastel, de carne, frito",
+          "motivo": "Ela tem o hábito consolidado de comer salgados na praça de alimentação durante o trabalho e a substituição integral pela fruta tende a falhar."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 6,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 11685,
+          "tokens_saida": 417
+        }
+      }
+    },
+    {
+      "id": "adulto-dislipidemia-dificil-01",
+      "execucao": 3,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 261,
+          "substituto": "Manteiga, com sal",
+          "motivo": "Como ela tem o hábito de passar manteiga no pão, essa inclusão torna o plano mais próximo da realidade dela."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 56,
+          "substituto": "Pastel, de carne, frito",
+          "motivo": "Ela tem o hábito consolidado de comer pastel na praça de alimentação durante o intervalo do trabalho."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 16,
+          "saidas": 14,
+          "saidas_com_nova_tentativa": 2,
+          "tokens_entrada": 31033,
+          "tokens_saida": 1054
+        }
+      }
+    },
+    {
+      "id": "adulto-hipertensao-facil-01",
+      "execucao": 1,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.9
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 263,
+          "substituto": "Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",
+          "motivo": "Como ela come pão com manteiga no dia a dia, a inclusão de margarina torna o plano mais condizente com seu hábito."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 402,
+          "original": "Frango, inteiro, com pele, cru",
+          "substituto_id": 445,
+          "substituto": "Toucinho, frito",
+          "motivo": "Ela tem o hábito de beliscar torresmo enquanto cozinha no restaurante, então o ajuste prevê uma porção controlada."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 6,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 10878,
+          "tokens_saida": 415
+        }
+      }
+    },
+    {
+      "id": "adulto-hipertensao-facil-01",
+      "execucao": 2,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.3
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 263,
+          "substituto": "Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",
+          "motivo": "A paciente tem o hábito de usar margarina no pão diariamente."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 226,
+          "substituto": "Mamão, Papaia, cru",
+          "motivo": "Rosângela prefere mamão, que já faz parte do seu cotidiano."
+        },
+        {
+          "refeicao": "Jantar",
+          "original_id": 489,
+          "original": "Ovo, de galinha, inteiro, cru",
+          "substituto_id": 488,
+          "substituto": "Ovo, de galinha, inteiro, cozido/10minutos",
+          "motivo": "A paciente prefere consumir o ovo cozido em vez de precisar preparar algo novo."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 8,
+          "saidas": 8,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 13766,
+          "tokens_saida": 491
+        }
+      }
+    },
+    {
+      "id": "adulto-hipertensao-facil-01",
+      "execucao": 3,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 263,
+          "substituto": "Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",
+          "motivo": "Ela tem o costume de comer o pão francês com manteiga ou margarina na rotina."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 226,
+          "substituto": "Mamão, Papaia, cru",
+          "motivo": "Ela prefere comer mamão, que é uma fruta de sua preferência."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 13,
+          "saidas": 13,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 21116,
+          "tokens_saida": 531
+        }
+      }
+    },
+    {
+      "id": "adulto-jovem-emagrecimento-medio-01",
+      "execucao": 1,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.9
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 457,
+          "substituto": "Leite, de vaca, desnatado, UHT",
+          "motivo": "Prefere opções com menos gordura devido ao medo de engordar."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 402,
+          "original": "Frango, inteiro, com pele, cru",
+          "substituto_id": 405,
+          "substituto": "Frango, inteiro, sem pele, cru",
+          "motivo": "Prefere retirar a pele do frango por buscar uma alimentação mais magra."
+        },
+        {
+          "refeicao": "Ceia",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 449,
+          "substituto": "Iogurte, natural, desnatado",
+          "motivo": "Troca o leite integral por iogurte desnatado, conforme seu hábito atual."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 6,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 11694,
+          "tokens_saida": 457
+        }
+      }
+    },
+    {
+      "id": "adulto-jovem-emagrecimento-medio-01",
+      "execucao": 2,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 457,
+          "substituto": "Leite, de vaca, desnatado, UHT",
+          "motivo": "Prefere opções com menos gordura devido ao medo de ganhar peso."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 402,
+          "original": "Frango, inteiro, com pele, cru",
+          "substituto_id": 405,
+          "substituto": "Frango, inteiro, sem pele, cru",
+          "motivo": "Prefere frango sem pele e tem aversão a gorduras em excesso."
+        },
+        {
+          "refeicao": "Ceia",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 457,
+          "substituto": "Leite, de vaca, desnatado, UHT",
+          "motivo": "Por ser muito rígida com o peso, prefere trocar leite integral pelo desnatado."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 20,
+          "saidas": 15,
+          "saidas_com_nova_tentativa": 5,
+          "tokens_entrada": 34035,
+          "tokens_saida": 1055
+        }
+      }
+    },
+    {
+      "id": "adulto-jovem-emagrecimento-medio-01",
+      "execucao": 3,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 1.0
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.7
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.5
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 457,
+          "substituto": "Leite, de vaca, desnatado, UHT",
+          "motivo": "A paciente tem medo de engordar e prefere opções menos calóricas."
+        },
+        {
+          "refeicao": "Almoço",
+          "original_id": 402,
+          "original": "Frango, inteiro, com pele, cru",
+          "substituto_id": 405,
+          "substituto": "Frango, inteiro, sem pele, cru",
+          "motivo": "Ela prefere frango grelhado e evita gorduras como a pele do frango."
+        },
+        {
+          "refeicao": "Jantar",
+          "original_id": 489,
+          "original": "Ovo, de galinha, inteiro, cru",
+          "substituto_id": 488,
+          "substituto": "Ovo, de galinha, inteiro, cozido/10minutos",
+          "motivo": "Para facilitar o preparo na república, ela prefere o ovo cozido ao invés de ter que fritar ou preparar cru."
+        },
+        {
+          "refeicao": "Ceia",
+          "original_id": 458,
+          "original": "Leite, de vaca, integral",
+          "substituto_id": 457,
+          "substituto": "Leite, de vaca, desnatado, UHT",
+          "motivo": "Como ela vigia muito o peso, optará pela versão desnatada."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 18,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 6,
+          "tokens_entrada": 31658,
+          "tokens_saida": 1444
+        }
+      }
+    },
+    {
+      "id": "idoso-baixa-ingestao-medio-01",
+      "execucao": 1,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.7
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 99,
+          "substituto": "Biscoito, polvilho doce",
+          "motivo": "Ele prefere biscoito de polvilho para acompanhar o café da manhã."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 175,
+          "substituto": "Banana, da terra, crua",
+          "motivo": "Ele prefere consumir a banana-da-terra que faz parte da sua cultura alimentar."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 8,
+          "saidas": 8,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 13529,
+          "tokens_saida": 445
+        }
+      }
+    },
+    {
+      "id": "idoso-baixa-ingestao-medio-01",
+      "execucao": 2,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.4
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.9
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.7
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 99,
+          "substituto": "Biscoito, polvilho doce",
+          "motivo": "Ele prefere biscoito de polvilho ao pão francês pela manhã."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 175,
+          "substituto": "Banana, da terra, crua",
+          "motivo": "Ele tem preferência específica por banana-da-terra como parte de sua cultura alimentar."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 11,
+          "saidas": 6,
+          "saidas_com_nova_tentativa": 5,
+          "tokens_entrada": 18634,
+          "tokens_saida": 787
+        }
+      }
+    },
+    {
+      "id": "idoso-baixa-ingestao-medio-01",
+      "execucao": 3,
+      "adesao": [
+        {
+          "refeicao": "Café da manhã",
+          "adesao": 0.8
+        },
+        {
+          "refeicao": "Almoço",
+          "adesao": 0.4
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "adesao": 0.5
+        },
+        {
+          "refeicao": "Jantar",
+          "adesao": 0.3
+        },
+        {
+          "refeicao": "Ceia",
+          "adesao": 0.7
+        }
+      ],
+      "substituicoes": [
+        {
+          "refeicao": "Café da manhã",
+          "original_id": 53,
+          "original": "Pão, trigo, francês",
+          "substituto_id": 99,
+          "substituto": "Biscoito, polvilho doce",
+          "motivo": "Ele prefere biscoito de polvilho ao pão francês pela manhã."
+        },
+        {
+          "refeicao": "Lanche da tarde",
+          "original_id": 182,
+          "original": "Banana, prata, crua",
+          "substituto_id": 175,
+          "substituto": "Banana, da terra, crua",
+          "motivo": "Ele prefere banana-da-terra, que é um alimento habitual da sua cultura."
+        }
+      ],
+      "violacoes": {},
+      "uso": {
+        "cenario": {
+          "chamadas": 11,
+          "saidas": 11,
+          "saidas_com_nova_tentativa": 0,
+          "tokens_entrada": 18494,
+          "tokens_saida": 798
+        }
+      }
+    }
+  ],
+  "modelo": "gemini-3.1-flash-lite",
+  "versao_prompt": "cenario-v1",
+  "data": "2026-11-19",
+  "execucoes_por_caso": 3,
+  "plano": {
+    "refeicoes": [
+      {
+        "nome": "Café da manhã",
+        "itens": [
+          {
+            "alimento_id": 53,
+            "gramas": 50.0
+          },
+          {
+            "alimento_id": 458,
+            "gramas": 200.0
+          },
+          {
+            "alimento_id": 511,
+            "gramas": 10.0
+          }
+        ]
+      },
+      {
+        "nome": "Almoço",
+        "itens": [
+          {
+            "alimento_id": 4,
+            "gramas": 80.0
+          },
+          {
+            "alimento_id": 562,
+            "gramas": 60.0
+          },
+          {
+            "alimento_id": 402,
+            "gramas": 120.0
+          },
+          {
+            "alimento_id": 157,
+            "gramas": 60.0
+          }
+        ]
+      },
+      {
+        "nome": "Lanche da tarde",
+        "itens": [
+          {
+            "alimento_id": 182,
+            "gramas": 100.0
+          }
+        ]
+      },
+      {
+        "nome": "Jantar",
+        "itens": [
+          {
+            "alimento_id": 4,
+            "gramas": 60.0
+          },
+          {
+            "alimento_id": 562,
+            "gramas": 50.0
+          },
+          {
+            "alimento_id": 489,
+            "gramas": 50.0
+          },
+          {
+            "alimento_id": 115,
+            "gramas": 50.0
+          }
+        ]
+      },
+      {
+        "nome": "Ceia",
+        "itens": [
+          {
+            "alimento_id": 458,
+            "gramas": 150.0
+          }
+        ]
+      }
+    ]
+  },
+  "metricas": {
+    "taxa_violacao_coerencia": 0.0,
+    "violacoes_por_regra": {},
+    "cenarios_com_falha": 0
+  },
+  "uso_total": {
+    "cenario": {
+      "chamadas": 160,
+      "saidas": 124,
+      "saidas_com_nova_tentativa": 24,
+      "tokens_entrada": 286076,
+      "tokens_saida": 10667
+    }
+  },
+  "metricas_antes_da_correcao": {
+    "taxa_violacao_coerencia": 0.2,
+    "violacoes_por_regra": {
+      "adesao_fora_da_rotina": 3
+    },
+    "cenarios_com_falha": 0
+  },
+  "nota": "metricas recalculadas sobre as mesmas saidas do llm depois de a janela do lanche ir de 14h-18h para 14h-19h"
+}
