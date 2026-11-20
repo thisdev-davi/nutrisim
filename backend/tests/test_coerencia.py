@@ -111,3 +111,17 @@ def test_runner_mede_a_taxa_e_retoma(tmp_path):
     assert json.loads(arquivo.read_text())["metricas"] == resultado["metricas"]
     # o que ja rodou e pulado: gerar nao e chamado de novo
     runner.rodar_cenarios([FICHA], None, **kwargs)
+
+
+def test_lanche_as_19h_conta_como_lanche_da_tarde():
+    """a fruta antes da academia, as 19h, e o lanche que o plano propoe."""
+    paciente = FICHA.ficha.paciente.model_copy(
+        update={"recordatorio": ["7h: cafe", "13h: almoco", "19h: uma fruta"]}
+    )
+    ficha = FICHA.ficha.model_copy(update={"paciente": paciente})
+    adesao = [
+        {"refeicao": r.nome, "adesao": 1.0 if r.nome == "Lanche da tarde" else 0.5}
+        for r in coerencia.PLANO_FIXO.refeicoes
+    ]
+    v = coerencia.violacoes(ficha, coerencia.PLANO_FIXO, cenario(adesao), precos())
+    assert v == {}

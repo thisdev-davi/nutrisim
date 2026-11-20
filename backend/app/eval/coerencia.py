@@ -15,7 +15,8 @@ JANELAS = {
     "cafe": (4, 10),
     "desjejum": (4, 10),
     "almoco": (11, 14),
-    "lanche": (14, 18),
+    # ate 19h: a fruta antes da academia ou da aula da noite ainda e lanche
+    "lanche": (14, 19),
     "jantar": (18, 22),
     "ceia": (21, 24),
 }
